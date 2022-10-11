@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 14:00:58 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/10 09:10:22 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/11 14:00:45 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
@@ -24,6 +24,8 @@ int	ft_atoi(const char *nptr)
 	i = 0;
 	sign = 1;
 	sum = 0;
+	while ((nptr[i] >= 9 && nptr[i] < 17) || (nptr[i] == 32))
+		i++;
 	if (nptr[i] == '+' || nptr[i] == '-')
 	{	
 		if (nptr[i] == '-')
@@ -43,10 +45,12 @@ int	ft_atoi(const char *nptr)
 static int	ft_multiplier(const char *nptr)
 {
 	float	multiplier;
-	int	i;
+	int		i;
 
 	i = 0;
 	multiplier = 0.1;
+	while ((nptr[i] >= 9 && nptr[i] < 17) || (nptr[i] == 32))
+		i++;
 	if (nptr[i] == '+' || nptr[i] == '-')
 		i++;
 	while (nptr[i] >= '0' && nptr[i] <= '9')
@@ -59,7 +63,7 @@ static int	ft_multiplier(const char *nptr)
 
 /*int main(void)
 {
-	char str[8] = "+42lyon";
+	char str[] = "\t\v\f\r\n \f-06050";
 	
 	printf("Og: %d\n", atoi(str));
 	printf("Mine: %d\n", ft_atoi(str));

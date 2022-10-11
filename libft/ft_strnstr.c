@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:12:25 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/07 13:58:18 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/11 14:15:51 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <string.h>
@@ -20,10 +20,12 @@ char	*ft_strnstr(const char *big, const char *little, size_t len)
 
 	i = 0;
 	j = 0;
+	if (little[i] == '\0')
+		return ((char *)big);
 	while (i < len && big[i] != '\0')
 	{	
 		c = i;
-		while (little[j] == big[i])
+		while (little[j] == big[i] && i < len)
 		{
 			if (little[j + 1] == '\0')
 				return (((char *)big) + c);
@@ -41,9 +43,9 @@ char	*ft_strnstr(const char *big, const char *little, size_t len)
 
 /*int main(void)
 {
-	char haystack[] = "This is thth12312dasfthdsthe way.";
-	char needle[] = "the";
+	char haystack[] = "lorem ipsum dolor sit amet";
+	char needle[] = "dolor";
 
-	printf("Og: %s\n", strnstr(haystack, needle, 30));
-	printf("Mine: %s\n", ft_strnstr(haystack, needle, 30));
+	printf("Og: %s\n", strnstr(haystack, needle, 15));
+	printf("Mine: %s\n", ft_strnstr(haystack, needle, 15));
 }*/

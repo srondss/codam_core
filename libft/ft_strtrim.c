@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 09:10:54 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/10 16:59:26 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/11 13:58:37 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 		return (NULL);
 	while (*s1 && ft_strchr(set, *s1))
 		s1++;
-	len = ft_strlen(s1);
+	len = ft_strlen((char *)s1);
 	while (len && ft_strchr(set, s1[len]))
 		len--;
 	string = ft_substr((char *)s1, 0, len + 1);

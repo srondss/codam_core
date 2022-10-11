@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/08 13:46:59 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/09 08:40:39 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/11 13:57:45 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -18,9 +18,9 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	void	*ptr;
 
 	i = 0;
-	if (nmemb == 0 || size == 0)
-		return (NULL);
 	ptr = malloc(nmemb * size);
+	if (ptr == NULL)
+		return (ptr);
 	while (i < (nmemb * size))
 	{
 		((char *)ptr)[i] = '\0';
@@ -34,9 +34,8 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	int *ptr;
 	int *ptr2;
 	
-	ptr = calloc(5, sizeof(int)); 
-	ptr2 = ft_calloc(5, sizeof(int));
- 
+	ptr = calloc(0,  0); 
+	ptr2 = ft_calloc(0, 0);
 	for (int i = 0; i < 5; i++)
 		ptr[i] = i; 
 	for (int j = 0; j < 5; j++)

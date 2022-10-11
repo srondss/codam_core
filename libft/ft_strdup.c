@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 08:40:59 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/09 08:56:03 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/11 14:00:10 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <string.h>
@@ -15,7 +15,7 @@
 
 char	*ft_strdup(const char *s)
 {
-	int	i;
+	int		i;
 	char	*ptr;
 
 	i = 0;

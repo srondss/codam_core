@@ -6,20 +6,22 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 10:01:01 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/09 16:14:45 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/11 13:59:55 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include "libft.h"
+
 char	*ft_strchr(const char *s, int c)
 {
-	int	i;
+	int		i;
 	char	*word;
 
 	word = (char *)s;
 	i = 0;
-	while (word[i] != '\0')
+	while (i < ft_strlen((char *)s) + 1)
 	{
 		if (c == word[i])
 		{
@@ -32,10 +34,10 @@ char	*ft_strchr(const char *s, int c)
 
 /*int main(void)
 {
-	char string[30] = "This is my @mention";
-	char *string2 = strchr(string, '@');
+	char string[] = "there is so \0ma\0ny \0 \\0 in t\0his stri\0ng !\0\0\0\0";
+	char *string2 = strchr(string, '\0');
 	printf("Og: %s\n", string2);
 	
-	char *string3 = ft_strchr(string, '@');
+	char *string3 = ft_strchr(string, '\0');
 	printf("Mine: %s\n", string3);
 }*/

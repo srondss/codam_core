@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 08:51:56 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/10 09:10:02 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/11 14:02:43 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -14,8 +14,8 @@
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	char	*string;
 
 	i = 0;
@@ -25,6 +25,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	while (s2[j] != '\0')
 		j++;
 	string = (char *)malloc(sizeof(char) * (i + j + 1));
+	if (!string)
+		return (0);
 	i = -1;
 	j = 0;
 	while (s1[++i] != '\0')

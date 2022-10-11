@@ -6,19 +6,19 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 16:59:48 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/10 19:52:57 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/11 14:01:42 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
 #include <stdlib.h>
 
-char *ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	char	*str;
-	int	len;
-	int	num;
-	int	i;
-	
+	int		len;
+	int		num;
+	int		i;
+
 	i = 0;
 	len = 0;
 	num = n;
@@ -34,19 +34,19 @@ char *ft_itoa(int n)
 		if (num < 9)
 		{
 			str[len] = num + '0';
-			break;
+			break ;
 		}
 		num = (num % 10);
 		str[len] = (num);
-		len--; 
+		len--;
 	}
 	return (str);
 }
 
-int main(void)
+/*int main(void)
 {
 	int n;
 	
 	n = 42;
 	printf("Itoa: %s", ft_itoa(n));
-}
+}*/

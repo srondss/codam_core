@@ -6,87 +6,45 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 13:32:29 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/10 16:58:18 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/11 16:32:27 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
 #include <stdio.h>
 
-int	find_c(char const *s, char c, int i);
-char	**fill_arr(char const *s, char **arr, char c);
+int find_delimiters(char const *s, char c, int i, int count);
 
-char	**ft_split(char const *s, char c)
+char **ft_split(char const *s, char c)
 {
-	int	i;
-	int	j;
-	int	len;
-	char	**arr;
+	int j;
+	int i;
+	int count;
+	char **test;
 
 	i = 0;
-	j = find_c(s, c, i);
-	len = 0;
-	arr = (char **)malloc((j + 1) * sizeof(char *));
-	j = 0;
-	while (s[i] != '\0')
-	{
-		if (s[i] == c || s[i + 1] == '\0')
-		{
-			arr[j] = malloc((len + 1) * sizeof(char));
-			j++;
-			len = 0;
-		}
-		len++;
-		i++;
-	}
-	arr = fill_arr(s, arr, c);
-	return (arr);
+	count = 0;
+	test = (char **)malloc(sizeof(char *) * 3);
+	j = find_delimiters(s, c, i, count);
+	printf("Delimiters: %d", j);
+
+	return (test);
 }
 
-char	**fill_arr(char const *s, char **arr, char c)
+int find_delimiters(char const *s, char c, int i, int count)
 {
-	int	i;
-	int	len;
-	int	j;
-
-	i = 0;
-	j = 0;
-	len = 0;
-	while (s[len] != '\0')
-	{
-		if (s[len] == c)
-		{
-			arr[i][j] = '\0';
-			i++;
-			j = -1;
-		}
-		else
-		{
-			arr[i][j] = s[len];
-		}
-		j++;
-		len++;
-	}
-	arr[i][j] = '\0';
-	return (arr);
-}
-
-int	find_c(char const *s, char c, int i)
-{
-	int	j;
-
-	j = 0;
-	while (s[i] != '\0')
-	{
-		if (s[i] == c)
-			j++;
+	if (s[i] == '\0')
+		return (count);
+	while (s[i] != c && s[i])
 		i++;
-	}
-	return (j);
+	count++;
+	printf("C: %c", s[i]);
+	return (find_delimiters(s, c, (i + 1), count));
 }
 
-/*int main(void)
+int main(void)
 {
 	char str[] = "hello,goodbye,doei";
-	for (int i = 0; i < 3; i++)
-		printf("String: %s\n", ft_split(str, ',')[i]);
-}*/
+	ft_split(str, ',');
+	//for (int i = 0; i < 3; i++)
+	//	printf("String: %s\n", ft_split(str, ',')[i]);
+}
