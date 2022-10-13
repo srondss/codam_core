@@ -39,6 +39,8 @@ SRCS_1	= ft_strlen.c		\
 SRCS_2	=       ft_substr.c		\
 		  ft_strjoin.c		\
 		  ft_split.c		\
+		ft_strtrim.c		\
+		ft_itoa.c		\
 
 SRCS	= $(SRCS_1) \
 			$(SRCS_2) \

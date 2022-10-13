@@ -6,45 +6,82 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 13:32:29 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/11 16:32:27 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/12 15:02:24 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
 #include <stdio.h>
+#include "libft.h"
 
-int find_delimiters(char const *s, char c, int i, int count);
+static int find_strlen(char const *s, char c);
+static int find_delimiters(char const *s, char c, size_t i, size_t count);
 
 char **ft_split(char const *s, char c)
 {
-	int j;
-	int i;
-	int count;
-	char **test;
+	size_t j;
+	size_t i;
+	size_t count;
+	size_t len;
+	char **words;
 
 	i = 0;
 	count = 0;
-	test = (char **)malloc(sizeof(char *) * 3);
+	len = 0;
 	j = find_delimiters(s, c, i, count);
-	printf("Delimiters: %d", j);
-
-	return (test);
+	if (j == 0)
+		return (NULL);
+	words = (char **)malloc(sizeof(char *) * (j + 1));
+	while (len < j && words)
+	{
+		while (s[i] != '\0' && s[i] == c)
+			i++;
+		count = find_strlen(&s[i], c);
+		words[len] = malloc(sizeof(**words) * (count + 1));
+	//	ft_strncpy(words[len], &s[i], count);
+		words[len][count] = '\0';
+		while (s[i] != '\0' && s[i] != c)
+			i++;
+		len++;
+	}
+	words[len] = NULL;
+	return (words);
 }
 
-int find_delimiters(char const *s, char c, int i, int count)
+static int find_delimiters(char const *s, char c, size_t i, size_t count)
 {
-	if (s[i] == '\0')
-		return (count);
-	while (s[i] != c && s[i])
-		i++;
-	count++;
-	printf("C: %c", s[i]);
-	return (find_delimiters(s, c, (i + 1), count));
+	while (s[i] != '\0')
+	{
+		if (s[i] == c)
+			i++;
+		else
+		{
+			count++;
+			while (s[i] != c && s[i] != '\0')
+				i++;
+		}
+	}
+	return (count);
 }
 
-int main(void)
+static int find_strlen(char const *s, char c)
 {
-	char str[] = "hello,goodbye,doei";
-	ft_split(str, ',');
-	//for (int i = 0; i < 3; i++)
-	//	printf("String: %s\n", ft_split(str, ',')[i]);
+	size_t i;
+
+	i = 0;
+	while (s[i] != '\0')
+	{
+		if (s[i] == c)
+			return (i);
+		else
+			i++;	
+	}
+	return (i);
 }
+
+/*int main(void)
+{
+	char str[] = "hello,,,,";
+	char **str2 = ft_split(str, ',');
+	for (int i = 0; i < 3; i++)
+		printf("String: %s\n", str2[i]);
+}*/

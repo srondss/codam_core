@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 10:28:06 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/11 12:13:27 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/12 09:16:17 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <string.h>
@@ -22,12 +22,14 @@ char	*ft_strrchr(const char *s, int c)
 	i = 0;
 	word = (char *)s;
 	ptr = NULL;
-	while (i < ft_strlen((char *)s) + 1)
+	while (s[i] != '\0')
 	{
 		if (word[i] == c)
 			ptr = &word[i];
 		i++;
 	}
+	if (c == '\0')
+		ptr = &word[i];
 	return (ptr);
 }
 

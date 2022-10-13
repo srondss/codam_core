@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 08:33:32 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/11 13:52:36 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/12 13:38:32 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -37,6 +37,6 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 
 /*int main(void)
 {
-	char s[] = "I just want this part #############";
-	printf("Substring: %s", ft_substr(s, 5, 10)); 
+	char s[] = "hello,goodbye,doei";
+	printf("Substring: %s", ft_substr(s, 6, 7)); 
 }*/
