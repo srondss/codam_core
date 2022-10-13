@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 16:01:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/12 09:19:52 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/13 16:33:32 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
@@ -40,4 +40,4 @@ char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strtrim(char const *s1, char const *set);
 char	**ft_split(char const *s, char c);
 char	*ft_itoa(int n);
-int		ft_strlen(char *str);
+int		ft_strlen(char const *str);

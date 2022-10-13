@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 10:28:06 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/12 09:16:17 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/13 11:14:22 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <string.h>
@@ -24,7 +24,7 @@ char	*ft_strrchr(const char *s, int c)
 	ptr = NULL;
 	while (s[i] != '\0')
 	{
-		if (word[i] == c)
+		if (word[i] == (unsigned char)c)
 			ptr = &word[i];
 		i++;
 	}
@@ -35,11 +35,12 @@ char	*ft_strrchr(const char *s, int c)
 
 /*int main(void)
 {
-	char string[] = "there is so \0ma\0ny \0 \\0 in t\0his stri\0ng !\0\0\0\0";
+	char string[] = "tripouille";
 	
-	char *string2 = strrchr((void *)0, '\0');
-	char *string3 = ft_strrchr((void *)0, '\0');
+	char *string2 = strrchr(string, 't' + 256);
+	char *string3 = ft_strrchr(string, 't' + 256);
 
+	printf("Og C: %d\n", 't' + 256);
 	printf("Og: %s\n", string2);
 	printf("Mine: %s\n", string3);
 }*/

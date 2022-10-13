@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 09:35:56 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/11 14:36:36 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/13 11:16:21 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <string.h>
@@ -14,7 +14,7 @@
 
 void	*ft_memmove(void *dest, const void *src, size_t n)
 {
-	size_t	i;
+	size_t			i;
 	unsigned char	*d;
 	unsigned char	*s;
 

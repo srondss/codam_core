@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 10:51:17 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/07 11:01:52 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/13 16:23:34 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <string.h>
@@ -18,10 +18,10 @@ void	*ft_memchr(const void *s, int c, size_t n)
 	void	*bytes;
 
 	i = 0;
-	bytes = (void *)s;
+	bytes = (unsigned char *)s;
 	while (i < n)
 	{
-		if (((char *)bytes)[i] == c)
+		if (((unsigned char *)bytes)[i] == (unsigned char)c)
 			return (&bytes[i]);
 		i++;
 	}
@@ -30,9 +30,9 @@ void	*ft_memchr(const void *s, int c, size_t n)
 
 /*int main(void)
 {
-	char str[6] = "hello";
-	char *ptr = memchr(str, 'l', sizeof(char) * 6);
+	char str[] = "/|\x12\xff\x09\x42\2002\42|\\";
+	char *ptr = memchr(str, '\200', sizeof(char) * 10);
 	printf("%s\n", ptr);
-	char *mptr = ft_memchr(str, 'l', sizeof(char) * 6);
+	char *mptr = ft_memchr(str, '\200', sizeof(char) * 10);
 	printf("%s\n", mptr);
 }*/

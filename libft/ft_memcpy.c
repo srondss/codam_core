@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 13:23:09 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/05 13:37:50 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/13 11:03:25 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <string.h>
@@ -26,16 +26,15 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	}
 	return (dest);
 }
-/*
-int main(void)
+
+/*int main(void)
 {
 	char str[5] = "hello";
 	char mstr[5] = "hello";
 	char dest[5];
 	char mdest[5];
-	memcpy(dest, str, 3);
+	memcpy(str+2, str, 3);
 	printf("Og: %s\n", dest);
-	ft_memcpy(mdest, mstr, 3);
+	ft_memcpy(mstr+2, mstr, 3);
 	printf("Mine: %s\n", mdest);
-
 }*/

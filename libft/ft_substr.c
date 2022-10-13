@@ -6,20 +6,25 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 08:33:32 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/12 13:38:32 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/13 16:39:15 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
 #include <stdlib.h>
+#include "libft.h"
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	unsigned int	i;
 	size_t			j;
+	size_t			slen;
 	char			*string;
 
 	i = 0;
 	j = 0;
+	slen = ft_strlen(s);
+	if (slen < len)
+		len = slen;
 	string = (char *)malloc(sizeof(char) * len + 1);
 	if (!(string))
 		return (NULL);
@@ -37,6 +42,6 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 
 /*int main(void)
 {
-	char s[] = "hello,goodbye,doei";
-	printf("Substring: %s", ft_substr(s, 6, 7)); 
+	char s[] = "tripouille";
+	printf("Substring: %s", ft_substr(s, ft_strlen(s) + 1, 7)); 
 }*/

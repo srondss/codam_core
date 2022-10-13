@@ -6,10 +6,10 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/04 14:36:32 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/11 12:06:18 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/13 16:32:48 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-int	ft_strlen(char *str)
+int	ft_strlen(char const *str)
 {
 	int	i;
 

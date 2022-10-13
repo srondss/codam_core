@@ -6,61 +6,96 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 16:59:48 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/12 16:12:03 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/13 10:24:55 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
 #include <stdlib.h>
+#include "libft.h"
 
-static char *ret_positive(char *str, int len, int num, int i);
-// TODO: Create ret_negative.
-char    *ft_itoa(int n)
+static char	*ret_positive(int len, int num, int i, int n);
+static char	*ret_negative(int len, int num, int i, int n);
+
+char	*ft_itoa(int n)
 {
-    char    *str;
-    int        len;
-    int        num;
-    int        i;
+	char	*str;
+	int		len;
+	int		num;
+	int		i;
 
-    i = 0;
-    len = 0;
-    num = n;
-    if (n >= 0)
-    {
-        while (n > 0)
-        {
-            n /= 10;
-            len++;
-        }
-        if (num == 0)
-            len++;
-        str = (char *)malloc(sizeof(char) * (len + 1));
-        str[len] = '\0';
-        str = ret_positive(str, len, num, i);
-    }
-    return (str);
+	i = 0;
+	len = 0;
+	num = n;
+	if (n >= 0)
+		str = ret_positive(len, num, i, n);
+	else if (n == -2147483648)
+		return (ft_strdup("-2147483648"));
+	else
+		str = ret_negative(len, (num * -1), i, (n * -1));
+	return (str);
 }
 
-static char *ret_positive(char *str, int len, int num, int i)
+static char	*ret_negative(int len, int num, int i, int n)
 {
-    while (i <= len)
-    {
-        printf("num: %d, i: %d len: %d\n", num, i, len);
-        len--;
-        if (num < 9)
-        {
-            str[len] = num + '0';
-            break ;
-        }
-        str[len] = ((num % 10) + '0');
-        num /= 10;
-    }
-    return (str);
+	char	*str;
+
+	while (n > 0)
+	{
+		n /= 10;
+		len++;
+	}
+	str = (char *)malloc(sizeof(char) * (len + 2));
+	if (str == NULL)
+		return (str);
+	str[len + 1] = '\0';
+	str[0] = '-';
+	while ((i + 1) <= len)
+	{
+		if (num < 9)
+		{
+			str[len] = num + '0';
+			break ;
+		}
+		str[len] = ((num % 10) + '0');
+		num /= 10;
+		len--;
+	}
+	return (str);
 }
 
-int main(void)
+static char	*ret_positive(int len, int num, int i, int n)
 {
-    int n;
-    
-    n = 143124;
-    printf("Itoa: %s", ft_itoa(n));
+	char	*str;
+
+	while (n > 0)
+	{
+		n /= 10;
+		len++;
+	}
+	if (num == 0)
+		len++;
+	str = (char *)malloc(sizeof(char) * (len + 1));
+	if (str == NULL)
+		return (str);
+	str[len] = '\0';
+	while (i <= len)
+	{
+		len--;
+		if (num < 9)
+		{
+			str[len] = num + '0';
+			break ;
+		}
+		str[len] = ((num % 10) + '0');
+		num /= 10;
+	}
+	return (str);
 }
+
+/*int main(void)
+{
+	int n;
+	
+	n = -214748;
+	printf("Itoa: %s", ft_itoa(n));
+}*/

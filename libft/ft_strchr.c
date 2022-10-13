@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 10:01:01 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/11 13:59:55 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/13 11:14:41 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -23,10 +23,8 @@ char	*ft_strchr(const char *s, int c)
 	i = 0;
 	while (i < ft_strlen((char *)s) + 1)
 	{
-		if (c == word[i])
-		{
+		if ((unsigned char)c == word[i])
 			return (&word[i]);
-		}
 		i++;
 	}
 	return (NULL);

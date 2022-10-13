@@ -6,48 +6,61 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 13:32:29 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/12 15:02:24 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/13 16:26:18 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
 #include <stdio.h>
 #include "libft.h"
 
+void free_everything(char **string, int i);
 static int find_strlen(char const *s, char c);
-static int find_delimiters(char const *s, char c, size_t i, size_t count);
+static int get_nstrings(char const *s, char c, size_t i, size_t count);
 
 char **ft_split(char const *s, char c)
 {
-	size_t j;
-	size_t i;
-	size_t count;
-	size_t len;
-	char **words;
+	size_t	j;
+	size_t	i;
+	size_t	count;
+	size_t	len;
+	char	**strings;
 
 	i = 0;
+	j = 0;
 	count = 0;
-	len = 0;
-	j = find_delimiters(s, c, i, count);
-	if (j == 0)
-		return (NULL);
-	words = (char **)malloc(sizeof(char *) * (j + 1));
-	while (len < j && words)
+	len = get_nstrings(s, c, i, count);
+	strings = (char **)malloc(sizeof(char *) * (len + 1));
+	if (!strings)
+		return (0);
+	while (i < len)
 	{
-		while (s[i] != '\0' && s[i] == c)
-			i++;
-		count = find_strlen(&s[i], c);
-		words[len] = malloc(sizeof(**words) * (count + 1));
-	//	ft_strncpy(words[len], &s[i], count);
-		words[len][count] = '\0';
-		while (s[i] != '\0' && s[i] != c)
-			i++;
-		len++;
+		while (s[j] == c)
+			j++;
+		strings[i] = ft_substr(s, j, find_strlen(&s[j], c));
+		if (strings[i] == NULL)
+		{
+			free_everything(strings, i);
+			break;
+		}
+		while (s[j] != c && s[j] != '\0')
+			j++;
+		i++;
 	}
-	words[len] = NULL;
-	return (words);
+	strings[i] = NULL;
+	
+	return (strings);
 }
 
-static int find_delimiters(char const *s, char c, size_t i, size_t count)
+void free_everything(char **string, int i)
+{
+	while (i >= 0)
+	{
+		free(string[i]);
+		i--;
+	}
+}
+
+static int get_nstrings(char const *s, char c, size_t i, size_t count)
 {
 	while (s[i] != '\0')
 	{
@@ -80,7 +93,7 @@ static int find_strlen(char const *s, char c)
 
 /*int main(void)
 {
-	char str[] = "hello,,,,";
+	char str[] = "hello,goodbye,doei";
 	char **str2 = ft_split(str, ',');
 	for (int i = 0; i < 3; i++)
 		printf("String: %s\n", str2[i]);

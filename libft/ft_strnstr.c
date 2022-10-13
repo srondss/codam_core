@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:12:25 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/11 14:15:51 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/13 16:05:03 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <string.h>
@@ -25,15 +25,12 @@ char	*ft_strnstr(const char *big, const char *little, size_t len)
 	while (i < len && big[i] != '\0')
 	{	
 		c = i;
-		while (little[j] == big[i] && i < len)
+		while (little[j] == big[i + j] && (i + j) < len)
 		{
 			if (little[j + 1] == '\0')
-				return (((char *)big) + c);
+				return ((char *)&big[c]);
 			else
-			{
 				j++;
-				i++;
-			}
 		}
 		j = 0;
 		i++;
@@ -43,9 +40,9 @@ char	*ft_strnstr(const char *big, const char *little, size_t len)
 
 /*int main(void)
 {
-	char haystack[] = "lorem ipsum dolor sit amet";
-	char needle[] = "dolor";
+	char haystack[] = "aaabcabcd";
+	char needle[] = "aabc";
 
-	printf("Og: %s\n", strnstr(haystack, needle, 15));
-	printf("Mine: %s\n", ft_strnstr(haystack, needle, 15));
+	printf("Og: %s\n", strnstr(haystack, needle, 100));
+	printf("Mine: %s\n", ft_strnstr(haystack, needle, 100));
 }*/

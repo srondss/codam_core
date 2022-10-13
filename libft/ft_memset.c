@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/04 14:42:19 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/05 13:15:47 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/13 10:31:30 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 /*#include <string.h>*/
@@ -22,11 +22,10 @@ void	*ft_memset(void *s, int c, size_t n)
 		((char *)s)[i] = c;
 		i++;
 	}
-	((char *)s)[i] = '\0';
 	return (s);
 }
-/*
-int main(void)
+
+/*int main(void)
 {
 	char buffer[10];
 	char mbuffer[10];
