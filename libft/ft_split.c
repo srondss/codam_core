@@ -6,52 +6,45 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 13:32:29 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/13 16:26:18 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/14 14:31:29 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
 #include <stdio.h>
 #include "libft.h"
 
-void free_everything(char **string, int i);
-static int find_strlen(char const *s, char c);
-static int get_nstrings(char const *s, char c, size_t i, size_t count);
+void		free_everything(char **string, int i);
+static int	find_strlen(char const *s, char c);
+static int	get_nstrings(char const *s, char c);
 
-char **ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c)
 {
 	size_t	j;
 	size_t	i;
-	size_t	count;
 	size_t	len;
 	char	**strings;
 
-	i = 0;
+	i = -1;
 	j = 0;
-	count = 0;
-	len = get_nstrings(s, c, i, count);
+	len = get_nstrings(s, c);
 	strings = (char **)malloc(sizeof(char *) * (len + 1));
 	if (!strings)
 		return (0);
-	while (i < len)
+	while (++i < len)
 	{
 		while (s[j] == c)
 			j++;
 		strings[i] = ft_substr(s, j, find_strlen(&s[j], c));
 		if (strings[i] == NULL)
-		{
 			free_everything(strings, i);
-			break;
-		}
 		while (s[j] != c && s[j] != '\0')
 			j++;
-		i++;
 	}
 	strings[i] = NULL;
-	
 	return (strings);
 }
 
-void free_everything(char **string, int i)
+void	free_everything(char **string, int i)
 {
 	while (i >= 0)
 	{
@@ -60,8 +53,13 @@ void free_everything(char **string, int i)
 	}
 }
 
-static int get_nstrings(char const *s, char c, size_t i, size_t count)
+static int	get_nstrings(char const *s, char c)
 {
+	size_t	count;
+	size_t	i;
+
+	i = 0;
+	count = 0;
 	while (s[i] != '\0')
 	{
 		if (s[i] == c)
@@ -76,9 +74,9 @@ static int get_nstrings(char const *s, char c, size_t i, size_t count)
 	return (count);
 }
 
-static int find_strlen(char const *s, char c)
+static int	find_strlen(char const *s, char c)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (s[i] != '\0')
@@ -86,7 +84,7 @@ static int find_strlen(char const *s, char c)
 		if (s[i] == c)
 			return (i);
 		else
-			i++;	
+			i++;
 	}
 	return (i);
 }
