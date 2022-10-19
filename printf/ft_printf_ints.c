@@ -26,6 +26,20 @@ int put_int(va_list list)
 	return (num);
 }
 
+int put_int(va_list list)
+{
+	int num;
+	char *str;
+
+	num = va_arg(list, int);
+	str = ft_itoa((long) num);
+	if (!str)
+		return (0);
+	num = ft_putstr(str);
+	free(str);
+	return (num);
+}
+
 int	ft_putstr(char *str)
 {
 	int len;

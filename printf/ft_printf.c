@@ -6,40 +6,27 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/14 15:44:13 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/18 14:48:20 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/19 15:56:38 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdarg.h>
-#include <stdio.h>
-#include <unistd.h>
-#include "../libft/libft.h"
 #include "ft_printf.h"
 
-typedef int	(*JUMP_TABLE)(va_list arg); 
+static const JUMP_TABLE		my_table[127] = 
+{
+	['d'] = &put_int,
+	['c'] = &put_char,
+	['s'] = &put_str,
+	['p'] = &put_ptr,
+	['i'] = &put_int,
+	['u'] = &put_uint,
+	['x'] = &put_hex,
+	['X'] = &put_chex,
+	['%'] = &put_prc
+};
 
-int	put_int(va_list list);
-int	put_prc(va_list list);
-int	ft_putstr(char *str);
-int	put_char(va_list list);
-int	put_str(va_list list);
-int	put_ptr(va_list list);
-char	*get_hex(unsigned long hex);
 
 int	ft_printf(const char *FORMAT, ...)
 {
-	static const JUMP_TABLE		my_table[127] = 
-	{
-		['d'] = &put_int,
-	 	['c'] = &put_char,
-		['s'] = &put_str,
-		['p'] = &put_ptr
-	/*	['i'] = &put_int,
-		['u'] = &put_uint,
-		['x'] = &put_hex,
-		['X'] = &put_chex,
-		['%'] = &put_prc*/
-	};
-
 	int x;
 	va_list arg;
 
@@ -60,22 +47,20 @@ int	ft_printf(const char *FORMAT, ...)
 			write(1, &FORMAT[x], 1);
 		x++;
 	}
-
 	return (x);
 }
 
-int main(void)
+/*int main(void)
 {
-	int j;
-	int *i;
-	unsigned long x;
-	
-	j = 5;
-	i = &j;
+	unsigned int j;
+	unsigned int *ptr;
 
-	ft_printf("My Pointer address: %p\n", i);
-	printf("Original pointer address: %p\n", i);
-}
+	ptr = &j;
+	j = 214747;
+
+	ft_printf("My Pointer address: %%\n");
+	printf("Original pointer address: %%\n");
+}*/
 
 int	put_prc(va_list list)
 {
@@ -90,6 +75,20 @@ int put_int(va_list list)
 	char *str;
 
 	num = va_arg(list, int);
+	str = ft_itoa((long) num);
+	if (!str)
+		return (0);
+	num = ft_putstr(str);
+	free(str);
+	return (num);
+}
+
+int put_uint(va_list list)
+{
+	unsigned int num;
+	char *str;
+
+	num = va_arg(list, unsigned int);
 	str = ft_itoa((long) num);
 	if (!str)
 		return (0);
@@ -119,47 +118,99 @@ int 	put_str(va_list list)
 
 int	put_ptr(va_list list)
 {
-	int	*ptr;
-	char	*str;
+	int				*ptr;
+	char			*str;
 	unsigned long	hex;
 
 	ptr = va_arg(list, int *);
 	hex = (unsigned long)ptr;
-	str = get_hex(hex);
-	hex = 11;
-	write(1, &str[0], 1);
-	write(1, &str[1], 1);
-	while (hex > 1)
-	{
-		write(1, &str[hex], 1);
-		hex--;
-	}
-	
-	return (11);
+	str = get_hex_ptr(hex);
+	return (ft_putstr(str));
 }
 
-char	*get_hex(unsigned long hex)
+char	*get_hex_ptr(unsigned long hex)
 {
-	char *arr;
+	char *str;
 	int x; 
 	unsigned long remainder;
 	
-	arr = (char *)malloc(sizeof(char) * 12);
-	arr[0] = '0';
-	arr[1] = 'x';
-	x = 2;
+	str = (char *)malloc(sizeof(char) * 13);
+	str[0] = '0';
+	str[1] = 'x';
+	x = 13;
 	while (hex != 0)
 	{
 		remainder = hex % 16;
 		if (remainder < 10)
-			arr[x] = '0' + remainder;
+			str[x] = '0' + remainder;
 		else
-			arr[x] = ('7'+32) + remainder;
-		printf("arr[%d]: %c\n", x, arr[x]);
+			str[x] = ('7'+32) + remainder;
+		x--;
+		hex = hex / 16;
+	}
+	return (str);
+}
+
+
+int	put_hex(va_list list)
+{
+	char str[10];
+	int x; 
+	unsigned long remainder;
+	unsigned long hex;
+	
+	hex = va_arg(list, unsigned long);
+	x = 0;
+	while (hex != 0)
+	{
+		remainder = hex % 16;
+		if (remainder < 10)
+			str[x] = '0' + remainder;
+		else
+			str[x] = ('7'+32) + remainder;
 		x++;
 		hex = hex / 16;
 	}
-	return (arr);
+	str[x] = '\0';
+	return (ft_putrstr(str));
+}
+
+int	put_chex(va_list list)
+{
+	char str[10];
+	int x; 
+	unsigned long remainder;
+	unsigned long hex;
+	
+	hex = va_arg(list, unsigned long);
+	x = 0;
+	while (hex != 0)
+	{
+		remainder = hex % 16;
+		if (remainder < 10)
+			str[x] = '0' + remainder;
+		else
+			str[x] = '7' + remainder;
+		x++;
+		hex = hex / 16;
+	}
+	str[x] = '\0';
+	return (ft_putrstr(str));
+}
+
+int ft_putrstr(char *str)
+{
+	int len;
+	int i;
+
+	len = ft_strlen(str);
+	i = len;
+	while (len >= 0)
+	{
+		write(1, str+len, 1);
+		len--;
+	}
+	return (i);
 }
 
 int	ft_putstr(char *str)
