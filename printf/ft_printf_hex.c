@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/19 16:07:45 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/20 12:36:48 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/20 17:01:26 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <unistd.h>
@@ -15,11 +15,11 @@
 
 int	put_hex(va_list *list)
 {
-	char str[10];
-	int x; 
-	unsigned int remainder;
-	unsigned int hex;
-	
+	char			str[10];
+	int				x;
+	unsigned int	remainder;
+	unsigned int	hex;
+
 	hex = va_arg(*list, unsigned int);
 	if (hex == 0)
 		return (write(1, "0", 1));
@@ -30,7 +30,7 @@ int	put_hex(va_list *list)
 		if (remainder < 10)
 			str[x] = '0' + remainder;
 		else
-			str[x] = ('7'+32) + remainder;
+			str[x] = ('7' + 32) + remainder;
 		x++;
 		hex = hex / 16;
 	}
@@ -40,11 +40,11 @@ int	put_hex(va_list *list)
 
 int	put_chex(va_list *list)
 {
-	char str[10];
-	int x; 
-	unsigned int remainder;
-	unsigned int hex;
-	
+	char			str[10];
+	int				x;
+	unsigned int	remainder;
+	unsigned int	hex;
+
 	hex = va_arg(*list, unsigned int);
 	if (hex == 0)
 		return (write(1, "0", 1));

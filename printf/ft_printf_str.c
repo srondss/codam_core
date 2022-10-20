@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/19 16:05:16 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/20 12:18:04 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/20 17:03:28 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -18,13 +18,13 @@ int	put_char(va_list *list)
 	char	c;
 
 	c = va_arg(*list, int);
-	return (write(1, &c, 1));	
+	return (write(1, &c, 1));
 }
 
-int 	put_str(va_list *list)
+int	put_str(va_list *list)
 {
 	char	*str;
-	int	len;
+	int		len;
 
 	str = va_arg(*list, char *);
 	if (!str)
@@ -33,10 +33,10 @@ int 	put_str(va_list *list)
 	return (len);
 }
 
-int ft_putrstr(char *str)
+int	ft_putrstr(char *str)
 {
-	int len;
-	int i;
+	int	len;
+	int	i;
 
 	len = ft_strlen(str);
 	i = len;
@@ -50,7 +50,7 @@ int ft_putrstr(char *str)
 
 int	ft_putstr(char *str)
 {
-	int len;
+	int	len;
 
 	len = ft_strlen(str);
 	write(1, str, len);

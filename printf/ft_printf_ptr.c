@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_printf_ptr.c                                    :+:    :+:            */
+/*   ft_printf_ptr.c                                    :+:      :+:    :+:   */
 /*                                                     +:+                    */
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/19 16:09:28 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/19 19:37:19 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/20 17:04:30 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_printf.h"
@@ -28,10 +28,10 @@ int	put_ptr(va_list *list)
 
 char	*get_hex_ptr(unsigned long hex)
 {
-	char *str;
-	int x; 
-	unsigned long remainder;
-	
+	char			*str;
+	int				x;
+	unsigned long	remainder;
+
 	str = (char *)malloc(sizeof(char) * 19);
 	x = 0;
 	while (hex != 0)
@@ -40,12 +40,12 @@ char	*get_hex_ptr(unsigned long hex)
 		if (remainder < 10)
 			str[x] = '0' + remainder;
 		else
-			str[x] = ('7'+32) + remainder;
+			str[x] = ('7' + 32) + remainder;
 		x++;
 		hex = hex / 16;
 	}
 	str[x] = 'x';
-	str[x+1] = '0';
-	str[x+2] = '\0';
+	str[x + 1] = '0';
+	str[x + 2] = '\0';
 	return (str);
 }

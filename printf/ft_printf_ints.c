@@ -6,15 +6,15 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/17 18:15:52 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/20 15:09:16 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/20 17:02:32 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_printf.h"
 
-int put_int(va_list *list)
+int	put_int(va_list *list)
 {
-	int num;
-	char *str;
+	int		num;
+	char	*str;
 
 	num = va_arg(*list, int);
 	str = ft_itoa(num);
@@ -54,10 +54,10 @@ static char	*ft_uitoa(unsigned int len, unsigned int num, unsigned int n)
 	return (str);
 }
 
-int put_uint(va_list *list)
+int	put_uint(va_list *list)
 {
-	unsigned int num;
-	char *str;
+	unsigned int	num;
+	char			*str;
 
 	num = va_arg(*list, unsigned int);
 	str = ft_uitoa(0, num, num);
