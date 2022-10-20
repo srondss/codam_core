@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 16:59:48 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/13 10:24:55 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/20 15:07:41 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -78,7 +78,7 @@ static char	*ret_positive(int len, int num, int i, int n)
 	if (str == NULL)
 		return (str);
 	str[len] = '\0';
-	while (i <= len)
+	while (i < len)
 	{
 		len--;
 		if (num < 9)

@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_printf_hex.c                                    :+:    :+:            */
+/*   ft_printf_hex.c                                    :+:      :+:    :+:   */
 /*                                                     +:+                    */
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/19 16:07:45 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/19 19:40:43 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/20 12:36:48 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <unistd.h>
+#include <stdio.h>
 #include "ft_printf.h"
 
-int	put_hex(va_list list)
+int	put_hex(va_list *list)
 {
-	char str[20];
+	char str[10];
 	int x; 
-	unsigned long remainder;
-	unsigned long hex;
+	unsigned int remainder;
+	unsigned int hex;
 	
-	hex = va_arg(list, unsigned long);
+	hex = va_arg(*list, unsigned int);
 	if (hex == 0)
 		return (write(1, "0", 1));
 	x = 0;
@@ -37,14 +38,14 @@ int	put_hex(va_list list)
 	return (ft_putrstr(str));
 }
 
-int	put_chex(va_list list)
+int	put_chex(va_list *list)
 {
-	char str[20];
+	char str[10];
 	int x; 
-	unsigned long remainder;
-	unsigned long hex;
+	unsigned int remainder;
+	unsigned int hex;
 	
-	hex = va_arg(list, unsigned long);
+	hex = va_arg(*list, unsigned int);
 	if (hex == 0)
 		return (write(1, "0", 1));
 	x = 0;

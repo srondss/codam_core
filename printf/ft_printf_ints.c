@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_printf_ints.c                                   :+:    :+:            */
+/*   ft_printf_ints.c                                   :+:      :+:    :+:   */
 /*                                                     +:+                    */
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/17 18:15:52 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/19 20:18:58 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/20 15:09:16 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_printf.h"
 
-int put_int(va_list list)
+int put_int(va_list *list)
 {
 	int num;
 	char *str;
 
-	num = va_arg(list, int);
+	num = va_arg(*list, int);
 	str = ft_itoa(num);
 	if (!str)
 		return (0);
@@ -25,7 +25,7 @@ int put_int(va_list list)
 	return (num);
 }
 
-static char	*ft_uitoa(unsigned int len, unsigned int num, unsigned int i, unsigned int n)
+static char	*ft_uitoa(unsigned int len, unsigned int num, unsigned int n)
 {
 	char	*str;
 
@@ -40,7 +40,7 @@ static char	*ft_uitoa(unsigned int len, unsigned int num, unsigned int i, unsign
 	if (str == NULL)
 		return (str);
 	str[len] = '\0';
-	while (i <= len)
+	while (0 < len)
 	{
 		len--;
 		if (num < 9)
@@ -54,13 +54,13 @@ static char	*ft_uitoa(unsigned int len, unsigned int num, unsigned int i, unsign
 	return (str);
 }
 
-int put_uint(va_list list)
+int put_uint(va_list *list)
 {
 	unsigned int num;
 	char *str;
 
-	num = va_arg(list, unsigned int);
-	str = ft_uitoa(0, num, 0, num);
+	num = va_arg(*list, unsigned int);
+	str = ft_uitoa(0, num, num);
 	if (!str)
 		return (0);
 	num = ft_putstr(str);

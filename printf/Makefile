@@ -1,24 +1,34 @@
-CC=gcc
+CC=cc
 NAME=libftprintf.a
-CFLAGS=-Wall -Wextra -Werror
-OPTIONS=-c -I.
-SRC=ft_printf.c ft_printf_hex.c ft_printf_ints.c ft_printf_misc.c ft_printf_ptr.c ft_printf_str.c ./libft/*.c
-OBJ=*.o
+FLAGS=-Wall -Wextra -Werror
+MAKE=make
+SRCS=ft_printf.c ft_printf_ints.c ft_printf_hex.c ft_printf_misc.c ft_printf_str.c ft_printf_ptr.c
+HEAD=ft_printf.h
+OBJS=$(SRCS:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	ar -crs $(NAME) $(OBJ)
+$(NAME) : $(OBJS) $(HEAD)
+	@cd libft && $(MAKE)
+	@cp libft/libft.a $(NAME)
+	@ar -rcs $(NAME) $(OBJS)
+	@echo "\033[90m[\033[32mSuccess\033[90m]\033[32m Successfully compiled "libftprintf.a" .\033[0m"
 
-$(OBJ): $(SRC)
-	$(CC) $(CFLAGS) $(OPTIONS) $(SRC)
+%.o: %.c
+	@$(CC) $(FLAGS) -c $<  -o $(<:.c=.o)
+	@echo "\033[90m[\033[32mOK\033[90m]\033[34m Compiling $<\033[0m"
 
-clean:
-	rm -f $(OBJ)
+clean :
+	@rm -f $(OBJS)
+	@$(MAKE) clean -C ./libft
+	@echo "\033[90m[\033[91mDeleting\033[90m]\033[31m Object FT_PRINTF files deleted\033[0m"
 
-fclean: clean
-	rm -f $(NAME)
+fclean : clean
+	@rm -f $(NAME)
+	@rm -f libft.a
+	@$(MAKE) fclean -C ./libft
+	@echo "\033[90m[\033[91mDeleting\033[90m]\033[31m libftprintf.a deleted.\033[0m"
 
 re: fclean all	
 
-.PHONY: clean fclean all re
+.PHONY: all re fclean clean

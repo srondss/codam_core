@@ -12,9 +12,9 @@
 
 #include "ft_printf.h"
 
-int	put_prc(va_list list)
+int	put_prc(va_list *list)
 {
-	(void) list;
+	(void) *list;
 	write(1, "%", 1);
 	return (1);
 }

@@ -11,13 +11,13 @@
 /* ************************************************************************** */
 #include "ft_printf.h"
 
-int	put_ptr(va_list list)
+int	put_ptr(va_list *list)
 {
 	unsigned long	ptr;
 	char			*str;
 	unsigned long	hex;
 
-	ptr = va_arg(list, unsigned long);
+	ptr = va_arg(*list, unsigned long);
 	if (!ptr)
 		return (write(1, "0x0", 3));
 	str = get_hex_ptr(ptr);
