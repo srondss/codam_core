@@ -6,25 +6,23 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 14:00:58 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/11 14:00:45 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/21 16:07:02 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
 #include <stdio.h>
-
-static int	ft_multiplier(const char *nptr);
 
 int	ft_atoi(const char *nptr)
 {
 	int	sign;
 	int	i;
 	int	sum;
-	int	multiplier;
 
 	i = 0;
-	sign = 1;
 	sum = 0;
-	while ((nptr[i] >= 9 && nptr[i] < 17) || (nptr[i] == 32))
+	sign = 1;
+	while (nptr[i] == '\f' || nptr[i] == ' ' || nptr[i] == '\n' 
+			|| nptr[i] == '\r' || nptr[i] == '\t' || nptr[i] == '\v')
 		i++;
 	if (nptr[i] == '+' || nptr[i] == '-')
 	{	
@@ -32,38 +30,17 @@ int	ft_atoi(const char *nptr)
 			sign = -1;
 		i++;
 	}
-	multiplier = ft_multiplier(nptr);
-	while (nptr[i] >= '0' && nptr[i] <= '9')
+	while (nptr[i] >= '0' && nptr[i] <= '9' && nptr[i] != '\0')
 	{
-		sum += ((nptr[i] - 48) * multiplier);
-		multiplier /= 10;
-		i++;
+		sum *= 10;
+		sum += nptr[i++] - '0';
 	}
 	return (sum * sign);
 }
 
-static int	ft_multiplier(const char *nptr)
-{
-	float	multiplier;
-	int		i;
-
-	i = 0;
-	multiplier = 0.1;
-	while ((nptr[i] >= 9 && nptr[i] < 17) || (nptr[i] == 32))
-		i++;
-	if (nptr[i] == '+' || nptr[i] == '-')
-		i++;
-	while (nptr[i] >= '0' && nptr[i] <= '9')
-	{
-		multiplier *= 10;
-		i++;
-	}
-	return ((int)multiplier);
-}
-
 /*int main(void)
 {
-	char str[] = "\t\v\f\r\n \f-06050";
+	char str[] = "\x0e15";
 	
 	printf("Og: %d\n", atoi(str));
 	printf("Mine: %d\n", ft_atoi(str));

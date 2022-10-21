@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 16:01:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/14 14:53:59 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/21 14:33:03 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef LIBFT_H
@@ -14,6 +14,12 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+
+typedef struct s_list
+{
+	void			*content;
+	struct s_list	*next;
+}	t_list;
 
 int		ft_toupper(int c);
 void	*ft_memset(void *s, int c, size_t n);
@@ -50,5 +56,5 @@ void	ft_putnbr_fd(int n, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putstr_fd(char *s, int fd);
 void	ft_putchar_fd(char c, int fd);
-
+t_list	*ft_lstnew(void *content);
 #endif

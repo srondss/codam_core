@@ -48,10 +48,14 @@ SRCS_2	=       ft_substr.c		\
 		ft_putendl_fd.c		\
 		ft_putnbr_fd.c		\
 
+SRCS_B =		ft_lstnew.c
+
 SRCS	= $(SRCS_1) \
 			$(SRCS_2) \
 
 OBJS	= $(SRCS:.c=.o)
+
+OBJS_BONUS = $(SRCS_B:.c=.o)
 
 all : $(NAME)
 
