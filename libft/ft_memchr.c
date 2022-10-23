@@ -6,11 +6,10 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 10:51:17 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/13 16:23:34 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/23 16:49:32 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <string.h>
-#include <stdio.h>
+#include <stdlib.h>
 
 void	*ft_memchr(const void *s, int c, size_t n)
 {

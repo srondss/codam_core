@@ -6,11 +6,10 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 10:38:39 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/11 13:59:40 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/23 16:54:16 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <string.h>
-#include <stdio.h>
+#include <stdlib.h>
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {

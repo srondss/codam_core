@@ -6,14 +6,12 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 13:32:29 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/14 14:31:29 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/23 16:51:06 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdlib.h>
-#include <stdio.h>
 #include "libft.h"
 
-void		free_everything(char **string, int i);
+static void	free_everything(char **string, int i);
 static int	find_strlen(char const *s, char c);
 static int	get_nstrings(char const *s, char c);
 
@@ -44,7 +42,7 @@ char	**ft_split(char const *s, char c)
 	return (strings);
 }
 
-void	free_everything(char **string, int i)
+static void	free_everything(char **string, int i)
 {
 	while (i >= 0)
 	{

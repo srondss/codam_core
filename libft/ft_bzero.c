@@ -6,11 +6,10 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 13:16:08 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/05 13:22:31 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/23 16:48:13 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdio.h>
-#include <strings.h>
+#include <stdlib.h>
 
 void	ft_bzero(void *s, size_t n)
 {

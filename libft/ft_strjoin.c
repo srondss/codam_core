@@ -6,10 +6,9 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 08:51:56 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/11 14:02:43 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/23 16:52:20 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdio.h>
 #include <stdlib.h>
 
 char	*ft_strjoin(char const *s1, char const *s2)

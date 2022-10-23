@@ -6,13 +6,9 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 10:28:06 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/22 10:57:48 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/23 16:54:54 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <string.h>
-#include <stdio.h>
-#include "libft.h"
-
 char	*ft_strrchr(const char *s, int c)
 {
 	int		i;

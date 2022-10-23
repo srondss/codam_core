@@ -6,12 +6,10 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 09:10:54 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/11 13:58:37 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/23 16:55:17 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "libft.h"
-#include <stdio.h>
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
