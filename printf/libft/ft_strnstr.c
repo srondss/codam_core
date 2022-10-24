@@ -6,11 +6,10 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:12:25 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/13 16:05:03 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/23 16:54:35 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <string.h>
-#include <stdio.h>
+#include <stdlib.h>
 
 char	*ft_strnstr(const char *big, const char *little, size_t len)
 {

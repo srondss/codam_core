@@ -6,10 +6,9 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 13:59:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/07 10:27:32 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/23 16:55:40 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdio.h>
 
 int	ft_tolower(int c)
 {

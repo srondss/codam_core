@@ -6,12 +6,10 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/14 10:34:47 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/14 15:38:18 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/23 16:56:17 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include "libft.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 void	ft_striteri(char *s, void (*f)(unsigned int, char *))
 {

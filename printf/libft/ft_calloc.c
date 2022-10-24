@@ -6,27 +6,21 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/08 13:46:59 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/13 10:23:24 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/23 16:57:46 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdio.h>
-#include <stdlib.h>
+#include "libft.h"
 
 void	*ft_calloc(size_t nmemb, size_t size)
 {
-	size_t	i;
-	void	*ptr;
+	char	*ptr;
 
-	i = 0;
 	ptr = malloc(nmemb * size);
 	if (ptr == NULL)
-		return (ptr);
-	while (i < (nmemb * size))
-	{
-		((char *)ptr)[i] = '\0';
-		i++;
-	}
-	return (ptr);
+		return (NULL);
+	if (size != 0 || nmemb != 0)
+		ft_bzero(ptr, nmemb * size);
+	return ((void *) ptr);
 }
 
 /*int main(void)

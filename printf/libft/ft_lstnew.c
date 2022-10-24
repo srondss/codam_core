@@ -1,24 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_putstr_fd.c                                     :+:    :+:            */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                     +:+                    */
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/10/14 11:52:35 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/23 16:50:52 by ysrondy       ########   odam.nl         */
+/*   Created: 2022/10/21 13:06:06 by ysrondy       #+#    #+#                 */
+/*   Updated: 2022/10/21 13:40:06 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <unistd.h>
+#include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+t_list	*ft_lstnew(void *content)
 {
-	int	i;
+	struct s_list	*new_list;
 
-	i = 0;
-	while (s[i] != '\0')
-	{
-		write(fd, &s[i], 1);
-		i++;
-	}
+	new_list = (malloc)(sizeof(struct s_list));
+	if (!new_list)
+		return (0);
+	new_list->content = content;
+	new_list->next = NULL;
+	return (new_list);
 }
+
+/*int main(void)
+{
+	printf("%p", ft_lstnew("Hello"));
+}*/

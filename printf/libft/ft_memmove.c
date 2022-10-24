@@ -6,38 +6,35 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 09:35:56 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/13 11:16:21 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/23 16:50:18 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <string.h>
-#include <stdio.h>
+#include <stdlib.h>
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	size_t			i;
-	unsigned char	*d;
-	unsigned char	*s;
+	size_t	i;
 
-	d = (unsigned char *)dest;
-	s = (unsigned char *)src;
 	i = 0;
-	if (dest > src)
+	if (!dst && !src)
+		return (0);
+	if (src > dst)
 	{
-		while (n > 0)
+		while (i < len)
 		{
-			n--;
-			(d)[n] = (s)[n];
-		}
-	}
-	if (src > dest)
-	{
-		while (i < n)
-		{
-			(d)[i] = (s)[i];
+			((unsigned char *) dst)[i] = ((unsigned char *) src)[i];
 			i++;
 		}
 	}
-	return (dest);
+	else
+	{
+		while (len)
+		{
+			((unsigned char *) dst)[len - 1] = ((unsigned char *) src)[len - 1];
+			len--;
+		}
+	}
+	return (dst);
 }
 
 /*int	main(void)

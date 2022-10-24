@@ -6,11 +6,10 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/05 13:23:09 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/13 11:03:25 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/23 16:50:04 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <string.h>
-#include <stdio.h>
+#include <stdlib.h>
 
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {

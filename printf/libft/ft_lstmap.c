@@ -1,29 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_toupper.c                                       :+:      :+:    :+:   */
+/*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/06 12:09:52 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/23 16:55:47 by ysrondy       ########   odam.nl         */
+/*   Created: 2022/10/22 12:14:12 by ysrondy           #+#    #+#             */
+/*   Updated: 2022/10/23 16:28:56 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+#include "libft.h"
 
-int	ft_toupper(int c)
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	if (c >= 'a' && c <= 'z')
+	t_list	*new_node;
+	t_list	*new_list;
+
+	if (!f || !del)
+		return (NULL);
+	new_list = NULL;
+	while (lst)
 	{
-		c -= 32;
-		return (c);
+		new_node = ft_lstnew(f(lst->content));
+		if (new_node == NULL)
+		{
+			ft_lstclear(&new_list, del);
+			return (NULL);
+		}
+		ft_lstadd_back(&new_list, new_node);
+		lst = lst->next;
 	}
-	else
-		return (c);
+	return (new_list);
 }
-
-/*int main(void)
-{
-	char h = 'A';
-	printf("%c", h);
-	printf("%c", toupper(h));
-}*/

@@ -6,12 +6,10 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/14 09:48:06 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/14 15:38:20 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/23 16:53:55 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdlib.h>
 #include "libft.h"
-#include <stdio.h>
 
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {

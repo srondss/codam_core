@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 13:32:29 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/23 16:51:06 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/24 10:34:10 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -49,6 +49,7 @@ static void	free_everything(char **string, int i)
 		free(string[i]);
 		i--;
 	}
+	free(string);
 }
 
 static int	get_nstrings(char const *s, char c)
