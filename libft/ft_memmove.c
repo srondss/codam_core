@@ -6,10 +6,10 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 09:35:56 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/22 10:46:34 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/23 16:50:18 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stddef.h>
+#include <stdlib.h>
 
 void	*ft_memmove(void *dst, const void *src, size_t len)
 {

@@ -6,41 +6,40 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 10:28:06 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/13 11:14:22 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/23 16:54:54 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <string.h>
-#include <stdio.h>
-#include "libft.h"
-
 char	*ft_strrchr(const char *s, int c)
 {
 	int		i;
-	char	*word;
-	char	*ptr;
+	int		j;
+	char	a;
 
+	a = c;
 	i = 0;
-	word = (char *)s;
-	ptr = NULL;
-	while (s[i] != '\0')
+	j = -1;
+	while (s[i])
 	{
-		if (word[i] == (unsigned char)c)
-			ptr = &word[i];
+		if (s[i] == a)
+			j = i;
 		i++;
 	}
-	if (c == '\0')
-		ptr = &word[i];
-	return (ptr);
+	if (s[i] == a)
+		j = i;
+	if (j != -1)
+		return ((char *) &s[j]);
+	return (0);
 }
 
 /*int main(void)
 {
-	char string[] = "tripouille";
+	char string[] = "teste";
 	
-	char *string2 = strrchr(string, 't' + 256);
-	char *string3 = ft_strrchr(string, 't' + 256);
+	char *string2 = strrchr(string, '\0');
+	char *string3 = ft_strrchr(string, '\0');
 
-	printf("Og C: %d\n", 't' + 256);
-	printf("Og: %s\n", string2);
-	printf("Mine: %s\n", string3);
+	//printf("Og C: %d\n", 't' + 256);
+	printf("pointer 0: %p\n", string+5);
+	printf("Og: %p\n", string2);
+	printf("Mine: %p\n", string3);
 }*/

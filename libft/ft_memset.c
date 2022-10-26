@@ -6,11 +6,10 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/04 14:42:19 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/13 10:31:30 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/23 16:50:31 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-/*#include <string.h>*/
-#include <stdio.h>
+#include <stdlib.h>
 
 void	*ft_memset(void *s, int c, size_t n)
 {

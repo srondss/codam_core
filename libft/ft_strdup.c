@@ -6,11 +6,9 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 08:40:59 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/13 10:12:07 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/23 16:51:40 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <string.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 char	*ft_strdup(const char *s)

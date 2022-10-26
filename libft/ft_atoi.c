@@ -6,11 +6,9 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 14:00:58 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/22 10:13:26 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/23 16:47:59 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdlib.h>
-#include <stdio.h>
 
 int	ft_atoi(const char *nptr)
 {

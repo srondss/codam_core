@@ -6,11 +6,10 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:34 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/11 10:32:13 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/10/23 16:49:52 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <string.h>
-#include <stdio.h>
+#include <stdlib.h>
 
 int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {

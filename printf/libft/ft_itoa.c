@@ -6,11 +6,9 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 16:59:48 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/20 15:07:41 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/23 16:48:44 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdio.h>
-#include <stdlib.h>
 #include "libft.h"
 
 static char	*ret_positive(int len, int num, int i, int n);

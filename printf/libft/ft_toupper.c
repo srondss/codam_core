@@ -6,10 +6,9 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 12:09:52 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/12 09:19:36 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/10/23 16:55:47 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdio.h>
 
 int	ft_toupper(int c)
 {
