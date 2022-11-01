@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 12:40:45 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/30 17:06:31 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/11/01 18:39:30 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -15,6 +15,19 @@
 #include <stdio.h>
 #include "../libft/libft.h"
 
+
+char	*ft_strcpy(char *dest, char*src)
+{
+	int i;
+
+	i = 0;
+	while (src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	return (dest);
+}
 
 int	check_newline(char *buf)
 {
@@ -34,13 +47,21 @@ char	*get_next_line(int fd)
 {
 	static char buf[BUFFER_SIZE];
 	static char *retstr;
+	static char *tmp;
 	int i;
 	int j;
-	static int k;
+	int k;
 
 	i = 0;
 	j = 1;
 	k = 0;
+	if (retstr)
+	{
+		printf("RetB4Free: %s\n", retstr);
+		free(retstr);
+		printf("RetA5Free: %s\n", retstr);
+		free(tmp);
+	}
 	while (j != 0)
 	{
 		j = read(fd, buf, BUFFER_SIZE);
@@ -49,14 +70,18 @@ char	*get_next_line(int fd)
 			printf("Buf: %s\n", buf);
 			printf("Ret: %s\n", retstr);
 			if (!retstr)
+			{
+				printf("duplicated\n");
 				retstr = ft_strdup(buf);
+			}
 			else
 			{
-		
-				//printf("buflen %d\n", ft_strlen(buf));
-				printf("strlen1 %d\n", ft_strlen(retstr));
+				tmp = ft_strdup(retstr);
+				k = ft_strlen(tmp);
+	//			printf("strlen1: %d\n", k);
 				retstr = malloc(sizeof(char) * (BUFFER_SIZE + ft_strlen(retstr) + 1));
-				//printf("strlen2 %d\n", ft_strlen(retstr));
+				ft_strcpy(retstr,tmp);
+	//			printf("strlen2 %d\n", ft_strlen(retstr));
 				while (buf[i] != '\0')
 				{
 					retstr[k] = buf[i];
@@ -69,11 +94,17 @@ char	*get_next_line(int fd)
 					k++;
 				}
 				i = 0;
+				retstr[k + 1] = '\0';
 			}
+		}
+		else
+		{
+			printf("Final Ret: %s\n", retstr);
+			return (retstr);
 		}
 	}
 	printf("outside\n");
-	printf("Final Buf: %s\n", buf);
+	//printf("Final Buf: %s\n", buf);
 	printf("Final Ret: %s\n", retstr);
 	return (retstr);
 }
@@ -83,6 +114,6 @@ int	main()
 	int fd;
 	fd = open("test.txt", O_RDONLY);
 	get_next_line(fd);
-	//get_next_line(fd);
+	get_next_line(fd);
 	//get_next_line(fd);
 }
