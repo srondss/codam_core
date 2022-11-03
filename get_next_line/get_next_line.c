@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 12:40:45 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/11/02 19:35:14 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/11/03 19:26:24 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -15,23 +15,59 @@
 #include <stdio.h>
 #include "../libft/libft.h"
 
-char *copy_up_to_newline(char *dest, char *src)
+char *buff_to_line(char *line, char *buf) //stops if buf[i] == \n
 {
+	char *tmp;
 	int i;
 	int len;
 
 	i = 0;
-	len = 0;
-	while (src[i] != '\n')
-		i++;
-	dest = malloc(sizeof(char) * (i + 1));
-	while (len <= i)
+	if (!line)
 	{
-		dest[len] = src[len];
-		len++;
+		line = malloc(sizeof(char) * BUFFER_SIZE + 1);
+		ft_memcpy(line, buf, (BUFFER_SIZE + 1));
 	}
-	dest[len] = '\0';
-	return (dest);
+	else
+	{
+		len = ft_strlen(line);
+		tmp = malloc(sizeof(char) * len + 1);
+		ft_memcpy(tmp, line, (len + 1));
+		free(line);
+		line = malloc(len + BUFFER_SIZE + 1);
+		ft_memcpy(line, tmp, (ft_strlen(tmp)));
+		free(tmp);
+		while (buf[i] != '\0')
+		{
+			line[len] = buf[i];
+			len++;
+			i++;
+		}
+		line[len] = '\0';
+	}
+	i = 0;
+	return (line);
+}
+
+char *copy_newline(char *line)
+{
+	int i;
+	int len;
+	char *retstr;
+
+	i = 0;
+	len = ft_strlen(line);
+	retstr = malloc(sizeof(char) * len + 1);
+	while (line[i] != '\0')
+	{
+		retstr[i] = line[i];
+		if (line[i] == '\n')
+		{
+			retstr[i + 1] = '\0';
+			break;
+		}
+		i++;
+	}
+	return (retstr);
 }
 
 int	check_newline(char *buf)
@@ -39,6 +75,8 @@ int	check_newline(char *buf)
 	int i;
 
 	i = 0;
+	if (!buf)
+		return (0);
 	while (buf[i] != '\0')
 	{
 		if (buf[i] == '\n')
@@ -48,64 +86,67 @@ int	check_newline(char *buf)
 	return (0);
 }
 
+char *line_update(char *line)
+{
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+	while (line[i] != '\n')
+		i++;
+	while (line[i] != '\0') // SEGFAULT here EOF 
+	{
+		line[j] = line[i + 1];
+		j++;
+		i++;
+	}
+	return (line);
+}
+
 char	*get_next_line(int fd)
 {
 	static char buf[BUFFER_SIZE + 1];
+	static char *line;
 	static char *retstr;
-	static char *tmp;
-	int i;
-	int read_ret;
-	int k;
+	static int 	read_ret;
 
-	i = 0;
-	read_ret = 1;
-	k = 0;
-	while (read_ret != 0 && (check_newline(buf) == 0))
+	if (line)
+		line = line_update(line);
+	
+	read_ret = BUFFER_SIZE;
+	// if buf[0]
+	// 	copy whatever was inside buffer into line 
+	while (!check_newline(line) && read_ret == BUFFER_SIZE)
 	{
 		read_ret = read(fd, buf, BUFFER_SIZE);
-		buf[BUFFER_SIZE] = '\0';
-		if (!retstr)
-		{
-			retstr = malloc(sizeof(char) * (ft_strlen(buf) + 1));
-			ft_memcpy(retstr, buf, (ft_strlen(buf) + 1));
-		}
-		else
-		{
-			tmp = malloc(sizeof(char) * (ft_strlen(retstr) + 1));
-			ft_memcpy(tmp, retstr, (ft_strlen(retstr) + 1));
-			k = ft_strlen(tmp);
-			free(retstr);
-			retstr = malloc(sizeof(char) * (BUFFER_SIZE + ft_strlen(tmp) + 1));
-			ft_memcpy(retstr, tmp, (ft_strlen(tmp) + 1));
-			while (buf[i] != '\0')
-			{
-				retstr[k] = buf[i];
-				if (buf[i] == '\n')
-				{
-					retstr[k + 1] = '\0';
-					break;
-				}
-				i++;
-				k++;
-			}
-			printf("i : %d\n", i);
-			printf("readret: %d\n", i);
-			if (buf[i] != '\n')
-				retstr[k] = '\0';
-			i = 0;
-		}
+		if (read_ret == 0 && buf[0] == '\0')
+			return (free(line), NULL);
+		if (read_ret == -1)
+			return ("Error, Could'nt read file.");
+		buf[read_ret] = '\0';
+		line = buff_to_line(line, buf);
 	}
-	tmp = copy_up_to_newline(tmp, retstr);
-	//free(retstr);
-	printf("Final Ret: %s", tmp);
-	return tmp;
+	retstr = copy_newline(line);
+	return (retstr);
 }
 
 int	main()
 {
 	int fd;
+	char *str;
+
 	fd = open("test.txt", O_RDONLY);
-	get_next_line(fd);
-	//get_next_line(fd);
-	//get_next_line(fd);
+	while (1)
+	{
+		str = get_next_line(fd);
+		if (!str)
+			break;
+		printf("%s", str);
+		free(str);
+	}
+	system("leaks -q a.out");
+	close(fd);
 }
+
+
