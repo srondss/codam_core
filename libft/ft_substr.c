@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 08:33:32 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/11/04 11:43:55 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/11/04 11:46:07 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -18,10 +18,10 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	size_t			slen;
 	char			*string;
 
-//	if (!s || !start)
-//		return (NULL);
 	i = 0;
 	j = 0;
+	if (!s)
+		return (NULL);
 	slen = ft_strlen(s);
 	if (slen < len)
 		len = slen;
@@ -39,9 +39,10 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	string[j] = '\0';
 	return (string);
 }
-
-/*int main(void)
+/*
+#include <stdio.h>
+int main(void)
 {
-	char s[] = "tripouille";
-	printf("Substring: %s", ft_substr(s, ft_strlen(s) + 1, 7)); 
+	//char s[] = "tripouille";
+	printf("Substring: %s", ft_substr(NULL, 1, 7)); 
 }*/

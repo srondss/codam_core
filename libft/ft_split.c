@@ -6,12 +6,12 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 13:32:29 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/24 10:34:10 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/11/04 18:21:58 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
 
-static void	free_everything(char **string, int i);
+static char	**free_everything(char **string, int i);
 static int	find_strlen(char const *s, char c);
 static int	get_nstrings(char const *s, char c);
 
@@ -22,6 +22,8 @@ char	**ft_split(char const *s, char c)
 	size_t	len;
 	char	**strings;
 
+	if (!s)
+		return (NULL);
 	i = -1;
 	j = 0;
 	len = get_nstrings(s, c);
@@ -34,7 +36,7 @@ char	**ft_split(char const *s, char c)
 			j++;
 		strings[i] = ft_substr(s, j, find_strlen(&s[j], c));
 		if (strings[i] == NULL)
-			free_everything(strings, i);
+			return (free_everything(strings, i));
 		while (s[j] != c && s[j] != '\0')
 			j++;
 	}
@@ -42,7 +44,7 @@ char	**ft_split(char const *s, char c)
 	return (strings);
 }
 
-static void	free_everything(char **string, int i)
+static char	**free_everything(char **string, int i)
 {
 	while (i >= 0)
 	{
@@ -50,6 +52,7 @@ static void	free_everything(char **string, int i)
 		i--;
 	}
 	free(string);
+	return (NULL);
 }
 
 static int	get_nstrings(char const *s, char c)
@@ -87,11 +90,13 @@ static int	find_strlen(char const *s, char c)
 	}
 	return (i);
 }
-
-/*int main(void)
+/*
+#include <stdio.h>
+int main(void)
 {
-	char str[] = "hello,goodbye,doei";
-	char **str2 = ft_split(str, ',');
-	for (int i = 0; i < 3; i++)
-		printf("String: %s\n", str2[i]);
+	//char str[] = "hello,goodbye,doei";
+	char **str2 = ft_split(NULL, ',');
+	printf("String: %s", str2[0]);
+	//for (int i = 0; i < 3; i++)
+	//	printf("String: %s\n", str2[i]);
 }*/

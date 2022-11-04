@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/14 09:48:06 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/23 16:53:55 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/11/04 12:09:17 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -17,6 +17,8 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 	size_t	len;
 	char	*str;
 
+	if (!s)
+		return (NULL);
 	i = 0;
 	len = ft_strlen(s);
 	str = (char *)malloc(sizeof(char) * (len + 1));
