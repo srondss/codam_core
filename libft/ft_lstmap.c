@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 12:14:12 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/11/03 19:33:02 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/11/04 11:40:12 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -15,8 +15,8 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
 	t_list	*new_node;
 	t_list	*head;
-	void 	*content;
-	
+	void	*content;
+
 	if (!f || !del)
 		return (NULL);
 	head = NULL;

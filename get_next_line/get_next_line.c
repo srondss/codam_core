@@ -6,14 +6,41 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 12:40:45 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/11/03 19:26:24 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/11/04 13:07:39 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
+#include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
-#include "../libft/libft.h"
+//#include "../libft/libft.h"
+
+
+void	*ft_memcpy(void *dest, const void *src, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	if (!dest && !src)
+		return (0);
+	while (i < n)
+	{
+		((char *)dest)[i] = ((char *)src)[i];
+		i++;
+	}
+	return (dest);
+}
+
+int	ft_strlen(char const *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+		i++;
+	return (i);
+}
 
 char *buff_to_line(char *line, char *buf) //stops if buf[i] == \n
 {
@@ -93,7 +120,7 @@ char *line_update(char *line)
 
 	i = 0;
 	j = 0;
-	while (line[i] != '\n')
+	while (line[i] != '\n' && line[i] != '\0')
 		i++;
 	while (line[i] != '\0') // SEGFAULT here EOF 
 	{
@@ -113,7 +140,8 @@ char	*get_next_line(int fd)
 
 	if (line)
 		line = line_update(line);
-	
+	if (retstr)
+		free(retstr);
 	read_ret = BUFFER_SIZE;
 	// if buf[0]
 	// 	copy whatever was inside buffer into line 
@@ -148,5 +176,3 @@ int	main()
 	system("leaks -q a.out");
 	close(fd);
 }
-
-
