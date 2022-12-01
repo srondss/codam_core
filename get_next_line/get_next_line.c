@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 12:40:45 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/11/27 19:47:24 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/12/01 10:14:09 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -15,6 +15,8 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include "../libft/libft.h"
+
+#include <string.h>
 
 void	*ft_memmove(void *dst, const void *src, size_t len)
 {
@@ -60,11 +62,8 @@ char *buff_to_line(char *line, char *buf) //stops if buf[i] == \n
 
 	i = 0;
 	len = ft_strlen(line);
-//	printf("Line in buff_to_line: %s\n", line);
-//	printf("Length of Line: %d\n", len);
 	str = (char *)malloc(sizeof(char) * len + BUFFER_SIZE + 1);
 	ft_strlcpy(str, line, (len + 1));
-//	printf("Str in buff_to_line: %s\n", str);
 	while (buf[i] != '\0' && buf[i] != '\n')
 	{
 		str[len + i] = buf[i];
@@ -77,33 +76,10 @@ char *buff_to_line(char *line, char *buf) //stops if buf[i] == \n
 	}
 	else
 		str[len + i] = '\0';
-//	printf("Final_Str in buff_to_line: %s\n", str);
 	free(line);
 	line = ft_strdup(str);
 	free(str);
 	return (line);
-}
-
-char *copy_newline(char *line)
-{
-	int i;
-	int len;
-	char *retstr;
-
-	i = 0;
-	len = ft_strlen(line);
-	retstr = malloc(sizeof(char) * len + 1);
-	while (line[i] != '\0')
-	{
-		retstr[i] = line[i];
-		if (line[i] == '\n')
-		{
-			retstr[i + 1] = '\0';
-			break;
-		}
-		i++;
-	}
-	return (retstr);
 }
 
 int	check_newline(char *buf)
@@ -122,20 +98,33 @@ int	check_newline(char *buf)
 	return (0);
 }
 
-char	*buf_update(char *buf)
+void	buf_update(char *buf)
 {
 	int i;
-
+	int j;
+	char *new_buf;
+	
 	i = 0;
-//	printf("Buf dans buf_update: %s\n", buf);
+	j = 0;
+	new_buf = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
 	while (buf[i] != '\n' && buf[i] != '\0')
 		i++;
 	if (buf[i] != '\0')
 	{
-//		printf("length Buf: %d\n", ft_strlen(buf));
-		ft_memmove(buf, buf+(i + 1), (ft_strlen(buf) - (i - 1)));
+		i++;
+		while (buf[i] != '\0')
+		{
+			new_buf[j] = buf[i];
+			i++;
+			j++;		
+		}
+		new_buf[j] = '\0';
+		ft_strlcpy(buf, new_buf, (ft_strlen(new_buf) + 1)); 
 	}
-	return (buf); 
+	free(new_buf);
+
+/*	if (buf[i] != '\0')
+		ft_memmove(buf, buf+(i + 1), (ft_strlen(buf) - (i - 1)));*/
 }
 
 char	*get_next_line(int fd)
@@ -150,29 +139,29 @@ char	*get_next_line(int fd)
 	j = 0;
 	read_ret = BUFFER_SIZE;
 	line = ft_calloc(sizeof(char *), BUFFER_SIZE + 1);
-//	printf("Begin Buffer: %s\n", buf);
 	if (buf[0] != '\0')
 	{
 		while (buf[i] != '\0')
 		{
-	//		printf("enter\n");
 			line[j] = buf[i];
+			if (buf[i] == '\n')
+				break;
 			i++;
 			j++;
 		}
 	}
-//	printf("Line before start: %s\n", line);
 	while (!check_newline(line) && read_ret == BUFFER_SIZE)
 	{
 		read_ret = read(fd, buf, BUFFER_SIZE);
 		if (read_ret == 0 && buf[0] == '\0')
 			return (free(line), NULL);
 		if (read_ret == -1)
+		{
+			buf[0] = '\0';
 			return (free(line), NULL);
+		}
 		buf[read_ret] = '\0';
-	//	printf("Updated Buffer: %s\n", buf);
 		line = buff_to_line(line, buf);
-	//	printf("Line: %s\n", line);
 	}
 	buf_update(buf);
 	return (line);
@@ -195,6 +184,9 @@ int	main()
 	system("leaks -q a.out");
 	close(fd);
 }
+
+//		/* 2 */ test_gnl(fd, NULL);
+
 
 /* imagine i have the following text: he\nllo\nty
 and my BUFFER_SIZE=4. it reads the first four letters into my BUF: h-e-\n-l + '\0'
