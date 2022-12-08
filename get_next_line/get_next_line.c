@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 12:40:45 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/12/01 10:14:09 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/12/08 19:20:23 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -63,6 +63,8 @@ char *buff_to_line(char *line, char *buf) //stops if buf[i] == \n
 	i = 0;
 	len = ft_strlen(line);
 	str = (char *)malloc(sizeof(char) * len + BUFFER_SIZE + 1);
+	if (!str)
+		return (NULL);
 	ft_strlcpy(str, line, (len + 1));
 	while (buf[i] != '\0' && buf[i] != '\n')
 	{
@@ -102,11 +104,10 @@ void	buf_update(char *buf)
 {
 	int i;
 	int j;
-	char *new_buf;
+	char new_buf[BUFFER_SIZE+1];
 	
 	i = 0;
 	j = 0;
-	new_buf = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
 	while (buf[i] != '\n' && buf[i] != '\0')
 		i++;
 	if (buf[i] != '\0')
@@ -121,17 +122,15 @@ void	buf_update(char *buf)
 		new_buf[j] = '\0';
 		ft_strlcpy(buf, new_buf, (ft_strlen(new_buf) + 1)); 
 	}
-	free(new_buf);
-
-/*	if (buf[i] != '\0')
-		ft_memmove(buf, buf+(i + 1), (ft_strlen(buf) - (i - 1)));*/
+	else
+		buf[0] = '\0';
 }
 
 char	*get_next_line(int fd)
 {
 	static char 	buf[BUFFER_SIZE + 1];
 	char 		*line;
-	static int 	read_ret;
+	int 	read_ret;
 	int		i;
 	int		j;
 
@@ -139,6 +138,9 @@ char	*get_next_line(int fd)
 	j = 0;
 	read_ret = BUFFER_SIZE;
 	line = ft_calloc(sizeof(char *), BUFFER_SIZE + 1);
+	if (!line)
+		return (NULL);
+	
 	if (buf[0] != '\0')
 	{
 		while (buf[i] != '\0')
@@ -150,6 +152,8 @@ char	*get_next_line(int fd)
 			j++;
 		}
 	}
+	
+
 	while (!check_newline(line) && read_ret == BUFFER_SIZE)
 	{
 		read_ret = read(fd, buf, BUFFER_SIZE);
@@ -162,12 +166,16 @@ char	*get_next_line(int fd)
 		}
 		buf[read_ret] = '\0';
 		line = buff_to_line(line, buf);
+		if (!line)
+			return (NULL);
 	}
 	buf_update(buf);
+
+
 	return (line);
 }
 
-int	main()
+/*int	main()
 {
 	int fd;
 	char *str;
@@ -183,7 +191,7 @@ int	main()
 	}
 	system("leaks -q a.out");
 	close(fd);
-}
+}*/
 
 //		/* 2 */ test_gnl(fd, NULL);
 
