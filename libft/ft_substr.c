@@ -6,11 +6,12 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 08:33:32 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/11/04 11:46:07 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/11/08 17:59:37 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
 
+#include <stdio.h>
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	unsigned int	i;
@@ -24,8 +25,8 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (NULL);
 	slen = ft_strlen(s);
 	if (slen < len)
-		len = slen;
-	string = (char *)malloc(sizeof(char) * len + 1);
+		len = (slen - start);
+	string = (char *)malloc(sizeof(char) * (len));
 	if (!(string))
 		return (NULL);
 	while (i < start && s[i] != '\0')
@@ -39,10 +40,9 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	string[j] = '\0';
 	return (string);
 }
-/*
-#include <stdio.h>
-int main(void)
+
+/*int main(void)
 {
-	//char s[] = "tripouille";
-	printf("Substring: %s", ft_substr(NULL, 1, 7)); 
+	char s[] = "hola";
+	printf("Substring: %s", ft_substr(s, 2, 30)); 
 }*/
