@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 12:40:45 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/12/09 17:57:20 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/12/09 20:09:01 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
