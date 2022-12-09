@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 12:41:19 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/25 12:42:47 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/12/09 17:56:47 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 # define GET_NEXT_LINE_H
 # include <stdlib.h>
 
-char *get_next_line(int fd);
-
+char	*get_next_line(int fd);
+size_t	ft_strlcpy(char *dst, const char *src, size_t size);
+void	*ft_calloc(size_t nmemb, size_t size);
+char	*ft_strdup(const char *s);
+int		ft_strlen(char const *str);
+void	fill_string(char *buf, char *str, int i, int len);
 #endif

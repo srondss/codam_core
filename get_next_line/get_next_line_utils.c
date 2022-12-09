@@ -1,15 +1,41 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   get_next_line_utils.c                              :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: ysrondy <marvin@codam.nl>                    +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/12/09 17:21:35 by ysrondy       #+#    #+#                 */
+/*   Updated: 2022/12/09 17:57:39 by ysrondy       ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
-void	ft_bzero(void *s, size_t n)
+void	fill_string(char *buf, char *str, int i, int len)
 {
-	size_t	i;
-
-	i = 0;
-	while (i < n)
+	while (buf[i] != '\0' && buf[i] != '\n')
 	{
-		((char *)s)[i] = '\0';
+		str[len + i] = buf[i];
 		i++;
 	}
+	if (buf[i] == '\n')
+	{
+		str[len + i] = '\n';
+		str[len + i + 1] = '\0';
+	}
+	else
+		str[len + i] = '\0';
+}
+
+int	ft_strlen(char const *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+		i++;
+	return (i);
 }
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t size)
@@ -35,12 +61,20 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 void	*ft_calloc(size_t nmemb, size_t size)
 {
 	char	*ptr;
+	size_t	i;
 
 	ptr = malloc(nmemb * size);
 	if (ptr == NULL)
 		return (NULL);
 	if (size != 0 || nmemb != 0)
-		ft_bzero(ptr, nmemb * size);
+	{
+		i = 0;
+		while (i < (size * nmemb))
+		{
+			((char *)ptr)[i] = '\0';
+			i++;
+		}
+	}
 	return ((void *) ptr);
 }
 
