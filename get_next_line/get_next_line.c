@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 12:40:45 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/12/09 20:09:01 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/12/10 11:43:07 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -15,42 +15,50 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-char	*buff_to_line(char *line, char *buf)
-{
-	char	*str;	
-	int		i;
-	int		len;
-
-	i = 0;
-	len = ft_strlen(line);
-	str = (char *)malloc(sizeof(char) * len + BUFFER_SIZE + 1);
-	if (!str)
-	{
-		free(line);
-		return (free(str), NULL);
-	}
-	ft_strlcpy(str, line, (len + 1));
-	fill_string(buf, str, i, len);
-	free(line);
-	line = ft_strdup(str);
-	free(str);
-	return (line);
-}
-
-int	check_newline(char *buf)
+int	check_newline(char *buf, char c)
 {
 	int	i;
 
 	i = 0;
 	if (!buf)
 		return (0);
-	while (buf[i] != '\0')
+	if (c == '\n')
 	{
-		if (buf[i] == '\n')
-			return (i + 1);
-		i++;
+		while (buf[i] != '\0')
+		{
+			if (buf[i] == '\n')
+				return (i + 1);
+			i++;
+		}
+		return (0);
 	}
-	return (0);
+	else
+	{
+		while (buf[i] != '\0')
+			i++;
+	}
+	return (i);
+}
+
+char	*buff_to_line(char *line, char *buf)
+{
+	char	*str;	
+	int		line_len;
+	int		buf_len;
+
+	buf_len = check_newline(buf, '\n');
+	if (buf_len == 0)
+		buf_len = check_newline(buf, '\0');
+	line_len = check_newline(line, '\0');
+	str = (char *)malloc(sizeof(char) * (line_len + buf_len + 1));
+	if (!str)
+		return (free(str), free(line), NULL);
+	ft_strlcpy(str, line, (line_len + 1));
+	fill_string(buf, str, 0, line_len);
+	free(line);
+	line = ft_strdup(str);
+	free(str);
+	return (line);
 }
 
 void	buf_update(char *buf)
@@ -81,7 +89,7 @@ void	buf_update(char *buf)
 
 char	*create_line(char *line, int read_ret, char *buf, int fd)
 {
-	while (!check_newline(line) && read_ret == BUFFER_SIZE)
+	while (!check_newline(line, '\n') && read_ret == BUFFER_SIZE)
 	{
 		read_ret = read(fd, buf, BUFFER_SIZE);
 		if (read_ret == 0 && buf[0] == '\0')
@@ -105,25 +113,16 @@ char	*get_next_line(int fd)
 	static char		buf[BUFFER_SIZE + 1];
 	char			*line;
 	int				read_ret;
-	int				i;
-	int				j;
 
-	i = 0;
-	j = 0;
 	read_ret = BUFFER_SIZE;
-	line = ft_calloc(sizeof(char *), BUFFER_SIZE + 1);
+	line = ft_calloc(sizeof(char), 1);
 	if (!line)
 		return (NULL);
 	if (buf[0] != '\0')
 	{
-		while (buf[i] != '\0')
-		{
-			line[j] = buf[i];
-			if (buf[i] == '\n')
-				break ;
-			i++;
-			j++;
-		}
+		line = buff_to_line(line, buf);
+		if (!line)
+			return (NULL);
 	}
 	line = create_line(line, read_ret, buf, fd);
 	return (line);
