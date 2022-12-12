@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/25 12:41:19 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/12/12 18:56:16 by ysrondy       ########   odam.nl         */
+/*                                                        ::::::::            */
+/*   get_next_line_bonus.h                              :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: ysrondy <marvin@codam.nl>                    +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/12/12 17:08:15 by ysrondy       #+#    #+#                 */
+/*   Updated: 2022/12/12 18:57:41 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 5

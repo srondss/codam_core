@@ -6,17 +6,17 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 12:40:45 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/12/12 20:31:30 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/12/12 17:20:46 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
-#include <stdbool.h>
+#include <limits.h>
 
-static int	check_newline(char *buf, char c)
+int	check_newline(char *buf, char c)
 {
 	int	i;
 
@@ -41,7 +41,7 @@ static int	check_newline(char *buf, char c)
 	return (i);
 }
 
-static char	*buff_to_line(char *line, char *buf)
+char	*buff_to_line(char *line, char *buf)
 {
 	char	*str;	
 	int		line_len;
@@ -62,17 +62,14 @@ static char	*buff_to_line(char *line, char *buf)
 	return (line);
 }
 
-static bool	buf_update(char *buf)
+void	buf_update(char *buf)
 {
 	int		i;
 	int		j;
-	char	*new_buf;
+	char	new_buf[BUFFER_SIZE + 1];
 
 	i = 0;
 	j = 0;
-	new_buf = malloc(sizeof(char) * BUFFER_SIZE + 1);
-	if (!new_buf)
-		return (false);	
 	while (buf[i] != '\n' && buf[i] != '\0')
 		i++;
 	if (buf[i] != '\0')
@@ -89,10 +86,9 @@ static bool	buf_update(char *buf)
 	}
 	else
 		buf[0] = '\0';
-	return (free(new_buf), true);
 }
 
-static char	*create_line(char *line, int read_ret, char *buf, int fd)
+char	*create_line(char *line, int read_ret, char *buf, int fd)
 {
 	while (!check_newline(line, '\n') && read_ret == BUFFER_SIZE)
 	{
@@ -109,18 +105,17 @@ static char	*create_line(char *line, int read_ret, char *buf, int fd)
 		if (!line)
 			return (NULL);
 	}
-	if (!buf_update(buf))
-		return (free(line), NULL);
+	buf_update(buf);
 	return (line);
 }
 
 char	*get_next_line(int fd)
 {
-	static char		buf[BUFFER_SIZE + 1];
+	static char		buf[OPEN_MAX][BUFFER_SIZE + 1];
 	char			*line;
 	int				read_ret;
 
-	if (BUFFER_SIZE <= 0 || fd < 0)
+	if (BUFFER_SIZE <= 0 || fd < 0 || fd > OPEN_MAX)
 		return (NULL);
 	read_ret = BUFFER_SIZE;
 	line = ft_calloc(sizeof(char), 1);
@@ -128,28 +123,39 @@ char	*get_next_line(int fd)
 		return (NULL);
 	if (buf[0] != '\0')
 	{
-		line = buff_to_line(line, buf);
+		line = buff_to_line(line, buf[fd]);
 		if (!line)
 			return (NULL);
 	}
-	line = create_line(line, read_ret, buf, fd);
+	line = create_line(line, read_ret, buf[fd], fd);
 	return (line);
 }
 
 /*int	main()
 {
 	int fd;
+	int fd2;
+	int file;
+	int number;
 	char *str;
 
 	fd = open("test.txt", O_RDONLY);
+	fd2 = open("test2.txt", O_RDONLY);
+	number = 1;
+	file = 0;
 	while (1)
 	{
-		str = get_next_line(fd);
+		if ((number % 2) == 0)
+			file = fd2;
+		else
+			file = fd;
+		str = get_next_line(file);
 		if (!str)
 			break;
 		printf("%s", str);
 		free(str);
+		number++;
 	}
-//	system("leaks -q a.out");
+	system("leaks -q a.out");
 	close(fd);
 }*/
