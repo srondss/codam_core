@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/25 12:40:45 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/12/12 17:20:46 by ysrondy       ########   odam.nl         */
+/*                                                        ::::::::            */
+/*   get_next_line_bonus.c                              :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: ysrondy <marvin@codam.nl>                    +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/12/14 17:17:40 by ysrondy       #+#    #+#                 */
+/*   Updated: 2022/12/14 17:19:26 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-#include "get_next_line_bonus.h"
+#include "get_next_line.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <limits.h>
 
-int	check_newline(char *buf, char c)
+static int	check_newline(char *buf, char c)
 {
 	int	i;
 
@@ -41,7 +42,7 @@ int	check_newline(char *buf, char c)
 	return (i);
 }
 
-char	*buff_to_line(char *line, char *buf)
+static char	*buff_to_line(char *line, char *buf)
 {
 	char	*str;	
 	int		line_len;
@@ -62,16 +63,17 @@ char	*buff_to_line(char *line, char *buf)
 	return (line);
 }
 
-void	buf_update(char *buf)
+static bool	buf_update(char *buf)
 {
 	int		i;
 	int		j;
-	char	new_buf[BUFFER_SIZE + 1];
+	char	*new_buf;
 
-	i = 0;
 	j = 0;
-	while (buf[i] != '\n' && buf[i] != '\0')
-		i++;
+	i = (check_newline(buf, '\n') - 1);
+	new_buf = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	if (!new_buf)
+		return (false);
 	if (buf[i] != '\0')
 	{
 		i++;
@@ -86,9 +88,10 @@ void	buf_update(char *buf)
 	}
 	else
 		buf[0] = '\0';
+	return (free(new_buf), true);
 }
 
-char	*create_line(char *line, int read_ret, char *buf, int fd)
+static char	*create_line(char *line, int read_ret, char *buf, int fd)
 {
 	while (!check_newline(line, '\n') && read_ret == BUFFER_SIZE)
 	{
@@ -105,7 +108,8 @@ char	*create_line(char *line, int read_ret, char *buf, int fd)
 		if (!line)
 			return (NULL);
 	}
-	buf_update(buf);
+	if (!buf_update(buf))
+		return (free(line), NULL);
 	return (line);
 }
 

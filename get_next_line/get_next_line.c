@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/25 12:40:45 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/12/12 20:31:30 by ysrondy       ########   odam.nl         */
+/*   Updated: 2022/12/14 16:59:15 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -68,13 +68,11 @@ static bool	buf_update(char *buf)
 	int		j;
 	char	*new_buf;
 
-	i = 0;
 	j = 0;
+	i = (check_newline(buf, '\n') - 1);
 	new_buf = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (!new_buf)
-		return (false);	
-	while (buf[i] != '\n' && buf[i] != '\0')
-		i++;
+		return (false);
 	if (buf[i] != '\0')
 	{
 		i++;
@@ -150,6 +148,6 @@ char	*get_next_line(int fd)
 		printf("%s", str);
 		free(str);
 	}
-//	system("leaks -q a.out");
+	system("leaks -q a.out");
 	close(fd);
 }*/
