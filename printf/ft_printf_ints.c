@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/17 18:15:52 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/20 17:02:32 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/12/17 14:41:44 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_printf.h"
@@ -19,7 +19,7 @@ int	put_int(va_list *list)
 	num = va_arg(*list, int);
 	str = ft_itoa(num);
 	if (!str)
-		return (0);
+		return (-1);
 	num = ft_putstr(str);
 	free(str);
 	return (num);
@@ -37,8 +37,8 @@ static char	*ft_uitoa(unsigned int len, unsigned int num, unsigned int n)
 	if (num == 0)
 		len++;
 	str = (char *)malloc(sizeof(char) * (len + 1));
-	if (str == NULL)
-		return (str);
+	if (!str)
+		return (NULL);
 	str[len] = '\0';
 	while (0 < len)
 	{
@@ -62,7 +62,7 @@ int	put_uint(va_list *list)
 	num = va_arg(*list, unsigned int);
 	str = ft_uitoa(0, num, num);
 	if (!str)
-		return (0);
+		return (-1);
 	num = ft_putstr(str);
 	free(str);
 	return (num);

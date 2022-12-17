@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/19 16:09:28 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/20 17:04:30 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/12/17 14:39:00 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_printf.h"
@@ -21,6 +21,8 @@ int	put_ptr(va_list *list)
 	if (!ptr)
 		return (write(1, "0x0", 3));
 	str = get_hex_ptr(ptr);
+	if (!str)
+		return (-1);
 	hex = ft_putrstr(str);
 	free(str);
 	return (hex);
@@ -33,6 +35,8 @@ char	*get_hex_ptr(unsigned long hex)
 	unsigned long	remainder;
 
 	str = (char *)malloc(sizeof(char) * 19);
+	if (!str)
+		return (NULL);
 	x = 0;
 	while (hex != 0)
 	{

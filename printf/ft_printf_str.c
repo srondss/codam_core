@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/19 16:05:16 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/10/20 17:03:28 by ysrondy          ###   ########.fr       */
+/*   Updated: 2022/12/17 14:35:58 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -37,13 +37,17 @@ int	ft_putrstr(char *str)
 {
 	int	len;
 	int	i;
+	int	flag;
 
+	flag = 0;
 	len = ft_strlen(str);
 	i = len;
 	while (len > 0)
 	{
 		len--;
-		write(1, &str[len], 1);
+		flag = write(1, &str[len], 1);
+		if (flag == -1)
+			return (-1);
 	}
 	return (i);
 }
@@ -51,8 +55,11 @@ int	ft_putrstr(char *str)
 int	ft_putstr(char *str)
 {
 	int	len;
+	int	flag;
 
 	len = ft_strlen(str);
-	write(1, str, len);
+	flag = write(1, str, len);
+	if (flag == -1)
+		return (flag);
 	return (len);
 }
