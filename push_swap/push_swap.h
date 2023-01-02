@@ -6,12 +6,19 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 11:34:39 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/12/22 13:08:24 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/02 20:53:53 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "libft/libft.h"
+
+typedef struct s_stack
+{
+	int	number;
+	struct	s_stack *next;
+	struct	s_stack *prev;
+}	t_stack;
 
 void	sa(int *array);
 void	sb(int *array);

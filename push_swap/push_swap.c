@@ -6,37 +6,32 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/12/22 13:10:29 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/02 21:31:37 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-
-// This function populates "array" with all input values as digits.
-int 	*fill_function(int argc, char **argv)
+void	fill_stack(t_stack *stack_a, char **string)
 {
-	int i;
-	int *array;
+	struct s_stack *node;
+/* Okay, so essentially, what i need here is to run a loop. At this point, I can assume
+that there are at least 2 integers in my stack. Hence, I will malloc 2 nodes. I will set
+begin_node->number to argv[1] and next_node->number to argv[2]. Then I will set next_node->prev = begin_node and
+begin_node->next to next_node. So at this point, they both point at each other. Then I start my loop which keeps on going
+as long as there is something in my argv. Everytime the loop executes, it mallocs new node. New_node will set 
+new_node->prev = next_node, and next_node will set next_node->next = new_node. Then next_node = next_node->next, hence it becomes the 
+new node. After that, New_node->number = argv[i]. Then loop starts over. At the end of the loop, we can assume that there 
+is nothing left in the string, so all numbers have been attached, however new_node still exists without a next node. So,
+we must set new_node->next = begin_node.
 
-	i = 0;
-	array = malloc(sizeof(int) * argc);
-	if (!array)
-		return (NULL);
-	while (i < argc) 
-	{
-		array[i] = ft_atoi(argv[(i + 1)]);
-		if (array[i] < 0)
-		{
-			printf("Error\n");
-			return (free(array), NULL);
-		}
-		i++;
-	}
-	return (array);
+and... voila! A circular double-linked list. 
+
+Dev Diary: Linked lists are really cool! I learnt today how to create a double-linked list. 
+*/
 }
 
-int print_array(int *array)
+/*int print_array(int *array)
 {
 	int i;
 	
@@ -49,19 +44,19 @@ int print_array(int *array)
 	if (array)
 		printf("\n-\n\n");
 	return (i);
-}
+}*/
 
 int main(int argc, char **argv)
 {
-	int *stack_a;
-	int stack_b[1];
-	int length;
+	struct	s_stack	*stack_a;
+	struct	s_stack	*stack_b;
 
-	stack_a = fill_function((argc - 1), argv);
-	stack_b[0] = 5;
-	length = print_array(stack_a);
-	pa(stack_a, stack_b, length);
-	length = print_array(stack_a);
+	stack_a = malloc(sizeof(struct s_stack) * argc - 1);
+	stack_b = malloc(sizeof(struct s_stack) * argc - 1);
 
+	fill_stack(stack_a, argv);
+
+	free(stack_a);
+	free(stack_b);
 	return (0);
 }
