@@ -6,57 +6,104 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/02 21:31:37 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/03 09:03:43 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	fill_stack(t_stack *stack_a, char **string)
+void	fill_stack(t_stack *stack_a, char **string, int argc)
 {
-	struct s_stack *node;
-/* Okay, so essentially, what i need here is to run a loop. At this point, I can assume
-that there are at least 2 integers in my stack. Hence, I will malloc 2 nodes. I will set
-begin_node->number to argv[1] and next_node->number to argv[2]. Then I will set next_node->prev = begin_node and
-begin_node->next to next_node. So at this point, they both point at each other. Then I start my loop which keeps on going
-as long as there is something in my argv. Everytime the loop executes, it mallocs new node. New_node will set 
-new_node->prev = next_node, and next_node will set next_node->next = new_node. Then next_node = next_node->next, hence it becomes the 
-new node. After that, New_node->number = argv[i]. Then loop starts over. At the end of the loop, we can assume that there 
-is nothing left in the string, so all numbers have been attached, however new_node still exists without a next node. So,
-we must set new_node->next = begin_node.
-
-and... voila! A circular double-linked list. 
-
-Dev Diary: Linked lists are really cool! I learnt today how to create a double-linked list. 
-*/
-}
-
-/*int print_array(int *array)
-{
+	struct	s_stack *start_node;
+	struct	s_stack *next_node;
+	struct	s_stack *new_node;
 	int i;
-	
-	i = 0;
-	while (array[i])
+
+	if (argc <= 3)
 	{
-		printf("%d\n", array[i]);
+		printf("Error: 2 numbers or less in stack");
+		exit(0);
+	}
+	i = 3;
+	start_node = stack_a;
+	next_node = malloc(sizeof(struct s_stack));
+	start_node = stack_a;
+	start_node->number = ft_atoi(string[1]);
+	start_node->next = next_node;
+	next_node->number = ft_atoi(string[2]);
+	next_node->prev = start_node;
+	
+	while (string[i])
+	{
+		new_node = malloc(sizeof(struct s_stack));
+		new_node->prev = next_node;
+		next_node->next = new_node;
+		next_node = next_node->next;
+		new_node->number = ft_atoi(string[i]);
 		i++;
 	}
-	if (array)
-		printf("\n-\n\n");
+	new_node->next = start_node;
+	start_node->prev = new_node;
+}
+
+int print_stack(t_stack *stack)
+{
+	int i;
+	struct s_stack *start_node;
+	
+	start_node = stack->next;
+	
+	i = 1;
+	printf("Number: %d\n", stack->number);
+	printf("Prev Node: %p\n", stack->prev);
+	printf("Curr Node: %p\n", stack);
+	printf("Next Node: %p\n", stack->next);
+	while (start_node != stack)
+	{
+		printf("Number: %d\n", start_node->number);
+		printf("Prev Node: %p\n", start_node->prev);
+		printf("Curr Node: %p\n", start_node);
+		printf("Next Node: %p\n", start_node->next);
+		start_node = start_node->next;
+		i++;
+	}
+	printf("Number of Nodes: %d\n", i);
 	return (i);
-}*/
+}
+
+void	free_stack(t_stack *stack)
+{
+	struct s_stack *last_node;
+
+	last_node = stack->prev;
+	while (stack != last_node)
+	{
+		stack = stack->next;
+		free(stack->prev);
+	}
+	free(stack);
+}
+
+int main_1(int argc, char **argv)
+{
+	struct	s_stack	*stack_a;
+
+	if (argc == 1)
+	{
+		printf("Error - Too few arguments");
+		return (1);
+	}
+	stack_a = malloc(sizeof(struct s_stack) * argc - 1);
+
+	fill_stack(stack_a, argv, argc);
+	print_stack(stack_a);
+	free_stack(stack_a);
+
+	return (0);
+}
 
 int main(int argc, char **argv)
 {
-	struct	s_stack	*stack_a;
-	struct	s_stack	*stack_b;
-
-	stack_a = malloc(sizeof(struct s_stack) * argc - 1);
-	stack_b = malloc(sizeof(struct s_stack) * argc - 1);
-
-	fill_stack(stack_a, argv);
-
-	free(stack_a);
-	free(stack_b);
-	return (0);
+	main_1(argc, argv);
+	system("leaks -q a.out");
 }
