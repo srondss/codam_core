@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/03 09:03:43 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/04 09:08:21 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,12 @@ void	fill_stack(t_stack *stack_a, char **string, int argc)
 	start_node->prev = new_node;
 }
 
-int print_stack(t_stack *stack)
+int print_stack(t_stack *stack, char delimiter)
 {
 	int i;
 	struct s_stack *start_node;
 	
 	start_node = stack->next;
-	
 	i = 1;
 	printf("Number: %d\n", stack->number);
 	printf("Prev Node: %p\n", stack->prev);
@@ -60,6 +59,7 @@ int print_stack(t_stack *stack)
 	printf("Next Node: %p\n", stack->next);
 	while (start_node != stack)
 	{
+		
 		printf("Number: %d\n", start_node->number);
 		printf("Prev Node: %p\n", start_node->prev);
 		printf("Curr Node: %p\n", start_node);
@@ -67,7 +67,10 @@ int print_stack(t_stack *stack)
 		start_node = start_node->next;
 		i++;
 	}
-	printf("Number of Nodes: %d\n", i);
+	if (delimiter == 'a')
+		printf("\n-\na\n\n");
+	else
+		printf("\n-\nb\n\n");
 	return (i);
 }
 
@@ -96,9 +99,14 @@ int main_1(int argc, char **argv)
 	stack_a = malloc(sizeof(struct s_stack) * argc - 1);
 
 	fill_stack(stack_a, argv, argc);
-	print_stack(stack_a);
-	free_stack(stack_a);
 
+	print_stack(stack_a, 'a');
+	
+	sa(stack_a);
+	
+	print_stack(stack_a, 'a');
+	
+	free_stack(stack_a);
 	return (0);
 }
 

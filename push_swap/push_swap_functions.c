@@ -1,65 +1,72 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   swap_functions.c                                   :+:      :+:    :+:   */
+/*   push_swap_functions.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:39:15 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/12/22 13:11:22 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/04 10:05:17 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "push_swap.h"
 
 // [Swap the first 2 elements at the top of stack a]
-void	sa(int *array)
+void	sa(t_stack *stack_a)
 {
-	int	tmp;
+	struct s_stack *elem2;
+	struct s_stack *last_elem;
+	struct s_stack *head;
 
-	if (array[1])
-	{
-		tmp = array[0];
-		array[0] = array[1];
-		array[1] = tmp;
-	}
+	head = stack_a;
+	elem2 = stack_a->next;
+	last_elem = stack_a->prev;
+
+	elem2->next = head;
+	elem2->prev = last_elem;
+
+	last_elem->next = elem2;
+	last_elem->prev = head;
+
+	head->next = last_elem;
+	head->prev = elem2;
+
 }
 
 //[Swap the first 2 elements at the top of stack b]
-void	sb(int *array)
+void	sb(t_stack *stack_b)
 {
-	int	tmp;
 
-	if (array[1])
-	{
-		tmp = array[0];
-		array[0] = array[1];
-		array[1] = tmp;
-	}
 }
 
 //[sa and sb at the same time.]
-void	ss(int *array)
+void	ss(t_stack *stack_a, t_stack *stack_b)
 {
-	sa(array);
-	sb(array);
+	sa(stack_a);
+	sb(stack_b);
 }
-// TODO: Fix this function. 
-void	pa(int *stack_a, int *stack_b, int stack_a_length)
-{
-	int *tmp_array;
 
-	tmp_array = malloc(sizeof(char) * stack_a_length + 1);
-	if (!tmp_array)
+void	pa(t_stack *stack_a, t_stack *stack_b)
+{
+	struct s_stack *last_node_stack_a;
+	struct s_stack *new_node;
+
+	last_node_stack_a = stack_a->prev;
+	if (!stack_b)
 		return ;
-	tmp_array[0] = stack_b[0];
-	ft_memcpy(tmp_array + 1, stack_a, stack_a_length);
-	stack_a = tmp_array;
-	free(tmp_array);
+	if (stack_b->next == stack_b)
+	{
+		new_node = malloc(sizeof(struct s_stack));
+		new_node->number = stack_b->number;
+		new_node->next = stack_a;
+		new_node->prev = last_node_stack_a;
+		last_node_stack_a->next = new_node;
+		stack_a->prev = new_node;
+		free(stack_b);
+	}
 }
 
-/*
-
-... pa [Take the first element at the top of b and put it at the top of a]
+/*... pa [Take the first element at the top of b and put it at the top of a]
 
 ... pb [Take the first element at the top of a and put it at the top of b.]
 
