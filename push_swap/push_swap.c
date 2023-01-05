@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/04 09:08:21 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/05 11:17:15 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ int print_stack(t_stack *stack, char delimiter)
 	printf("Next Node: %p\n", stack->next);
 	while (start_node != stack)
 	{
-		
+	//	printf("Stack: %p\n", stack);
+	//	printf("Start_node: %p\n", start_node);
 		printf("Number: %d\n", start_node->number);
 		printf("Prev Node: %p\n", start_node->prev);
 		printf("Curr Node: %p\n", start_node);
@@ -102,7 +103,7 @@ int main_1(int argc, char **argv)
 
 	print_stack(stack_a, 'a');
 	
-	sa(stack_a);
+	sa(&stack_a);
 	
 	print_stack(stack_a, 'a');
 	
