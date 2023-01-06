@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/05 11:17:15 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/06 12:30:51 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,26 +46,33 @@ void	fill_stack(t_stack *stack_a, char **string, int argc)
 	start_node->prev = new_node;
 }
 
-int print_stack(t_stack *stack, char delimiter)
+int print_stack(t_stack **head_stack, char delimiter)
 {
 	int i;
-	struct s_stack *start_node;
+	struct	s_stack *start_node;
+	struct	s_stack *next_node;
 	
-	start_node = stack->next;
-	i = 1;
-	printf("Number: %d\n", stack->number);
-	printf("Prev Node: %p\n", stack->prev);
-	printf("Curr Node: %p\n", stack);
-	printf("Next Node: %p\n", stack->next);
-	while (start_node != stack)
+
+	start_node = *head_stack;
+	if (!start_node)
 	{
-	//	printf("Stack: %p\n", stack);
-	//	printf("Start_node: %p\n", start_node);
-		printf("Number: %d\n", start_node->number);
-		printf("Prev Node: %p\n", start_node->prev);
-		printf("Curr Node: %p\n", start_node);
-		printf("Next Node: %p\n", start_node->next);
-		start_node = start_node->next;
+		printf("Stack %c doesn't exist\n", delimiter);
+		return (0);
+	}
+	next_node = start_node->next;
+	i = 1;
+	printf("Number: %d\n", start_node->number);
+	printf("Prev Node: %p\n", start_node->prev);
+	printf("Curr Node: %p\n", start_node);
+	printf("Next Node: %p\n", start_node->next);
+
+	while (next_node != start_node)
+	{
+		printf("Number: %d\n", next_node->number);
+		printf("Prev Node: %p\n", next_node->prev);
+		printf("Curr Node: %p\n", next_node);
+		printf("Next Node: %p\n", next_node->next);
+		next_node = next_node->next;
 		i++;
 	}
 	if (delimiter == 'a')
@@ -75,39 +82,66 @@ int print_stack(t_stack *stack, char delimiter)
 	return (i);
 }
 
-void	free_stack(t_stack *stack)
+void	free_stack(t_stack **head_stack)
 {
-	struct s_stack *last_node;
+	struct	s_stack *first_node;
+	struct	s_stack *last_node;
+	struct	s_stack *next_node;
 
-	last_node = stack->prev;
-	while (stack != last_node)
+	first_node = *head_stack;
+	if (!first_node)
+		return ;
+	last_node = first_node->prev;
+	next_node = first_node->next;
+	
+	if (first_node->next == first_node)
+		return (free(first_node));
+
+	while (next_node != last_node)
 	{
-		stack = stack->next;
-		free(stack->prev);
+		next_node = next_node->next;
+		free(next_node->prev);
 	}
-	free(stack);
+	free(last_node);
+	free(first_node);
 }
 
 int main_1(int argc, char **argv)
 {
 	struct	s_stack	*stack_a;
-
+	struct	s_stack *stack_b;
+	
 	if (argc == 1)
+		return (printf("Error - Too few arguments"));
+	else if (argc == 2)
+		return (printf("Only 1 Number, already sorted"));
+	else if (argc == 3)
 	{
-		printf("Error - Too few arguments");
-		return (1);
+		if (ft_atoi(argv[1]) > ft_atoi(argv[2]))
+			return (printf("Already sorted."));
+		else
+			return (printf("Swap both numbers."));
 	}
 	stack_a = malloc(sizeof(struct s_stack) * argc - 1);
+	stack_b = NULL;
 
 	fill_stack(stack_a, argv, argc);
 
-	print_stack(stack_a, 'a');
+	print_stack(&stack_a, 'a');
+	print_stack(&stack_b, 'b');
 	
-	sa(&stack_a);
+	pb(&stack_a, &stack_b);
+	pb(&stack_a, &stack_b);
+	pb(&stack_a, &stack_b);
 	
-	print_stack(stack_a, 'a');
+	print_stack(&stack_a, 'a');
+	print_stack(&stack_b, 'b');
 	
-	free_stack(stack_a);
+	printf("Address Stack_b: %p\n", stack_b);
+	printf("Address Stack_a: %p\n", stack_a);
+
+	free_stack(&stack_a);
+	free_stack(&stack_b);
 	return (0);
 }
 
