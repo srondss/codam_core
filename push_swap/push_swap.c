@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/06 12:30:51 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/07 11:11:33 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int print_stack(t_stack **head_stack, char delimiter)
 	start_node = *head_stack;
 	if (!start_node)
 	{
-		printf("Stack %c doesn't exist\n", delimiter);
+		printf("Tried printing Stack %c, it doesn't exist\n", delimiter);
 		return (0);
 	}
 	next_node = start_node->next;
@@ -126,13 +126,24 @@ int main_1(int argc, char **argv)
 	stack_b = NULL;
 
 	fill_stack(stack_a, argv, argc);
+	
+	print_stack(&stack_a, 'a');
+	print_stack(&stack_b, 'b');
+
+	printf("pb function called 4 times\n");
+	pb(&stack_a, &stack_b);
+	pb(&stack_a, &stack_b);
+	pb(&stack_a, &stack_b);
+	pb(&stack_a, &stack_b);
 
 	print_stack(&stack_a, 'a');
 	print_stack(&stack_b, 'b');
-	
-	pb(&stack_a, &stack_b);
-	pb(&stack_a, &stack_b);
-	pb(&stack_a, &stack_b);
+
+	pa(&stack_a, &stack_b);
+	pa(&stack_a, &stack_b);
+	pa(&stack_a, &stack_b);
+	pa(&stack_a, &stack_b);
+	printf("pa function called 4 times\n");
 	
 	print_stack(&stack_a, 'a');
 	print_stack(&stack_b, 'b');

@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:39:15 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/06 12:26:41 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/07 11:13:14 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "push_swap.h"
@@ -60,9 +60,58 @@ void	ss(t_stack **head_stack_a, t_stack **head_stack_b)
 }
 
 //... pa [Take the first element at the top of b and put it at the top of a]
-/*void	pa(t_stack *stack_a, t_stack *stack_b)
+void	pa(t_stack **head_stack_a, t_stack **head_stack_b)
 {
-}*/
+	struct	s_stack *first_b;
+	struct	s_stack *second_b;
+	struct	s_stack *last_b;
+	struct	s_stack *last_a;
+	
+	if (*(head_stack_b) == NULL)
+		return ;
+	first_b = *head_stack_b;
+	second_b = first_b->next;
+	last_b = first_b->prev;
+
+	second_b->prev = last_b;
+	last_b->next = second_b;
+
+	*head_stack_b = second_b;
+//	case when stack_a is empty. 
+	if (*(head_stack_a) == NULL)
+	{
+		*head_stack_a = malloc(sizeof(struct s_stack));
+		(*(head_stack_a))->number = first_b->number;
+		(*(head_stack_a))->next = *head_stack_a;
+		(*(head_stack_a))->prev = *head_stack_a;
+		free(first_b);
+	}
+//	case when stack_a only has 1 node
+	else if ((*(head_stack_a))->next == (*(head_stack_a)))
+	{
+		(*(head_stack_a))->next = first_b;
+		(*(head_stack_a))->prev = first_b;
+		first_b->next = *head_stack_a;
+		first_b->prev = *head_stack_a;
+		*head_stack_a = first_b;
+	}
+//	every other case.
+	else
+	{
+		last_a = (*(head_stack_a))->prev;
+		last_a->next = first_b;
+		first_b->next = (*(head_stack_a));
+		first_b->prev = last_a;
+		(*(head_stack_a))->prev = first_b;
+		if (first_b == second_b)
+		{
+			*head_stack_b = NULL;
+			*head_stack_a = first_b;
+		}
+		else 
+			*head_stack_a = first_b; 
+	}
+}
 
 //... pb [Take the first element at the top of a and put it at the top of b.]
 void	pb(t_stack **head_stack_a, t_stack **head_stack_b)
@@ -72,6 +121,8 @@ void	pb(t_stack **head_stack_a, t_stack **head_stack_b)
 	struct	s_stack *last_a;
 	struct	s_stack *last_b;
 	
+	if (*(head_stack_a) == NULL)
+		return ;
 	first_a = *head_stack_a;
 	second_a = first_a->next;
 	last_a = first_a->prev;
@@ -80,7 +131,7 @@ void	pb(t_stack **head_stack_a, t_stack **head_stack_b)
 	last_a->next = second_a;
 
 	*head_stack_a = second_a;
-//	Case when stack_b is empty. 
+//	case when stack_b is empty. 
 	if (*(head_stack_b) == NULL)
 	{
 		*head_stack_b = malloc(sizeof(struct s_stack));
@@ -89,7 +140,7 @@ void	pb(t_stack **head_stack_a, t_stack **head_stack_b)
 		(*(head_stack_b))->prev = *head_stack_b;
 		free(first_a);
 	}
-//	Case when stack_b only has 1 node
+//	case when stack_b only has 1 node
 	else if ((*(head_stack_b))->next == (*(head_stack_b)))
 	{
 		(*(head_stack_b))->next = first_a;
@@ -98,7 +149,7 @@ void	pb(t_stack **head_stack_a, t_stack **head_stack_b)
 		first_a->prev = *head_stack_b;
 		*head_stack_b = first_a;
 	}
-//	Every other case.
+//	every other case.
 	else
 	{
 		last_b = (*(head_stack_b))->prev;
