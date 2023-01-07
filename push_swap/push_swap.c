@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/07 11:11:33 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/07 21:33:06 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,10 +117,10 @@ int main_1(int argc, char **argv)
 		return (printf("Only 1 Number, already sorted"));
 	else if (argc == 3)
 	{
-		if (ft_atoi(argv[1]) > ft_atoi(argv[2]))
+		if (ft_atoi(argv[1]) < ft_atoi(argv[2]))
 			return (printf("Already sorted."));
 		else
-			return (printf("Swap both numbers."));
+			return (printf("sa\n"));
 	}
 	stack_a = malloc(sizeof(struct s_stack) * argc - 1);
 	stack_b = NULL;
@@ -130,24 +130,20 @@ int main_1(int argc, char **argv)
 	print_stack(&stack_a, 'a');
 	print_stack(&stack_b, 'b');
 
-	printf("pb function called 4 times\n");
+	sa(&stack_a);
 	pb(&stack_a, &stack_b);
 	pb(&stack_a, &stack_b);
 	pb(&stack_a, &stack_b);
-	pb(&stack_a, &stack_b);
+	rr(&stack_a, &stack_b);
+	rrr(&stack_a, &stack_b);
+	sa(&stack_a);
+	pa(&stack_a, &stack_b);
+	pa(&stack_a, &stack_b);
+	pa(&stack_a, &stack_b);
 
 	print_stack(&stack_a, 'a');
 	print_stack(&stack_b, 'b');
 
-	pa(&stack_a, &stack_b);
-	pa(&stack_a, &stack_b);
-	pa(&stack_a, &stack_b);
-	pa(&stack_a, &stack_b);
-	printf("pa function called 4 times\n");
-	
-	print_stack(&stack_a, 'a');
-	print_stack(&stack_b, 'b');
-	
 	printf("Address Stack_b: %p\n", stack_b);
 	printf("Address Stack_a: %p\n", stack_a);
 

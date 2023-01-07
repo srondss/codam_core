@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:39:15 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/07 11:13:14 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/07 21:39:12 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "push_swap.h"
@@ -167,15 +167,43 @@ void	pb(t_stack **head_stack_a, t_stack **head_stack_b)
 	}
 }
 
-/*... ra [Shift up all elements of stack a by 1] 
-
-... rb [Shift up all elements of stack b by 1]
-
-... rr [ra and rb at the same time.]
-
-... rra [Shift down all elements of stack a by 1.]
-
-... rrb [Shift down all elements of stack b by 1.]
-
-... rrr [rra and rrb at the same time.]
-*/
+//... ra [Shift up all elements of stack a by 1] 
+void	ra(t_stack **head_stack_a)
+{
+	if (*(head_stack_a) == NULL)
+		return ;
+	*head_stack_a = (*(head_stack_a))->next;
+}
+//... rb [Shift up all elements of stack b by 1]
+void	rb(t_stack **head_stack_b)
+{
+	if (*(head_stack_b) == NULL)
+		return ;
+	*head_stack_b = (*(head_stack_b))->next;
+}
+//... rr [ra and rb at the same time.]
+void	rr(t_stack **head_stack_a, t_stack **head_stack_b)
+{
+	ra(head_stack_a);
+	rb(head_stack_b);
+}
+//... rra [Shift down all elements of stack a by 1.]
+void	rra(t_stack **head_stack_a)
+{
+	if (*(head_stack_a) == NULL)
+		return ;
+	*head_stack_a = (*(head_stack_a))->prev;
+}
+//... rrb [Shift down all elements of stack b by 1.]
+void	rrb(t_stack **head_stack_b)
+{
+	if (*(head_stack_b) == NULL)
+		return ;
+	*head_stack_b = (*(head_stack_b))->prev;
+}
+//... rrr [rra and rrb at the same time.]
+void	rrr(t_stack **head_stack_a, t_stack **head_stack_b)
+{
+	rra(head_stack_a);
+	rrb(head_stack_b);
+}
