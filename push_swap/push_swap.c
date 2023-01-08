@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/07 21:33:06 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/08 19:23:22 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,24 @@ void	fill_stack(t_stack *stack_a, char **string, int argc)
 
 	if (argc <= 3)
 	{
-		printf("Error: 2 numbers or less in stack");
-		exit(0);
+		printf("Error: 2 numbers or less in stack\n");
+		exit(EXIT_SUCCESS);
 	}
 	i = 3;
 	start_node = stack_a;
 	next_node = malloc(sizeof(struct s_stack));
+	if (!next_node)
+		return (free(start_node));
 	start_node = stack_a;
 	start_node->number = ft_atoi(string[1]);
 	start_node->next = next_node;
 	next_node->number = ft_atoi(string[2]);
 	next_node->prev = start_node;
-	
 	while (string[i])
 	{
 		new_node = malloc(sizeof(struct s_stack));
+		if (!new_node)
+			return (free_stack(&stack_a));
 		new_node->prev = next_node;
 		next_node->next = new_node;
 		next_node = next_node->next;
@@ -52,11 +55,10 @@ int print_stack(t_stack **head_stack, char delimiter)
 	struct	s_stack *start_node;
 	struct	s_stack *next_node;
 	
-
 	start_node = *head_stack;
 	if (!start_node)
 	{
-		printf("Tried printing Stack %c, it doesn't exist\n", delimiter);
+		printf("Tried printing Stack %c, it doesn't exist\n\n", delimiter);
 		return (0);
 	}
 	next_node = start_node->next;
@@ -65,7 +67,6 @@ int print_stack(t_stack **head_stack, char delimiter)
 	printf("Prev Node: %p\n", start_node->prev);
 	printf("Curr Node: %p\n", start_node);
 	printf("Next Node: %p\n", start_node->next);
-
 	while (next_node != start_node)
 	{
 		printf("Number: %d\n", next_node->number);
@@ -93,10 +94,8 @@ void	free_stack(t_stack **head_stack)
 		return ;
 	last_node = first_node->prev;
 	next_node = first_node->next;
-	
 	if (first_node->next == first_node)
 		return (free(first_node));
-
 	while (next_node != last_node)
 	{
 		next_node = next_node->next;
@@ -114,39 +113,63 @@ int main_1(int argc, char **argv)
 	if (argc == 1)
 		return (printf("Error - Too few arguments"));
 	else if (argc == 2)
-		return (printf("Only 1 Number, already sorted"));
+		return (1);
 	else if (argc == 3)
 	{
 		if (ft_atoi(argv[1]) < ft_atoi(argv[2]))
-			return (printf("Already sorted."));
+			return (printf("Sorted."));
 		else
 			return (printf("sa\n"));
 	}
 	stack_a = malloc(sizeof(struct s_stack) * argc - 1);
+	if (!stack_a)
+		return (1);
 	stack_b = NULL;
 
 	fill_stack(stack_a, argv, argc);
 	
 	print_stack(&stack_a, 'a');
 	print_stack(&stack_b, 'b');
-
-	sa(&stack_a);
+	
+//	Begin algorithm.
 	pb(&stack_a, &stack_b);
-	pb(&stack_a, &stack_b);
-	pb(&stack_a, &stack_b);
-	rr(&stack_a, &stack_b);
-	rrr(&stack_a, &stack_b);
-	sa(&stack_a);
-	pa(&stack_a, &stack_b);
-	pa(&stack_a, &stack_b);
-	pa(&stack_a, &stack_b);
-
+	while (stack_a)
+	{
+		int i;
+		i = 0;
+		struct s_stack *head_b;
+		head_b = stack_b;
+		if (stack_a->number > head_b->number)
+			pb(&stack_a, &stack_b);
+		else
+		{
+			while (stack_a->number < head_b->number)
+			{
+				head_b = head_b->next;
+				if (head_b == stack_b)
+					break;
+				i++;
+			}
+			pb(&stack_a, &stack_b);
+			while (i > 0)
+			{
+				sb(&stack_b);
+				if (stack_b->number > stack_b->next->number)
+					rb(&stack_b);
+				i--;
+			}
+			print_stack(&stack_b, 'b');
+		}
+	}
+	while (stack_b->number < stack_b->next->number)
+		rb(&stack_b);
+	while (stack_b)
+		pa(&stack_a, &stack_b);
+//	End algorithm.
+	
 	print_stack(&stack_a, 'a');
 	print_stack(&stack_b, 'b');
-
-	printf("Address Stack_b: %p\n", stack_b);
-	printf("Address Stack_a: %p\n", stack_a);
-
+	
 	free_stack(&stack_a);
 	free_stack(&stack_b);
 	return (0);
@@ -155,5 +178,5 @@ int main_1(int argc, char **argv)
 int main(int argc, char **argv)
 {
 	main_1(argc, argv);
-	system("leaks -q a.out");
+//	system("leaks -q a.out");
 }
