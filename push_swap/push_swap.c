@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/08 19:23:22 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/09 19:33:23 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,37 +132,52 @@ int main_1(int argc, char **argv)
 	print_stack(&stack_b, 'b');
 	
 //	Begin algorithm.
-	pb(&stack_a, &stack_b);
 	while (stack_a)
 	{
-		int i;
-		i = 0;
 		struct s_stack *head_b;
-		head_b = stack_b;
-		if (stack_a->number > head_b->number)
+		int		i;
+
+		if (!stack_b)
+			pb(&stack_a, &stack_b);
+		else if (stack_a->number > stack_b->number)
 			pb(&stack_a, &stack_b);
 		else
 		{
+			i = 0;
+			head_b = stack_b;
 			while (stack_a->number < head_b->number)
 			{
+				if (stack_b->prev == stack_b->next)
+				{
+					pb(&stack_a, &stack_b);
+					sb(&stack_b);
+					break;
+				}
 				head_b = head_b->next;
 				if (head_b == stack_b)
+				{
+					i++;
 					break;
+				}
 				i++;
 			}
-			pb(&stack_a, &stack_b);
-			while (i > 0)
+			if (i == 1)
 			{
+				pb(&stack_a, &stack_b);
 				sb(&stack_b);
-				if (stack_b->number > stack_b->next->number)
-					rb(&stack_b);
-				i--;
 			}
-			print_stack(&stack_b, 'b');
+			else
+			{
+				while (i > 0)
+				{
+					pa(&stack_a, &stack_b);
+					ra(&stack_a);
+					i--;
+				}
+				pb(&stack_a, &stack_b);
+			}
 		}
 	}
-	while (stack_b->number < stack_b->next->number)
-		rb(&stack_b);
 	while (stack_b)
 		pa(&stack_a, &stack_b);
 //	End algorithm.
