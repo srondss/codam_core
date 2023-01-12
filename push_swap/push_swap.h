@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 11:34:39 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/08 11:53:22 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/12 21:49:10 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,3 +32,7 @@ void	rr(t_stack **head_stack_a, t_stack **head_stack_b);
 void	rra(t_stack **head_stack_a);
 void	rrb(t_stack **head_stack_b);
 void	rrr(t_stack **head_stack_a, t_stack **head_stack_b);
+void	call_algorithm(t_stack **stack_a, t_stack **stack_b);
+int	check_string(int argc, char **argv);
+int	check_duplicate(t_stack **head_a);
+
