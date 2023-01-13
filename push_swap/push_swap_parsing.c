@@ -6,12 +6,39 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 21:18:37 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/12 22:15:22 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/13 08:23:14 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 #include <limits.h>
+
+long	ft_atol(const char	*nptr)
+{
+	long	sign;
+	long	i;
+	long	sum;
+
+	i = 0;
+	sum = 0;
+	sign = 1;
+	if (nptr[i] == '+' || nptr[i] == '-')
+	{	
+		if (nptr[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (nptr[i] >= '0' && nptr[i] <= '9' && nptr[i] != '\0')
+	{
+		sum *= 10;
+		sum += nptr[i++] - '0';
+		if ((nptr[i] < '0' || nptr[i] > '9') && nptr[i] != '\0')
+			return (0);
+	}
+	if ((sum * sign) > INT_MAX || (sum * sign) < INT_MIN)
+		return (0);
+	return (sum * sign);
+}
 
 int	check_string(int argc, char **argv)
 {
@@ -20,7 +47,7 @@ int	check_string(int argc, char **argv)
 	i = 1;
 	while (i < argc)
 	{
-		if (argv[i][0] != 48 && atol(argv[i]) == 0)
+		if (argv[i][0] != 48 && ft_atol(argv[i]) == 0)
 			return (1);
 		i++;
 	}

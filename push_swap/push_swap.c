@@ -6,24 +6,19 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/12 22:08:51 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/13 08:32:04 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	fill_stack(t_stack *stack_a, char **string, int argc)
+void	fill_stack(t_stack *stack_a, char **string)
 {
 	struct	s_stack *start_node;
 	struct	s_stack *next_node;
 	struct	s_stack *new_node;
 	int i;
 
-	if (argc <= 3)
-	{
-		printf("Error: 2 numbers or less in stack\n");
-		exit(EXIT_SUCCESS);
-	}
 	i = 3;
 	start_node = stack_a;
 	next_node = malloc(sizeof(struct s_stack));
@@ -111,7 +106,7 @@ int main_1(int argc, char **argv)
 	struct	s_stack *stack_b;
 	
 	if (check_string(argc, argv) == 1)
-		return (printf("Error\n"));
+		return (fprintf(stderr, "Error\n"));
 	if (argc == 1)
 		return (1);
 	else if (argc == 2)
@@ -128,11 +123,11 @@ int main_1(int argc, char **argv)
 		return (1);
 	stack_b = NULL;
 
-	fill_stack(stack_a, argv, argc);
+	fill_stack(stack_a, argv);
 	if (check_duplicate(&stack_a) == 1)
 	{
 		free_stack(&stack_a);
-		return (printf("Error\n"));
+		return (fprintf(stderr, "Error\n"));
 	}
 //	print_stack(&stack_a, 'a');
 //	print_stack(&stack_b, 'b');
@@ -141,8 +136,8 @@ int main_1(int argc, char **argv)
 	call_algorithm(&stack_a, &stack_b);
 //	End algorithm.
 	
-	print_stack(&stack_a, 'a');
-	print_stack(&stack_b, 'b');
+//	print_stack(&stack_a, 'a');
+//	print_stack(&stack_b, 'b');
 	
 	free_stack(&stack_a);
 	free_stack(&stack_b);
