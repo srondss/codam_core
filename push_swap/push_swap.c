@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/13 08:32:04 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/14 22:52:23 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,15 +129,11 @@ int main_1(int argc, char **argv)
 		free_stack(&stack_a);
 		return (fprintf(stderr, "Error\n"));
 	}
-//	print_stack(&stack_a, 'a');
-//	print_stack(&stack_b, 'b');
 	
 //	Begin algorithm.
 	call_algorithm(&stack_a, &stack_b);
 //	End algorithm.
 	
-//	print_stack(&stack_a, 'a');
-//	print_stack(&stack_b, 'b');
 	
 	free_stack(&stack_a);
 	free_stack(&stack_b);
