@@ -6,50 +6,18 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/14 22:52:23 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/15 18:17:52 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-void	fill_stack(t_stack *stack_a, char **string)
-{
-	struct	s_stack *start_node;
-	struct	s_stack *next_node;
-	struct	s_stack *new_node;
-	int i;
-
-	i = 3;
-	start_node = stack_a;
-	next_node = malloc(sizeof(struct s_stack));
-	if (!next_node)
-		return (free(start_node));
-	start_node = stack_a;
-	start_node->number = ft_atoi(string[1]);
-	start_node->next = next_node;
-	next_node->number = ft_atoi(string[2]);
-	next_node->prev = start_node;
-	while (string[i])
-	{
-		new_node = malloc(sizeof(struct s_stack));
-		if (!new_node)
-			return (free_stack(&stack_a));
-		new_node->prev = next_node;
-		next_node->next = new_node;
-		next_node = next_node->next;
-		new_node->number = ft_atoi(string[i]);
-		i++;
-	}
-	new_node->next = start_node;
-	start_node->prev = new_node;
-}
 
 int print_stack(t_stack **head_stack, char delimiter)
 {
 	int i;
 	struct	s_stack *start_node;
 	struct	s_stack *next_node;
-	
+
 	start_node = *head_stack;
 	if (!start_node)
 	{
@@ -76,28 +44,6 @@ int print_stack(t_stack **head_stack, char delimiter)
 	else
 		printf("\n-\nb\n\n");
 	return (i);
-}
-
-void	free_stack(t_stack **head_stack)
-{
-	struct	s_stack *first_node;
-	struct	s_stack *last_node;
-	struct	s_stack *next_node;
-
-	first_node = *head_stack;
-	if (!first_node)
-		return ;
-	last_node = first_node->prev;
-	next_node = first_node->next;
-	if (first_node->next == first_node)
-		return (free(first_node));
-	while (next_node != last_node)
-	{
-		next_node = next_node->next;
-		free(next_node->prev);
-	}
-	free(last_node);
-	free(first_node);
 }
 
 int main_1(int argc, char **argv)
@@ -134,7 +80,8 @@ int main_1(int argc, char **argv)
 	call_algorithm(&stack_a, &stack_b);
 //	End algorithm.
 	
-	
+	print_stack(&stack_a, 'a');
+
 	free_stack(&stack_a);
 	free_stack(&stack_b);
 	return (0);
@@ -143,5 +90,5 @@ int main_1(int argc, char **argv)
 int main(int argc, char **argv)
 {
 	main_1(argc, argv);
-//	system("leaks -q a.out");
+	system("leaks -q push_swap");
 }

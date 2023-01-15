@@ -6,18 +6,20 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 11:34:39 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/12 21:49:10 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/15 18:22:05 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#ifndef PUSH_SWAP_H
+# define PUSH_SWAP_H
 
-#include <stdio.h>
-#include "libft/libft.h"
+# include <stdio.h>
+# include "libft/libft.h"
 
 typedef struct s_stack
 {
-	int	number;
-	struct	s_stack *next;
-	struct	s_stack *prev;
+	int				number;
+	struct s_stack	*next;
+	struct s_stack	*prev;
 }	t_stack;
 
 void	free_stack(t_stack **head_ref);
@@ -33,6 +35,7 @@ void	rra(t_stack **head_stack_a);
 void	rrb(t_stack **head_stack_b);
 void	rrr(t_stack **head_stack_a, t_stack **head_stack_b);
 void	call_algorithm(t_stack **stack_a, t_stack **stack_b);
-int	check_string(int argc, char **argv);
-int	check_duplicate(t_stack **head_a);
-
+int		check_string(int argc, char **argv);
+int		check_duplicate(t_stack **head_a);
+void	fill_stack(t_stack *stack_a, char **argv);
+void	free_stack(t_stack **stack);

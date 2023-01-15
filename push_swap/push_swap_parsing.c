@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 21:18:37 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/13 08:23:14 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/15 17:44:32 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ long	ft_atol(const char	*nptr)
 
 int	check_string(int argc, char **argv)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (i < argc)
@@ -54,22 +54,9 @@ int	check_string(int argc, char **argv)
 	return (0);
 }
 
-int	check_duplicate(t_stack **head_a)
+int	find_duplicate(t_stack *node, t_stack *next, int length)
 {
-	struct s_stack *node;
-	struct s_stack *next;
-	int 		i;
-
-	node = (*(head_a))->next;
-
-	i = 0;
-	while (node != *head_a)
-	{
-		node = node->next;
-		i++;
-	}
-	next = node->next;
-	while (i > 0)
+	while (length > 0)
 	{
 		while (node != next)
 		{
@@ -80,7 +67,24 @@ int	check_duplicate(t_stack **head_a)
 		}
 		node = node->next;
 		next = node->next;
-		i--;
+		length--;
 	}
 	return (0);
+}
+
+int	check_duplicate(t_stack **head_a)
+{
+	struct s_stack	*node;
+	struct s_stack	*next;
+	int				i;
+
+	node = (*(head_a))->next;
+	i = 0;
+	while (node != *head_a)
+	{
+		node = node->next;
+		i++;
+	}
+	next = node->next;
+	return (find_duplicate(node, next, i));
 }

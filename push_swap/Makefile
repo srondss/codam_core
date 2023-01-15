@@ -5,8 +5,8 @@ LIBFT_PATH = ./libft/
 INCLUDES = push_swap.h
 
 
-FILES= push_swap.c push_swap_functions.c push_swap_algorithm.c push_swap_parsing.c
-OBJECTS= push_swap.o push_swap_functions.o push_swap_algorithm.o push_swap_parsing.o
+FILES= push_swap.c push_swap_mandatory_functions.c push_swap_mandatory_functions_2.c push_swap_mandatory_functions_3.c push_swap_misc.c push_swap_algorithm.c push_swap_parsing.c
+OBJECTS= push_swap.o push_swap_mandatory_functions.o push_swap_mandatory_functions_2.o push_swap_mandatory_functions_3.o push_swap_misc.o push_swap_algorithm.o push_swap_parsing.o
 
 CC = clang
 CFLAGS = -Wall -Wextra -Werror
