@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 11:34:39 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/15 18:22:05 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/18 14:39:20 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PUSH_SWAP_H
@@ -39,3 +39,10 @@ int		check_string(int argc, char **argv);
 int		check_duplicate(t_stack **head_a);
 void	fill_stack(t_stack *stack_a, char **argv);
 void	free_stack(t_stack **stack);
+int	check_sorted(t_stack **stack);
+void	quicksort_a(t_stack **head_a, t_stack **head_b, int n_items);
+void	quicksort_b(t_stack **head_a, t_stack **head_b, int n_items);
+void	sort_three_a(t_stack **head_a);
+void	sort_three_b(t_stack **head_b);
+
+#endif

@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/15 18:17:52 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/18 14:47:03 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,11 @@ int main_1(int argc, char **argv)
 	}
 	
 //	Begin algorithm.
-	call_algorithm(&stack_a, &stack_b);
+	quicksort_a(&stack_a, &stack_b, (argc - 1));
 //	End algorithm.
 	
 	print_stack(&stack_a, 'a');
+	print_stack(&stack_b, 'b');
 
 	free_stack(&stack_a);
 	free_stack(&stack_b);
@@ -90,5 +91,5 @@ int main_1(int argc, char **argv)
 int main(int argc, char **argv)
 {
 	main_1(argc, argv);
-	system("leaks -q push_swap");
+//	system("leaks -q push_swap");
 }

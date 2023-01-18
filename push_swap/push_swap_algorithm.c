@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 16:41:51 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/14 23:26:18 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/18 15:06:48 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,106 @@ int	check_sorted(t_stack **head)
 		return (0);
 }
 
-void	sort_three_a(t_stack **head)
+void	sort_three_b(t_stack **head_b)
 {
 	struct	s_stack *node;
-
-	// while head is not sorted
-	while (!check_sorted(head))
+	int i;
+	
+	i = 0;
+	node = *head_b;
+	while (i < 2)
 	{
-		node = *head;
-		//  if first is greater than 2nd, swap both. 2 1 3 (sa) -> 1 2 3 OK
-		if (node->number > node->next->number)
-			sa(head);
-		//  if first is less than 2nd, rotate down. 2 3 1 (rra) -> 1 2 3 || 2 3 4 (sa)-> 4 2 3 -> 2 4 3
-		else if (node->number < node->next->number)
-			rra(head);
+		if (node->number < node->next->number)
+			break;
+		node = node->next;
+		i++;
 	}
+	if (i == 0)
+	{
+		sb(head_b);
+		node = *head_b;
+		if (node->next->number < node->next->next->number)
+		{
+			rb(head_b);
+			sb(head_b);
+			rrb(head_b);
+		}
+		node = *head_b;
+		if (node->number < node->next->number)
+			sb(head_b);
+	}
+	else if (i == 1)
+	{
+		node = *head_b;
+		if (node->number > node->next->next->number)
+		{
+			rb(head_b);
+			sb(head_b);
+			rrb(head_b);
+		}
+		else
+		{
+			rb(head_b);
+			sb(head_b);
+			rrb(head_b);
+			sb(head_b);
+		}
+	}
+	else
+		return ;
 }
 
+
+void	sort_three_a(t_stack **head_a)
+{
+	struct	s_stack *node;
+	int i;
+	
+	i = 0;
+	node = *head_a;
+	while (i < 2)
+	{
+		if (node->number > node->next->number)
+			break;
+		node = node->next;
+		i++;
+	}
+	if (i == 0)
+	{
+		sa(head_a);
+		node = *head_a;
+		if (node->next->number > node->next->next->number)
+		{
+			ra(head_a);
+			sa(head_a);
+			rra(head_a);
+		}
+		node = *head_a;
+		if (node->number > node->next->number)
+			sa(head_a);
+	}
+	else if (i == 1)
+	{
+		node = *head_a;
+		if (node->number < node->next->next->number)
+		{
+			ra(head_a);
+			sa(head_a);
+			rra(head_a);
+		}
+		else
+		{
+			ra(head_a);
+			sa(head_a);
+			rra(head_a);
+			sa(head_a);
+		}
+	}
+	else
+		return ;
+}
+
+/* OLD ALGORITHM.
 void	call_algorithm(t_stack **stack_a, t_stack **stack_b)
 {
 	struct s_stack *head_b;
@@ -60,9 +143,9 @@ void	call_algorithm(t_stack **stack_a, t_stack **stack_b)
 	// if top stack a is bigger than top stack b, just push to stack b.
 		else if ((*(stack_a))->number > (*(stack_b))->number)
 			pb(stack_a, stack_b);
-	/* if stack has 3 elements
+	 if stack has 3 elements
 	/	else if ((*(stack_a))->prev == (*(stack_a))->next->next && (*(stack_a))->next != (*(stack_a))->prev)
-			sort_three_a(stack_a); */
+			sort_three_a(stack_a); 
 		else
 		{
 			i = 0;
@@ -111,5 +194,5 @@ void	call_algorithm(t_stack **stack_a, t_stack **stack_b)
 	// push everything back to stack a since it's sorted.
 	while (*stack_b)
 		pa(stack_a, stack_b);
-}
+}*/
 

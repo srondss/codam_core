@@ -6,15 +6,88 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 06:44:25 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/17 09:04:05 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/18 15:04:18 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
+int *sort_arr(int *arr, int size_arr)
+{
+	int tmp;
+	int i;
+	int j;
+	
+	i = 0;
+	j = 0;
+	tmp = 0;
+	while (i < size_arr)
+	{
+		while (j < (size_arr - 1))
+		{
+			if (arr[j] > arr[j + 1])
+			{
+				tmp = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = tmp;
+			}
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+	return (arr);
+}
+
+int	get_pivot(t_stack **head, int n_items)
+{
+	int i;
+	int *arr;
+	struct s_stack *first;
+	int result;
+
+	i = 0;
+	arr = (int *)malloc(sizeof(int) * n_items);
+	first = *head;
+	if (!arr)
+		return (-1);
+
+	// put all numbers inside an array.
+	while (i < n_items)
+	{
+		arr[i] = first->number;
+		first = first->next;
+		i++;
+	}
+
+	// sort array
+	arr = sort_arr(arr, n_items); 
+	
+	// return middle number
+	i = (n_items / 2);
+	if ( n_items % 2 == 0)
+		result = arr[i - 1];
+	else
+		result = arr[i];
+	free(arr);
+	return (result);
+}
+
+int	check_sorted_desc(t_stack **head)
+{
+	struct s_stack *node;
+	
+	node = *head;
+
+	while (node->number > node->next->number)
+		node = node->next;
+	if (node->next == *head)
+		return (1);
+	else
+		return (0);
+}
 void	quicksort_a(t_stack **head_a, t_stack **head_b, int n_items)
 {
-
 	struct s_stack 	*start;
 	int	pivot;
 	int	pushed_numbers;
@@ -30,20 +103,33 @@ void	quicksort_a(t_stack **head_a, t_stack **head_b, int n_items)
 			sa(head_a);
 		return ;
 	}
+	else if (n_items == 3)
+	{
+		printf("Sort Three A\n");
+		sort_three_a(head_a);
+	}
 	else
 	{
-		pivot = // function which finds the pivot.
+		pivot = get_pivot(head_a, n_items);
+		printf("Pivot A: %d\n", pivot);
+		printf("N_Items: %d\n", n_items);
+		if (pivot == -1)
+		{
+			free_stack(head_a);
+			free_stack(head_b);
+			exit(EXIT_SUCCESS);
+		}
 		i = 0;
 		pushed_numbers = 0;
 		while (i < n_items)
 		{
-			if (start->number <= pivot)
+			if ((*(head_a))->number <= pivot)
 			{
-				pb(&stack_a, &stack_b);
+				pb(head_a, head_b);
 				pushed_numbers++;
 			}
-			else
-				ra(&stack_a);
+			else if ((*(head_a))->next != (*(head_a)))
+				ra(head_a);
 			i++;
 		}
 		quicksort_a(head_a, head_b, (n_items - pushed_numbers));
@@ -53,7 +139,6 @@ void	quicksort_a(t_stack **head_a, t_stack **head_b, int n_items)
 
 void	quicksort_b(t_stack **head_a, t_stack **head_b, int n_items)
 {
-
 	struct s_stack 	*start;
 	int	pivot;
 	int	pushed_numbers;
@@ -61,44 +146,60 @@ void	quicksort_b(t_stack **head_a, t_stack **head_b, int n_items)
 
 	start = *(head_b);
 
-// need to create function which checks if sorted descending
 	if (check_sorted_desc(head_b) == 1)
 	{
-		while (start != NULL)
-			pa(&stack_a, &stack_b);
+		while ((*head_b) != NULL)
+			pa(head_a, head_b);
 	}
 	else if (n_items == 0)
 		return ; 
 	else if (n_items == 1)
-		pa(&stack_a, &stack_b);
+		pa(head_a, head_b);
 	else if (n_items == 2)
 	{
+		printf("N_items: 2\n");
 		if (start->number < start->next->number)
 			sb(head_b);
-		pa(&stack_a, &stack_b);
-		pa(&stack_a, &stack_b);
+		pa(head_a, head_b);
+		pa(head_a, head_b);
+	}
+	else if (n_items == 3)
+	{
+		sort_three_b(head_b);
+		pa(head_a, head_b);
+		pa(head_a, head_b);
+		pa(head_a, head_b);
 	}
 	else
 	{
-		pivot = // function which finds the pivot.
+		pivot = get_pivot(head_b, n_items);
+		printf("Pivot B: %d\n", pivot);
+		printf("N_items: %d\n", n_items);
+		if (pivot == -1)
+		{
+			free_stack(head_a);
+			free_stack(head_b);
+			exit(EXIT_SUCCESS);
+		}
 		i = 0;
 		pushed_numbers = 0;
 		while (i < n_items)
 		{
-			if (start->number > pivot)
+			if ((*(head_b))->number > pivot)
 			{
-				pa(&stack_a, &stack_b);
+				pa(head_a, head_b);
 				pushed_numbers++;
 			}
-			rb(&stack_b);
+			else if ((*(head_b))->next != (*(head_b)))
+				rb(head_b);
 			i++;
 		}
+		while ((i - pushed_numbers) > 0)
+		{
+			rrb(head_b);
+			i--;
+		}
 		quicksort_a(head_a, head_b, pushed_numbers);
-		quicksort_b(head_a, head_b, (n_items - pushed_numbers);
+		quicksort_b(head_a, head_b, (n_items - pushed_numbers));
 	}
 }
-
-// need to create function which finds the pivot. 
-
-
-
