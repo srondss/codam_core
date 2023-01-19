@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 06:44:25 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/18 15:04:18 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/19 22:13:21 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int *sort_arr(int *arr, int size_arr)
 	return (arr);
 }
 
-int	get_pivot(t_stack **head, int n_items)
+int	get_pivot(t_stack **head, t_stack **head_other, int n_items)
 {
 	int i;
 	int *arr;
@@ -50,8 +50,11 @@ int	get_pivot(t_stack **head, int n_items)
 	arr = (int *)malloc(sizeof(int) * n_items);
 	first = *head;
 	if (!arr)
-		return (-1);
-
+	{
+		free_stack(head);
+		free_stack(head_other);
+		exit(EXIT_SUCCESS);
+	}
 	// put all numbers inside an array.
 	while (i < n_items)
 	{
@@ -94,7 +97,6 @@ void	quicksort_a(t_stack **head_a, t_stack **head_b, int n_items)
 	int	i;
 
 	start = *(head_a);
-
 	if (check_sorted(head_a) == 1 || n_items == 0 || n_items == 1)
 		return ;
 	else if (n_items == 2)
@@ -105,20 +107,14 @@ void	quicksort_a(t_stack **head_a, t_stack **head_b, int n_items)
 	}
 	else if (n_items == 3)
 	{
-		printf("Sort Three A\n");
+	//	printf("Sort Three A\n");
 		sort_three_a(head_a);
 	}
 	else
 	{
-		pivot = get_pivot(head_a, n_items);
-		printf("Pivot A: %d\n", pivot);
-		printf("N_Items: %d\n", n_items);
-		if (pivot == -1)
-		{
-			free_stack(head_a);
-			free_stack(head_b);
-			exit(EXIT_SUCCESS);
-		}
+		pivot = get_pivot(head_a, head_b, n_items);
+	//	printf("Pivot A: %d\n", pivot);
+	//	printf("N_Items: %d\n", n_items);
 		i = 0;
 		pushed_numbers = 0;
 		while (i < n_items)
@@ -131,6 +127,11 @@ void	quicksort_a(t_stack **head_a, t_stack **head_b, int n_items)
 			else if ((*(head_a))->next != (*(head_a)))
 				ra(head_a);
 			i++;
+		}
+		while ((i - pushed_numbers) > 0)
+		{
+			rra(head_a);
+			i--;
 		}
 		quicksort_a(head_a, head_b, (n_items - pushed_numbers));
 		quicksort_b(head_a, head_b, pushed_numbers);
@@ -157,7 +158,6 @@ void	quicksort_b(t_stack **head_a, t_stack **head_b, int n_items)
 		pa(head_a, head_b);
 	else if (n_items == 2)
 	{
-		printf("N_items: 2\n");
 		if (start->number < start->next->number)
 			sb(head_b);
 		pa(head_a, head_b);
@@ -172,15 +172,9 @@ void	quicksort_b(t_stack **head_a, t_stack **head_b, int n_items)
 	}
 	else
 	{
-		pivot = get_pivot(head_b, n_items);
-		printf("Pivot B: %d\n", pivot);
-		printf("N_items: %d\n", n_items);
-		if (pivot == -1)
-		{
-			free_stack(head_a);
-			free_stack(head_b);
-			exit(EXIT_SUCCESS);
-		}
+		pivot = get_pivot(head_b, head_a, n_items);
+//		printf("Pivot B: %d\n", pivot);
+//		printf("N_items: %d\n", n_items);
 		i = 0;
 		pushed_numbers = 0;
 		while (i < n_items)

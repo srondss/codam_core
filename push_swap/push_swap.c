@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/18 14:47:03 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/19 22:11:50 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,20 +68,18 @@ int main_1(int argc, char **argv)
 	if (!stack_a)
 		return (1);
 	stack_b = NULL;
-
 	fill_stack(stack_a, argv);
 	if (check_duplicate(&stack_a) == 1)
 	{
 		free_stack(&stack_a);
 		return (fprintf(stderr, "Error\n"));
 	}
-	
 //	Begin algorithm.
 	quicksort_a(&stack_a, &stack_b, (argc - 1));
 //	End algorithm.
 	
-	print_stack(&stack_a, 'a');
-	print_stack(&stack_b, 'b');
+//	print_stack(&stack_a, 'a');
+//	print_stack(&stack_b, 'b');
 
 	free_stack(&stack_a);
 	free_stack(&stack_b);
