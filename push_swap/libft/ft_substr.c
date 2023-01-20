@@ -6,12 +6,11 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 08:33:32 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/11/08 17:59:37 by ysrondy       ########   odam.nl         */
+/*   Updated: 2023/01/20 13:51:06 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
 
-#include <stdio.h>
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	unsigned int	i;

@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 16:41:51 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/19 19:05:54 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/20 13:43:34 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 // create function which checks if stack_a is sorted.
 int	check_sorted(t_stack **head)
 {
-	struct s_stack *node;
-	
-	node = *head;
+	struct s_stack	*node;
 
+	node = *head;
+	if (!node)
+		return (1);
 	while (node->number < node->next->number)
 		node = node->next;
 	if (node->next == *head)
@@ -29,15 +30,15 @@ int	check_sorted(t_stack **head)
 
 void	sort_three_b(t_stack **head_b)
 {
-	struct	s_stack *node;
-	int i;
-	
+	struct s_stack	*node;
+	int				i;
+
 	i = 0;
 	node = *head_b;
 	while (i < 2)
 	{
 		if (node->number < node->next->number)
-			break;
+			break ;
 		node = node->next;
 		i++;
 	}
@@ -49,7 +50,7 @@ void	sort_three_b(t_stack **head_b)
 			rrb(head_b);
 		}
 		else if (node->number < node->next->next->number)
-			rb(head_b);	
+			rb(head_b);
 		else
 			sb(head_b);
 		return ;
@@ -91,18 +92,17 @@ void	sort_three_b(t_stack **head_b)
 		return ;
 }
 
-
 void	sort_three_a(t_stack **head_a)
 {
-	struct	s_stack *node;
-	int i;
-	
+	struct s_stack	*node;
+	int				i;
+
 	i = 0;
 	node = *head_a;
 	while (i < 2)
 	{
 		if (node->number > node->next->number)
-			break;
+			break ;
 		node = node->next;
 		i++;
 	}

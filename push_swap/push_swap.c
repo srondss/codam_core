@@ -6,13 +6,13 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/19 22:11:50 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/20 13:50:25 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int print_stack(t_stack **head_stack, char delimiter)
+/*int print_stack(t_stack **head_stack, char delimiter)
 {
 	int i;
 	struct	s_stack *start_node;
@@ -44,13 +44,13 @@ int print_stack(t_stack **head_stack, char delimiter)
 	else
 		printf("\n-\nb\n\n");
 	return (i);
-}
+}*/
 
-int main_1(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	struct	s_stack	*stack_a;
-	struct	s_stack *stack_b;
-	
+	struct s_stack	*stack_a;
+	struct s_stack	*stack_b;
+
 	if (check_string(argc, argv) == 1)
 		return (fprintf(stderr, "Error\n"));
 	if (argc == 1)
@@ -74,20 +74,8 @@ int main_1(int argc, char **argv)
 		free_stack(&stack_a);
 		return (fprintf(stderr, "Error\n"));
 	}
-//	Begin algorithm.
 	quicksort_a(&stack_a, &stack_b, (argc - 1));
-//	End algorithm.
-	
-//	print_stack(&stack_a, 'a');
-//	print_stack(&stack_b, 'b');
-
 	free_stack(&stack_a);
 	free_stack(&stack_b);
 	return (0);
-}
-
-int main(int argc, char **argv)
-{
-	main_1(argc, argv);
-//	system("leaks -q push_swap");
 }
