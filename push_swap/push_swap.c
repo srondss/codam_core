@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/20 13:50:25 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/22 20:23:37 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	main(int argc, char **argv)
 	struct s_stack	*stack_b;
 
 	if (check_string(argc, argv) == 1)
-		return (fprintf(stderr, "Error\n"));
+		return (write(1, "Error\n", 6));
 	if (argc == 1)
 		return (1);
 	else if (argc == 2)
@@ -62,7 +62,7 @@ int	main(int argc, char **argv)
 		if (ft_atoi(argv[1]) < ft_atoi(argv[2]))
 			return (0);
 		else
-			return (printf("sa\n"));
+			return (write(1, "sa\n", 3));
 	}
 	stack_a = malloc(sizeof(struct s_stack) * argc - 1);
 	if (!stack_a)
@@ -72,7 +72,7 @@ int	main(int argc, char **argv)
 	if (check_duplicate(&stack_a) == 1)
 	{
 		free_stack(&stack_a);
-		return (fprintf(stderr, "Error\n"));
+		return (write(1, "Error\n", 6));
 	}
 	quicksort_a(&stack_a, &stack_b, (argc - 1));
 	free_stack(&stack_a);

@@ -6,13 +6,13 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 11:34:39 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/20 13:50:48 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/22 20:29:11 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
-# include <stdio.h>
+# include <unistd.h>
 # include "libft/libft.h"
 
 typedef struct s_stack
@@ -44,5 +44,6 @@ void	quicksort_a(t_stack **head_a, t_stack **head_b, int n_items);
 void	quicksort_b(t_stack **head_a, t_stack **head_b, int n_items);
 void	sort_three_a(t_stack **head_a);
 void	sort_three_b(t_stack **head_b);
+void	free_and_exit(t_stack **head_a, t_stack **head_b);
 
 #endif

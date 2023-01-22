@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 18:00:16 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/15 18:16:59 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/22 20:30:57 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,12 @@ void	free_stack(t_stack **head_stack)
 	}
 	free(last_node);
 	free(first_node);
+}
+
+void	free_and_exit(t_stack **head_a, t_stack **head_b)
+{
+	free_stack(head_a);
+	free_stack(head_b);
+	write(1, "Error\n", 6); 
+	exit(EXIT_SUCCESS);
 }

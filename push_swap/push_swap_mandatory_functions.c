@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:39:15 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/15 17:56:41 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/22 20:32:26 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "push_swap.h"
@@ -31,11 +31,7 @@ t_stack	*pa(t_stack **head_stack_a, t_stack **head_stack_b)
 	{
 		*head_stack_a = malloc(sizeof(struct s_stack));
 		if (!(*(head_stack_a)))
-		{
-			free_stack(head_stack_a);
-			free_stack(head_stack_b);
-			exit(EXIT_SUCCESS);
-		}
+			free_and_exit(head_stack_a, head_stack_b);
 		(*(head_stack_a))->number = first_b->number;
 		(*(head_stack_a))->next = *head_stack_a;
 		(*(head_stack_a))->prev = *head_stack_a;
@@ -64,7 +60,7 @@ t_stack	*pa(t_stack **head_stack_a, t_stack **head_stack_b)
 		else
 			*head_stack_a = first_b;
 	}
-	printf("pa\n");
+	write(1, "pa\n", 3);
 	return (*head_stack_a);
 }
 
@@ -88,11 +84,7 @@ t_stack	*pb(t_stack **head_stack_a, t_stack **head_stack_b)
 	{
 		*head_stack_b = malloc(sizeof(struct s_stack));
 		if (!(*(head_stack_b)))
-		{
-			free_stack(head_stack_a);
-			free_stack(head_stack_b);
-			exit(EXIT_SUCCESS);
-		}
+			free_and_exit(head_stack_a, head_stack_b);
 		(*(head_stack_b))->number = first_a->number;
 		(*(head_stack_b))->next = *head_stack_b;
 		(*(head_stack_b))->prev = *head_stack_b;
@@ -121,6 +113,6 @@ t_stack	*pb(t_stack **head_stack_a, t_stack **head_stack_b)
 		else
 			*head_stack_b = first_a;
 	}
-	printf("pb\n");
+	write(1, "pb\n", 3);
 	return (*head_stack_b);
 }

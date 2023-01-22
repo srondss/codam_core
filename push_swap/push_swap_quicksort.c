@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 06:44:25 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/20 13:48:32 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/22 20:29:21 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,7 @@ int	get_pivot(t_stack **head, t_stack **head_other, int n_items)
 	arr = (int *)malloc(sizeof(int) * n_items);
 	first = *head;
 	if (!arr)
-	{
-		free_stack(head);
-		free_stack(head_other);
-		exit(EXIT_SUCCESS);
-	}
+		free_and_exit(head, head_other);
 	while (i < n_items)
 	{
 		arr[i] = first->number;

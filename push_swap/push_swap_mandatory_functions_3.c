@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 17:55:01 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/15 17:56:37 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/22 20:25:32 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	sa(t_stack **head_ref)
 		third->prev = first;
 		*head_ref = second;
 	}
-	printf("sa\n");
+	write(1, "sa\n", 3);
 }
 
 //[Swap the first 2 elements at the top of stack b]
@@ -67,7 +67,7 @@ void	sb(t_stack **head_ref)
 		third->prev = first;
 		*head_ref = second;
 	}
-	printf("sb\n");
+	write(1, "sb\n", 3);
 }
 
 //[sa and sb at the same time.]
@@ -83,5 +83,5 @@ void	ra(t_stack **head_stack_a)
 	if (*(head_stack_a) == NULL)
 		return ;
 	*head_stack_a = (*(head_stack_a))->next;
-	printf("ra\n");
+	write(1, "ra\n", 3);
 }

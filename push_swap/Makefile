@@ -14,7 +14,7 @@ CFLAGS = -g -Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME): $(OBJECTS)
-	make -C $(LIBFT_PATH) $(LIBFT)
+	make -C $(LIBFT_PATH) $(LIBFT) 
 	$(CC) $(CFLAGS) -I $(INCLUDES) -o $(NAME) $(OBJECTS) -L $(LIBFT_PATH) -lft
 
 $(OBJECTS): $(FILES)
