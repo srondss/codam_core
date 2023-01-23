@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/22 20:23:37 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/23 11:32:28 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,6 @@ int	main(int argc, char **argv)
 	quicksort_a(&stack_a, &stack_b, (argc - 1));
 	free_stack(&stack_a);
 	free_stack(&stack_b);
+//	system("leaks -q push_swap");
 	return (0);
 }

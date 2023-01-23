@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 11:34:39 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/22 20:29:11 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/23 11:34:50 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PUSH_SWAP_H
@@ -45,5 +45,12 @@ void	quicksort_b(t_stack **head_a, t_stack **head_b, int n_items);
 void	sort_three_a(t_stack **head_a);
 void	sort_three_b(t_stack **head_b);
 void	free_and_exit(t_stack **head_a, t_stack **head_b);
+
+void	pa_helper(t_stack **head_a, t_stack **head_b, t_stack *first_b);
+void	pb_helper(t_stack **head_a, t_stack **head_b, t_stack *first_a);
+void	pa_helper2(t_stack **head_a, t_stack **head_b,
+			t_stack *first_b, t_stack *second_b);
+void	pb_helper2(t_stack **head_a, t_stack **head_b,
+			t_stack *first_a, t_stack *second_a);
 
 #endif
