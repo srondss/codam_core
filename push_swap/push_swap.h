@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 11:34:39 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/23 11:34:50 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/24 11:44:29 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PUSH_SWAP_H
@@ -52,5 +52,18 @@ void	pa_helper2(t_stack **head_a, t_stack **head_b,
 			t_stack *first_b, t_stack *second_b);
 void	pb_helper2(t_stack **head_a, t_stack **head_b,
 			t_stack *first_a, t_stack *second_a);
+void	quicksort_b_helper2(t_stack **head_a, t_stack **head_b, int n_items,
+			t_stack *start);
+int		quicksort_b_helper(t_stack **head_a, t_stack **head_b, int n_items);
+int		quicksort_a_helper(t_stack **head_a, t_stack **head_b, int n_items);
+int		get_pivot(t_stack **head, t_stack **head_other, int n_items);
+int		*sort_arr(int *arr, int size_arr);
+void	sort_three_b_helper3(t_stack **head_b, t_stack *node);
+void	sort_three_b_helper2(t_stack **head_b);
+void	sort_three_b_helper(t_stack **head_b, t_stack *node);
+void	sort_three_a_helper3(t_stack **head_b, t_stack *node);
+void	sort_three_a_helper2(t_stack **head_b);
+void	sort_three_a_helper(t_stack **head_b, t_stack *node);
+void	check_errors(int argc, char **argv);
 
 #endif

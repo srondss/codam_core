@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/23 11:32:28 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/24 12:10:52 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,19 +51,8 @@ int	main(int argc, char **argv)
 	struct s_stack	*stack_a;
 	struct s_stack	*stack_b;
 
-	if (check_string(argc, argv) == 1)
-		return (write(1, "Error\n", 6));
-	if (argc == 1)
-		return (1);
-	else if (argc == 2)
-		return (1);
-	else if (argc == 3)
-	{
-		if (ft_atoi(argv[1]) < ft_atoi(argv[2]))
-			return (0);
-		else
-			return (write(1, "sa\n", 3));
-	}
+	if (check_string(argc, argv) == 1 || argc == 1 || argc == 2 || argc == 3)
+		check_errors(argc, argv);
 	stack_a = malloc(sizeof(struct s_stack) * argc - 1);
 	if (!stack_a)
 		return (1);
@@ -72,11 +61,10 @@ int	main(int argc, char **argv)
 	if (check_duplicate(&stack_a) == 1)
 	{
 		free_stack(&stack_a);
-		return (write(1, "Error\n", 6));
+		return (write(2, "Error\n", 6));
 	}
 	quicksort_a(&stack_a, &stack_b, (argc - 1));
 	free_stack(&stack_a);
 	free_stack(&stack_b);
-//	system("leaks -q push_swap");
 	return (0);
 }

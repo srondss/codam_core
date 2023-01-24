@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 18:00:16 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/22 20:30:57 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/24 12:06:23 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,11 @@ t_stack *start_node)
 	{
 		new_node = malloc(sizeof(struct s_stack));
 		if (!new_node)
-			return (free_stack(&start_node));
+		{
+			free_stack(&start_node);
+			write(2, "Error\n", 6);
+			exit(EXIT_SUCCESS);
+		}
 		new_node->prev = next_node;
 		next_node->next = new_node;
 		next_node = next_node->next;
@@ -42,7 +46,11 @@ void	fill_stack(t_stack *stack_a, char **string)
 	start_node = stack_a;
 	next_node = malloc(sizeof(struct s_stack));
 	if (!next_node)
-		return (free(start_node));
+	{
+		free(start_node);
+		write(2, "Error\n", 6);
+		return ;
+	}
 	start_node = stack_a;
 	start_node->number = ft_atoi(string[1]);
 	start_node->next = next_node;
@@ -77,6 +85,6 @@ void	free_and_exit(t_stack **head_a, t_stack **head_b)
 {
 	free_stack(head_a);
 	free_stack(head_b);
-	write(1, "Error\n", 6); 
+	write(2, "Error\n", 6);
 	exit(EXIT_SUCCESS);
 }

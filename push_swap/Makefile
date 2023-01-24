@@ -5,8 +5,8 @@ LIBFT_PATH = ./libft/
 INCLUDES = push_swap.h
 
 
-FILES= push_swap.c push_swap_mandatory_functions.c push_swap_mandatory_functions_2.c push_swap_mandatory_functions_3.c push_swap_misc.c push_swap_algorithm.c push_swap_parsing.c push_swap_quicksort.c push_swap_mandatory_helpers.c
-OBJECTS= push_swap.o push_swap_mandatory_functions.o push_swap_mandatory_functions_2.o push_swap_mandatory_functions_3.o push_swap_misc.o push_swap_algorithm.o push_swap_parsing.o push_swap_quicksort.o push_swap_mandatory_helpers.o
+FILES= push_swap.c push_swap_mandatory_functions.c push_swap_mandatory_functions_2.c push_swap_mandatory_functions_3.c push_swap_misc.c push_swap_algorithm.c push_swap_parsing.c push_swap_quicksort.c push_swap_mandatory_helpers.c push_swap_quicksort_helpers.c push_swap_sort_three_a_helpers.c push_swap_sort_three_b_helpers.c
+OBJECTS= push_swap.o push_swap_mandatory_functions.o push_swap_mandatory_functions_2.o push_swap_mandatory_functions_3.o push_swap_misc.o push_swap_algorithm.o push_swap_parsing.o push_swap_quicksort.o push_swap_mandatory_helpers.o push_swap_quicksort_helpers.o push_swap_sort_three_a_helpers.o push_swap_sort_three_b_helpers.o
 
 CC = clang
 CFLAGS = -g -Wall -Wextra -Werror

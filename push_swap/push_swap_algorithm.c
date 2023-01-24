@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 16:41:51 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/20 13:43:34 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/24 11:35:42 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,50 +44,13 @@ void	sort_three_b(t_stack **head_b)
 	}
 	if (i == 0 && node->next->next->next == node)
 	{
-		if (node->next->number < node->next->next->number)
-		{
-			sb(head_b);
-			rrb(head_b);
-		}
-		else if (node->number < node->next->next->number)
-			rb(head_b);
-		else
-			sb(head_b);
+		sort_three_b_helper3(head_b, node);
 		return ;
 	}
 	if (i == 0)
-	{
-		sb(head_b);
-		node = *head_b;
-		if (node->next->number < node->next->next->number)
-		{
-			rb(head_b);
-			sb(head_b);
-			rrb(head_b);
-		}
-		node = *head_b;
-		if (node->number < node->next->number)
-			sb(head_b);
-	}
+		sort_three_b_helper(head_b, node);
 	else if (i == 1)
-	{
-		node = *head_b;
-		if (node->number > node->next->next->number)
-		{
-			rb(head_b);
-			sb(head_b);
-			rrb(head_b);
-		}
-		else if (node->next->next->next == node)
-			rrb(head_b);
-		else
-		{
-			rb(head_b);
-			sb(head_b);
-			rrb(head_b);
-			sb(head_b);
-		}
-	}
+		sort_three_b_helper2(head_b);
 	else
 		return ;
 }
@@ -108,50 +71,13 @@ void	sort_three_a(t_stack **head_a)
 	}
 	if (i == 0 && node->next->next->next == node)
 	{
-		if (node->next->number > node->next->next->number)
-		{
-			sa(head_a);
-			rra(head_a);
-		}
-		else if (node->number < node->next->next->number)
-			sa(head_a);
-		else
-			ra(head_a);
+		sort_three_a_helper3(head_a, node);
 		return ;
 	}
 	if (i == 0)
-	{
-		sa(head_a);
-		node = *head_a;
-		if (node->next->number > node->next->next->number)
-		{
-			ra(head_a);
-			sa(head_a);
-			rra(head_a);
-		}
-		node = *head_a;
-		if (node->number > node->next->number)
-			sa(head_a);
-	}
+		sort_three_a_helper(head_a, node);
 	else if (i == 1)
-	{
-		node = *head_a;
-		if (node->number < node->next->next->number)
-		{
-			ra(head_a);
-			sa(head_a);
-			rra(head_a);
-		}
-		else if (node->next->next->next == node)
-			rra(head_a);
-		else
-		{
-			ra(head_a);
-			sa(head_a);
-			rra(head_a);
-			sa(head_a);
-		}
-	}
+		sort_three_a_helper2(head_a);
 	else
 		return ;
 }
