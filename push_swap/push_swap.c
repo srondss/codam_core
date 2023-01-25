@@ -6,11 +6,12 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/24 12:10:52 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/25 09:02:22 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+#include <stdio.h>
 
 /*int print_stack(t_stack **head_stack, char delimiter)
 {
@@ -64,6 +65,8 @@ int	main(int argc, char **argv)
 		return (write(2, "Error\n", 6));
 	}
 	quicksort_a(&stack_a, &stack_b, (argc - 1));
+	
+//	print_stack(&stack_a, 'a');
 	free_stack(&stack_a);
 	free_stack(&stack_b);
 	return (0);

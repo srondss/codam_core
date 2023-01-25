@@ -6,11 +6,29 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 11:09:00 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/24 11:11:23 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/25 08:52:15 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+int	count_stack(t_stack **head)
+{
+	struct s_stack *node;
+	int i;
+
+	node = *head;
+	i = 1;
+
+	if (!node)
+		return (0);
+	while (node->next != *head)
+	{
+		node = node->next;
+		i++;
+	}
+	return (i);
+}
 
 int	quicksort_a_helper(t_stack **head_a, t_stack **head_b, int n_items)
 {
@@ -32,6 +50,8 @@ int	quicksort_a_helper(t_stack **head_a, t_stack **head_b, int n_items)
 			ra(head_a);
 		i++;
 	}
+	if (count_stack(head_a) == i - pushed_numbers || check_sorted(head_a) == 1)
+		return (pushed_numbers);
 	while ((i - pushed_numbers) > 0)
 	{
 		rra(head_a);
@@ -60,6 +80,8 @@ int	quicksort_b_helper(t_stack **head_a, t_stack **head_b, int n_items)
 			rb(head_b);
 		i++;
 	}
+	if (count_stack(head_b) == i - pushed_numbers || check_sorted_desc(head_b) == 1)
+		return (pushed_numbers);
 	while ((i - pushed_numbers) > 0)
 	{
 		rrb(head_b);
