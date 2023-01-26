@@ -1,43 +1,36 @@
-NAME = push_swap
-LIBFT = libft.a
+NAME := push_swap
 
-LIBFT_PATH = ./libft/
-INCLUDES = push_swap.h
+SRCS =	push_swap.c \
+	push_swap_mandatory_functions.c \
+	push_swap_mandatory_functions_2.c \
+	push_swap_mandatory_functions_3.c \
+	push_swap_misc.c \
+	push_swap_algorithm.c \
+	push_swap_parsing.c \
+	push_swap_quicksort.c \
+	push_swap_mandatory_helpers.c \
+	push_swap_quicksort_helpers.c \
+	push_swap_sort_three_a_helpers.c \
+	push_swap_sort_three_b_helpers.c \
+	push_swap_quicksort_helpers_2.c \
 
+CC = cc
 
-FILES= push_swap.c push_swap_mandatory_functions.c push_swap_mandatory_functions_2.c push_swap_mandatory_functions_3.c push_swap_misc.c push_swap_algorithm.c push_swap_parsing.c push_swap_quicksort.c push_swap_mandatory_helpers.c push_swap_quicksort_helpers.c push_swap_sort_three_a_helpers.c push_swap_sort_three_b_helpers.c
-OBJECTS= push_swap.o push_swap_mandatory_functions.o push_swap_mandatory_functions_2.o push_swap_mandatory_functions_3.o push_swap_misc.o push_swap_algorithm.o push_swap_parsing.o push_swap_quicksort.o push_swap_mandatory_helpers.o push_swap_quicksort_helpers.o push_swap_sort_three_a_helpers.o push_swap_sort_three_b_helpers.o
+FLAGS = -Wall -Wextra -Werror
 
-CC = clang
-CFLAGS = -g -Wall -Wextra -Werror
+OBJS = $(SRCS:.c=.o)
 
-all: $(NAME)
+all : $(NAME)
 
-$(NAME): $(OBJECTS)
-	make -C $(LIBFT_PATH) $(LIBFT) 
-	$(CC) $(CFLAGS) -I $(INCLUDES) -o $(NAME) $(OBJECTS) -L $(LIBFT_PATH) -lft
+$(NAME): $(OBJS)
+	$(CC) $(FLAGS) -o $@ $^
 
-$(OBJECTS): $(FILES)
-	$(CC) $(CFLAGS) -g -c $(FILES)
+clean :
+	rm -rf $(OBJS)
 
-test: $(NAME)
-	cp ./tools/checker_linux .
-	bash ./tools/tester.sh
+fclean : clean
+	rm -rf $(NAME)
 
-visual: $(NAME)
-	cp ./tools/pyviz.py .
-	python3 pyviz.py `ruby -e "puts (-200..200).to_a.shuffle.join(' ')"`
+re :	clean all
 
-clean:
-	make -C $(LIBFT_PATH) fclean
-	$(RM) $(OBJECTS) $(BONUS_OBJECTS)
-	$(RM) checker_linux
-	$(RM) pyviz.py
-
-fclean: clean
-	make -C $(LIBFT_PATH) fclean
-	$(RM) $(NAME)
-	
-re: fclean all 
-
-.PHONY: all clean fclean re 
+.PHONY: re fclean all

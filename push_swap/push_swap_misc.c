@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 18:00:16 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/24 12:06:23 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/26 09:21:49 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_stack *start_node)
 		new_node->prev = next_node;
 		next_node->next = new_node;
 		next_node = next_node->next;
-		new_node->number = ft_atoi(string[i]);
+		new_node->number = ft_atol(string[i]);
 		i++;
 	}
 	new_node->next = start_node;
@@ -52,9 +52,9 @@ void	fill_stack(t_stack *stack_a, char **string)
 		return ;
 	}
 	start_node = stack_a;
-	start_node->number = ft_atoi(string[1]);
+	start_node->number = ft_atol(string[1]);
 	start_node->next = next_node;
-	next_node->number = ft_atoi(string[2]);
+	next_node->number = ft_atol(string[2]);
 	next_node->prev = start_node;
 	fill_stack_support(string, next_node, start_node);
 }

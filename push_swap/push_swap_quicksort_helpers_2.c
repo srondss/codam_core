@@ -1,29 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_toupper.c                                       :+:      :+:    :+:   */
+/*   push_swap_quicksort_helpers_2.c                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/06 12:09:52 by ysrondy           #+#    #+#             */
-/*   Updated: 2022/10/23 16:55:47 by ysrondy       ########   odam.nl         */
+/*   Created: 2023/01/26 09:03:52 by ysrondy           #+#    #+#             */
+/*   Updated: 2023/01/26 09:04:44 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_toupper(int c)
+#include "push_swap.h"
+
+void	quicksort_b_helper3(t_stack **head_b, int i, int pushed_numbers)
 {
-	if (c >= 'a' && c <= 'z')
+	while ((i - pushed_numbers) > 0)
 	{
-		c -= 32;
-		return (c);
+		rrb(head_b);
+		i--;
 	}
-	else
-		return (c);
 }
 
-/*int main(void)
+void	quicksort_a_helper3(t_stack **head_a, int i, int pushed_numbers)
 {
-	char h = 'A';
-	printf("%c", h);
-	printf("%c", toupper(h));
-}*/
+	while ((i - pushed_numbers) > 0)
+	{
+		rra(head_a);
+		i--;
+	}
+}

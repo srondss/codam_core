@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 11:09:00 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/25 08:52:15 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/26 09:04:41 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,11 @@
 
 int	count_stack(t_stack **head)
 {
-	struct s_stack *node;
-	int i;
+	struct s_stack	*node;
+	int				i;
 
 	node = *head;
 	i = 1;
-
 	if (!node)
 		return (0);
 	while (node->next != *head)
@@ -52,11 +51,7 @@ int	quicksort_a_helper(t_stack **head_a, t_stack **head_b, int n_items)
 	}
 	if (count_stack(head_a) == i - pushed_numbers || check_sorted(head_a) == 1)
 		return (pushed_numbers);
-	while ((i - pushed_numbers) > 0)
-	{
-		rra(head_a);
-		i--;
-	}
+	quicksort_a_helper3(head_a, i, pushed_numbers);
 	return (pushed_numbers);
 }
 
@@ -80,13 +75,10 @@ int	quicksort_b_helper(t_stack **head_a, t_stack **head_b, int n_items)
 			rb(head_b);
 		i++;
 	}
-	if (count_stack(head_b) == i - pushed_numbers || check_sorted_desc(head_b) == 1)
+	if (count_stack(head_b) == i - pushed_numbers
+		|| check_sorted_desc(head_b) == 1)
 		return (pushed_numbers);
-	while ((i - pushed_numbers) > 0)
-	{
-		rrb(head_b);
-		i--;
-	}
+	quicksort_b_helper3(head_b, i, pushed_numbers);
 	return (pushed_numbers);
 }
 

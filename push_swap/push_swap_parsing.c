@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 21:18:37 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/24 12:09:51 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/01/26 09:22:42 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,9 @@ void	check_errors(int argc, char **argv)
 		exit(EXIT_SUCCESS);
 	else if (argc == 3)
 	{
-		if (ft_atoi(argv[1]) < ft_atoi(argv[2]))
+		if (ft_atol(argv[1]) < ft_atol(argv[2]))
 			exit(EXIT_SUCCESS);
-		else if (ft_atoi(argv[1]) == ft_atoi(argv[2]))
+		else if (ft_atol(argv[1]) == ft_atol(argv[2]))
 		{
 			write(2, "Error\n", 6);
 			exit(EXIT_SUCCESS);
