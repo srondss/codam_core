@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+	"__bit_reference": "c",
+	"__string": "c",
+	"cstring": "c",
+	"__locale": "c",
+	"atomic": "c",
+	"cstdint": "c"
+}
+}
