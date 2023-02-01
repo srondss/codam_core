@@ -1,6 +1,6 @@
 NAME := so_long
 
-SRCS = so_long.c
+SRCS = so_long.c so_long_parse_map.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c
 
 CC = cc
 
