@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:25:49 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/01 13:13:42 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/02 14:15:57 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,17 @@ int	check_map_letters(char *map)
 	{
 		str = get_next_line(fd);
 		if (!str) // need to consider empty file.
-			return (1);
-		printf("%s", str);
+			return (free(str), close(fd), 1);
 		while (i < (ft_strlen(str) - 1))
 		{
 			if (str[i] == '1' || str[i] == '0' || str[i] == 'C' || str[i] == 'E' || str[i] == 'P')
 				i++;
 			else
-				return (0);
+				return (free(str), close(fd), 0);
 		}
 		i = 0;
 		free(str);
 	}
-	close(fd);
 }
 
 // Checks if map is rectangular. 
@@ -50,17 +48,16 @@ int	check_map_rectangle(char *map)
 	fd = open(map, O_RDONLY);
 	str = get_next_line(fd);
 	size = ft_strlen(str);
-
+	free(str);
 	while (1)
 	{
 		str = get_next_line(fd);
 		if (!str)
-			return (1);
+			return (free(str), close(fd), 1);
 		if (size != ft_strlen(str))
-			return (0);
+			return (free(str), close(fd), 0);
 		free(str);
 	}
-	close(fd);
 }
 
 // Checks if .ber file as argument.
@@ -83,31 +80,33 @@ int	check_error_ber_file(char *argv)
 	return (0);
 }
 
-// Need to check if map contains only 1 exit, at least 1 collectible, and only 1 starting position.
-// Need to fix.
-int	check_st_ex_cltble(char *map)
+// Checks if map contains only 1 exit and only 1 starting position.
+int	check_exit_or_start(char *map)
 {
-	int	fd;
-	char	*str;
 	int	start;
-	int	collectibles;
 	int	exit;
+	int	i;
 
 	start = 0;
-	collectibles = 0;
 	exit = 0;
+	i = 0;
+	return (helper_exit_or_start(map, start, exit, i));
+}
+
+int	helper_exit_or_start(char *map, int start, int exit, int i)
+{
+	char	*str;
+	int	fd;
+
 	fd = open(map, O_RDONLY);
 	while (1)
 	{
 		str = get_next_line(fd);
 		if (!str)
 			break;
-		printf("%s", str);
 		while (i < (ft_strlen(str) - 1))
 		{
-			if (str[i] == 'C')
-				collectibles++;
-			else if (str[i] == 'E')
+			if (str[i] == 'E')
 				exit++;
 			else if (str[i] == 'P')
 				start++;
@@ -116,13 +115,8 @@ int	check_st_ex_cltble(char *map)
 		i = 0;
 		free(str);
 	}
-	if (start > 1 || exit > 1 || collectibles < 1)
-		return (0)
-	close(fd);
-	return (1);
+	if (start > 1 || exit > 1)
+		return (free(str), close(fd), 0);
+	return (free(str), close(fd), 1);
 }
-
-
-// Need to find out if closed/surrounded by walls.
-
 

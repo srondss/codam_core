@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 07:39:27 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/01 11:51:42 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/02 14:30:55 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int32_t main(int argc, char **argv)
 {
 	if (argc != 2 || check_error_ber_file(argv[1]) == 0)
 		return (write(2, "Input Error\n", 12));
-	if (check_map_letters(argv[1]) == 0 || check_map_rectangle(argv[1]) == 0)
+	if (check_map_letters(argv[1]) == 0 || check_map_rectangle(argv[1]) == 0 || check_exit_or_start(argv[1]) == 0 || check_collectibles(argv[1]) == 0 || check_walls(argv[1]) == 0) 
 		return (write(2, "Map Error\n", 10));
 
 	mlx_image_t *g_img;
@@ -69,6 +69,8 @@ int32_t main(int argc, char **argv)
 
 	// Run the main loop and terminate on quit.
 	mlx_loop(mlx);
+
 	mlx_terminate(mlx);
+	system("leaks -q so_long");
 	return (EXIT_SUCCESS);
 }
