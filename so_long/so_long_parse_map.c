@@ -6,62 +6,96 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:25:49 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/02 14:15:57 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/06 21:35:24 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-// Checks if map contains other letters besides 0,1,c,e,p.
-int	check_map_letters(char *map)
+
+void	check_map(char *str_map, t_game *game)
 {
-	int fd;
+	check_map_letters(str_map);
+	check_map_letters_amount(str_map, game);
+	check_map_rectangle(str_map);
+}
+
+// Checks if map contains other letters besides 0,1,c,e,p.
+void	check_map_letters(char *map)
+{
 	int i;
-	char *str;
-	
+
 	i = 0;
-	fd = open(map, O_RDONLY);
-	while (1)
+	printf("String: %s", map);
+	while (map[i] != '\0')
 	{
-		str = get_next_line(fd);
-		if (!str) // need to consider empty file.
-			return (free(str), close(fd), 1);
-		while (i < (ft_strlen(str) - 1))
-		{
-			if (str[i] == '1' || str[i] == '0' || str[i] == 'C' || str[i] == 'E' || str[i] == 'P')
-				i++;
-			else
-				return (free(str), close(fd), 0);
-		}
-		i = 0;
-		free(str);
+		if (map[i] == '1' || map[i] == '0' || map[i] == 'C' || map[i] == 'E' || map[i] == 'P' || map[i] == '\n')
+			i++;
+		else
+			ft_error_message(E_CHARACTER, 1);
 	}
 }
 
-// Checks if map is rectangular. 
-int	check_map_rectangle(char *map)
+// Checks if there are a valid number of arguments in map.
+void	check_map_letters_amount(char *str_map, t_game *game)
 {
-	int fd;
-	char *str;
-	int size;
+	int	i;
+	int	collectibles;
+	int	exit;
+	int	player;
+	
+	i = 0;
+	collectibles = 0;
+	exit = 0;
+	player = 0;
 
-	fd = open(map, O_RDONLY);
-	str = get_next_line(fd);
-	size = ft_strlen(str);
-	free(str);
-	while (1)
+	while (str_map[i++])
 	{
-		str = get_next_line(fd);
-		if (!str)
-			return (free(str), close(fd), 1);
-		if (size != ft_strlen(str))
-			return (free(str), close(fd), 0);
-		free(str);
+		if (str_map[i] == 'C')
+			collectibles++;
+		if (str_map[i] == 'P')
+			player++;
+		if (str_map[i] == 'E')
+			exit++;
+	}
+	if (collectibles < 1 || exit != 1 || player != 1)
+		ft_error_message(E_CHARS, 1);
+	game->collectibles = collectibles;
+}
+
+
+// Checks if map is rectangular. 
+void	check_map_rectangle(char *map)
+{
+	int i;
+	int size_first_line;
+	int size_other_line;
+
+	i = 0;
+	size_first_line = 0;
+	size_other_line = 0;
+	while (map[i] != '\n')
+	{
+		size_first_line++;
+		i++;
+	}
+	i++;
+	while (map[i] != '\0')
+	{
+		if (map[i] == '\n')
+		{
+			if (size_first_line != size_other_line)
+				ft_error_message(E_INVALIDMAP, 1);
+			size_other_line = 0;
+		}
+		else
+			size_other_line++;
+		i++;
 	}
 }
 
 // Checks if .ber file as argument.
-int	check_error_ber_file(char *argv)
+void	check_error_ber_file(char *argv)
 {
 	int i;
 
@@ -73,50 +107,10 @@ int	check_error_ber_file(char *argv)
 		else
 		{
 			if (argv[i + 1] == 'b' && argv[i + 2] == 'e' && argv[i + 3] == 'r' && argv[i + 4] == '\0')
-				return (1);
-			return (0);
+				return ;
+			ft_error_message(E_FORMAT, 1);
 		}
 	}
-	return (0);
-}
-
-// Checks if map contains only 1 exit and only 1 starting position.
-int	check_exit_or_start(char *map)
-{
-	int	start;
-	int	exit;
-	int	i;
-
-	start = 0;
-	exit = 0;
-	i = 0;
-	return (helper_exit_or_start(map, start, exit, i));
-}
-
-int	helper_exit_or_start(char *map, int start, int exit, int i)
-{
-	char	*str;
-	int	fd;
-
-	fd = open(map, O_RDONLY);
-	while (1)
-	{
-		str = get_next_line(fd);
-		if (!str)
-			break;
-		while (i < (ft_strlen(str) - 1))
-		{
-			if (str[i] == 'E')
-				exit++;
-			else if (str[i] == 'P')
-				start++;
-			i++;
-		}
-		i = 0;
-		free(str);
-	}
-	if (start > 1 || exit > 1)
-		return (free(str), close(fd), 0);
-	return (free(str), close(fd), 1);
+	ft_error_message(E_FORMAT, 1);
 }
 
