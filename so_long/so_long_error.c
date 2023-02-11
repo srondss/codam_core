@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:12:01 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/06 13:19:49 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/11 18:16:11 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,3 +24,4 @@ void	ft_error_message(char *str, int error)
 	(void)error;
 	exit(error);
 }
+

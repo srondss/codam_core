@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 15:58:41 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/06 21:47:25 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/11 20:14:15 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,40 +16,68 @@
 // Creates game assets and associates them to the game window. 
 void	load_assets(t_game *game)
 {
-	game->assets.wall = asset_to_image(game->mlx, "./CuteRPG/wall.png");
-	game->assets.character = asset_to_image(game->mlx, "./CuteRPG/player.png");
-	game->assets.exit = asset_to_image(game->mlx, "./CuteRPG/exit.png");
-	game->assets.collectible = asset_to_image(game->mlx, "./CuteRPG/collectible.png");
-	game->assets.floor = asset_to_image(game->mlx, "./CuteRPG/floor.png");
+	game->assets.wall = asset_to_image(game, "./CuteRPG/wal.png", 0);
+	game->assets.character = asset_to_image(game, "./CuteRPG/player.png", 1);
+	game->assets.exit = asset_to_image(game, "./CuteRPG/exit.png", 2);
+	game->assets.collectible = asset_to_image(game, "./CuteRPG/collectible.png", 3);
+	game->assets.floor = asset_to_image(game, "./CuteRPG/floor.png", 4);
 }
 
 // Turns a png into an image capable of being displayed in game window.
-mlx_image_t	*asset_to_image(mlx_t *mlx, char *img_path)
+mlx_image_t	*asset_to_image(t_game *game, char *img_path, int i)
 {
 	mlx_texture_t	*texture;
 	mlx_image_t	*img;
 
 	texture = mlx_load_png(img_path);
 	if (!texture)
-		ft_printf("\n Could not load texture\n");
-	img = mlx_texture_to_image(mlx, texture);
+	{
+		free_images_and_textures(game);
+		ft_error_message("Shit", 1);
+	}
+	if (i == 0)
+		game->assets.texture_wall = texture;
+	else if (i == 1)
+		game->assets.texture_character = texture;
+	else if (i == 2)
+		game->assets.texture_exit = texture;
+	else if (i == 3)
+		game->assets.texture_collectible = texture;
+	else if (i == 4)
+		game->assets.texture_floor = texture;
+	img = mlx_texture_to_image(game->mlx, texture);
 	if (!img)
-		ft_printf("\n Something went wrong...\n");
+		ft_error_message("Shit2", 1);
 	return (img);
 }
 
 // Frees all previously allocated assets.
-void	free_old_images(t_game *game)
+void	free_images_and_textures(t_game *game)
 {
-	mlx_delete_image(game->mlx, game->old_assets.character);
-	mlx_delete_image(game->mlx, game->old_assets.floor);
-	mlx_delete_image(game->mlx, game->old_assets.exit);
-	mlx_delete_image(game->mlx, game->old_assets.collectible);
-	mlx_delete_image(game->mlx, game->old_assets.wall);
+	if (game->assets.texture_wall != NULL)
+		mlx_delete_texture(game->assets.texture_wall);
+	if (game->assets.texture_character != NULL)
+		mlx_delete_texture(game->assets.texture_character);
+	if (game->assets.texture_exit != NULL)
+		mlx_delete_texture(game->assets.texture_exit);
+	if (game->assets.texture_collectible != NULL)
+		mlx_delete_texture(game->assets.texture_collectible);
+	if (game->assets.texture_floor != NULL)
+		mlx_delete_texture(game->assets.texture_floor);
+	if (game->assets.character != NULL)
+		mlx_delete_image(game->mlx, game->assets.character);
+	if (game->assets.floor != NULL)
+		mlx_delete_image(game->mlx, game->assets.floor);
+	if (game->assets.exit != NULL)
+		mlx_delete_image(game->mlx, game->assets.exit);
+	if (game->assets.collectible != NULL)
+		mlx_delete_image(game->mlx, game->assets.collectible);
+	if (game->assets.wall != NULL)
+		mlx_delete_image(game->mlx, game->assets.wall);
 }
 
-//	checks state of game and loads all images onto the window at their 
-//	respective positions if the game has not started yet.
+//	hook which checks state of game and loads all images onto 
+//	the window at their respective positions if the game has not started yet.
 void	load_images_to_window(t_game *game)
 {
 	int	column;
@@ -58,9 +86,6 @@ void	load_images_to_window(t_game *game)
 	row = 0;
 	if (game->state == STATE_NULL)
 	{
-		free_old_images(game);
-		game->old_assets = game->assets;
-		load_assets(game);
 		while (row < game->rows)
 		{
 			column = 0;
@@ -79,16 +104,14 @@ void	load_images_to_window(t_game *game)
 // Draw all images at their respective coordinates on the map.
 void	image_to_window(t_game *game, int column, int row)
 {
-//	if (column != 0 || row != 0)
-//		mlx_image_to_window(game->mlx, game->assets.floor, row * 32, column * 32);
+	if (column != 0 || row != 0)
+		mlx_image_to_window(game->mlx, game->assets.floor, column * 32, row * 32);
 	if (game->map[row][column] == '1')
-		mlx_image_to_window(game->mlx, game->assets.wall, row * 32, column * 32);
+		mlx_image_to_window(game->mlx, game->assets.wall, column * 32, row * 32);
 	else if (game->map[row][column] == 'E')
-		mlx_image_to_window(game->mlx, game->assets.exit, row * 32, column * 32);
+		mlx_image_to_window(game->mlx, game->assets.exit, column * 32, row * 32);
 	else if (game->map[row][column] == 'P')
-		mlx_image_to_window(game->mlx, game->assets.character, row * 32, column * 32);
+		mlx_image_to_window(game->mlx, game->assets.character, column * 32, row * 32);
 	else if (game->map[row][column] == 'C')
-		mlx_image_to_window(game->mlx, game->assets.collectible, row * 32, column * 32);
-//	if (row == 0 && column == 0) // NOT SURE WHY THIS IS NEEDED. 
-//		mlx_image_to_window(game->mlx, game->assets.floor, row * 32, column * 32);
+		mlx_image_to_window(game->mlx, game->assets.collectible, column * 32, row * 32);
 }

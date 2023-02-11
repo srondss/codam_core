@@ -6,11 +6,32 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 16:40:09 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/06 20:46:24 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/11 17:32:09 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+
+void	print_map(char **map)
+{
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+
+	while (map[i] != NULL)
+	{
+		while (j < ft_strlen(map[i]))
+		{
+			ft_printf("%c", map[i][j]);
+			j++;
+		}
+		ft_printf("\n");
+		i++;
+		j = 0;
+	}
+}
 
 void hook(void *param)
 {
@@ -45,5 +66,8 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 			if ((keydata.key == MLX_KEY_S || keydata.key == MLX_KEY_DOWN))
 				move_down(game);
 		}
+		free_images_and_textures(game);
+		load_assets(game);
+		load_images_to_window(game);
 	}
 }

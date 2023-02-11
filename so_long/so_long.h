@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:26:42 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/06 22:03:14 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/11 17:50:58 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,15 @@
 typedef struct s_assets
 {
 	mlx_image_t	*wall;
+	mlx_texture_t	*texture_wall;
 	mlx_image_t	*character;
+	mlx_texture_t	*texture_character;
 	mlx_image_t	*exit;
+	mlx_texture_t	*texture_exit;
 	mlx_image_t	*collectible;
+	mlx_texture_t	*texture_collectible;
 	mlx_image_t	*floor;
+	mlx_texture_t	*texture_floor;
 }			t_assets;
 
 typedef struct s_game 
@@ -72,8 +77,8 @@ typedef enum e_state
 
 void	set_default_game(t_game *game);
 void	load_assets(t_game *game);
-mlx_image_t	*asset_to_image(mlx_t *mlx, char *img_path);
-void	free_old_images(t_game *game);
+mlx_image_t	*asset_to_image(t_game *game, char *img_path, int i);
+void	free_images_and_textures(t_game *game);
 void	load_images_to_window(t_game *game);
 void	image_to_window(t_game *game, int column, int row);
 int	count_rows(char **map_2d);

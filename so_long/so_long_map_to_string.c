@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:39:12 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/06 21:33:45 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/07 13:24:57 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,7 @@ char	*read_map_into_str(char *map)
 	if (fd < 0)
 		ft_error_message(E_FILE, 1);
 	while (read(fd, &c, 1) == 1) // reads the entire file byte by byte.
-	{
-		ft_printf("Char: %c\n", c);
 		count++;
-	}
 	if (count == 0)
 		ft_error_message(E_FILE, 1);
 	str_map = (char *)malloc(sizeof(char) * (count + 1));

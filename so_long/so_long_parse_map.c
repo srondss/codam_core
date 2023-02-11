@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 11:25:49 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/06 21:35:24 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/11 17:58:41 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,15 @@ void	check_map_letters(char *map)
 	int i;
 
 	i = 0;
-	printf("String: %s", map);
 	while (map[i] != '\0')
 	{
 		if (map[i] == '1' || map[i] == '0' || map[i] == 'C' || map[i] == 'E' || map[i] == 'P' || map[i] == '\n')
 			i++;
 		else
+		{
+			free(map);
 			ft_error_message(E_CHARACTER, 1);
+		}
 	}
 }
 
@@ -59,7 +61,10 @@ void	check_map_letters_amount(char *str_map, t_game *game)
 			exit++;
 	}
 	if (collectibles < 1 || exit != 1 || player != 1)
+	{
+		free(str_map);
 		ft_error_message(E_CHARS, 1);
+	}
 	game->collectibles = collectibles;
 }
 
@@ -85,7 +90,10 @@ void	check_map_rectangle(char *map)
 		if (map[i] == '\n')
 		{
 			if (size_first_line != size_other_line)
+			{
+				free(map);
 				ft_error_message(E_INVALIDMAP, 1);
+			}
 			size_other_line = 0;
 		}
 		else

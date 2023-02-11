@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 16:34:44 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/06 16:42:03 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/11 19:21:28 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,13 @@ void	print_end_result(t_game *game)
 		ft_printf("\nCongratulations!\n You won!\n");
 	else if (game->state == STATE_CLOSING)
 		ft_printf("\n You're not done yet.. sad to see you go.\n");
-	else if (game->state == STATE_GAMEOVER)
-		ft_printf("\n GAME OVER... \n");
+	else
+		return ;
 }
 
 void	game_won(t_game *game)
 {
-	free_old_images(game);
-	game->old_assets = game->assets;
-	free_old_images(game); // WHY CALL TWICE?
+	free_images_and_textures(game);
 	game->state = STATE_SUCCESS;
 	print_end_result(game);
 	mlx_close_window(game->mlx);
