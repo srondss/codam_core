@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 13:39:12 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/07 13:24:57 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/12 15:22:43 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 char	*read_map_into_str(char *map)
 {
-	int	fd;
-	int	count;
+	int		fd;
+	int		count;
 	char	*str_map;
 	char	c;
 
@@ -24,7 +24,7 @@ char	*read_map_into_str(char *map)
 	fd = open(map, O_RDONLY);
 	if (fd < 0)
 		ft_error_message(E_FILE, 1);
-	while (read(fd, &c, 1) == 1) // reads the entire file byte by byte.
+	while (read(fd, &c, 1) == 1)
 		count++;
 	if (count == 0)
 		ft_error_message(E_FILE, 1);
@@ -42,5 +42,3 @@ char	**turn_str_into_2d_map(char *str)
 {
 	return (ft_split(str, '\n'));
 }
-
-

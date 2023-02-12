@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 16:44:37 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/11 17:37:56 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/12 15:24:19 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,11 @@ void	move_up(t_game *game)
 		{
 			if (game->map[row][column] == 'P')
 			{
-				if (game->map[row - 1][column] == '0' || game->map[row - 1][column] == 'C' || game->map[row - 1][column] == 'E')
+				if (game->map[row - 1][column] == '0' ||
+	game->map[row - 1][column] == 'C' || game->map[row - 1][column] == 'E')
 				{
 					if (validate_move(game, game->map[row - 1][column]) == 1)
-						return;
+						return ;
 					game->map[row - 1][column] = 'P';
 					game->map[row][column] = '0';
 					game->moves++;
@@ -53,10 +54,11 @@ void	move_left(t_game *game)
 		{
 			if (game->map[row][column] == 'P')
 			{
-				if (game->map[row][column - 1] == '0' || game->map[row][column - 1] == 'C' || game->map[row][column - 1] == 'E')
+				if (game->map[row][column - 1] == '0' ||
+	game->map[row][column - 1] == 'C' || game->map[row][column - 1] == 'E')
 				{
 					if (validate_move(game, game->map[row][column - 1]) == 1)
-						return;
+						return ;
 					game->map[row][column - 1] = 'P';
 					game->map[row][column] = '0';
 					game->moves++;
@@ -81,10 +83,11 @@ void	move_right(t_game *game)
 		{
 			if (game->map[row][column] == 'P')
 			{
-				if (game->map[row][column + 1] == '0' || game->map[row][column + 1] == 'C' || game->map[row][column + 1] == 'E')
+				if (game->map[row][column + 1] == '0' ||
+	game->map[row][column + 1] == 'C' || game->map[row][column + 1] == 'E')
 				{
 					if (validate_move(game, game->map[row][column + 1]) == 1)
-						return;
+						return ;
 					game->map[row][column + 1] = 'P';
 					game->map[row][column] = '0';
 					game->moves++;
@@ -109,10 +112,11 @@ void	move_down(t_game *game)
 		{
 			if (game->map[row][column] == 'P')
 			{
-				if (game->map[row + 1][column] == '0' || game->map[row + 1][column] == 'C' || game->map[row + 1][column] == 'E')
+				if (game->map[row + 1][column] == '0' ||
+	game->map[row + 1][column] == 'C' || game->map[row + 1][column] == 'E')
 				{
 					if (validate_move(game, game->map[row + 1][column]) == 1)
-						return;
+						return ;
 					game->map[row + 1][column] = 'P';
 					game->map[row][column] = '0';
 					game->moves++;

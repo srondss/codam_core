@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 07:39:27 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/11 21:49:54 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/12 18:51:24 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,41 @@ void	set_default_game(t_game *game)
 	game->moves = 0;
 	game->state = STATE_NULL;
 	game->exit = FALSE;
+	game->path = FALSE;
 }
 
-void	checkleaks() 
+void	init_assets(t_game *game)
+{
+	game->assets.texture_wall = NULL;
+	game->assets.texture_character = NULL;
+	game->assets.texture_exit = NULL;
+	game->assets.texture_collectible = NULL;
+	game->assets.texture_floor = NULL;
+	game->assets.character = NULL;
+	game->assets.floor = NULL;
+	game->assets.collectible = NULL;
+	game->assets.exit = NULL;
+	game->assets.wall = NULL;
+}
+
+void	checkleaks(void)
 {
 	system("leaks -q so_long");
+}
+
+void	start_mlx_program(t_game *game)
+{
+	game->mlx = mlx_init(game->columns * 32, game->rows * 32, "GAME", FALSE);
+	if (!(game->mlx))
+		return (free_map(game->map));
+	load_assets(game);
+	load_images_to_window(game);
+	mlx_key_hook(game->mlx, &key_hook, game);
+	mlx_loop(game->mlx);
+	free_map(game->map);
+	if (game->state != STATE_SUCCESS)
+		free_images_and_textures(game, 1);
+	mlx_terminate(game->mlx);
 }
 
 int	main(int argc, char **argv)
@@ -29,59 +59,25 @@ int	main(int argc, char **argv)
 	t_game	game;
 	char	*str_map;
 
-//	if (argc < 2)
-//		return (1);
-	
-	// Turn map file into one huge string.
+	if (argc != 2)
+		return (ft_error_message(E_ARG, 1), 1);
 	str_map = read_map_into_str(argv[1]);
-	ft_printf("%s", str_map);
-
-	// Initialise new game.
 	set_default_game(&game);
-
-	// Make sure the map is valid.
 	check_map(str_map, &game);
-
-	// Turn one huge string into 2d map (rows and columns). 
 	game.map = turn_str_into_2d_map(str_map);
-	
 	if (game.map == NULL)
-		return (free(str_map), 1);
-	// Free the string because we won't need it anymore.
-	free(str_map);
-
-	// Make sure the walls are all 1s.
-	check_2d_map_walls(&game);
-
-	// TODO: Need to create function which checks if path exists.
- 
-	// Initialise game window with 32 pixels + however many columns + rows. 
-	game.mlx = mlx_init(game.columns * 32, game.rows * 32, "GAME", FALSE);
-	if (!game.mlx)
-		return (free(game.map), 1);
-
-	// Need to create function which will load assets into the game.
-	load_assets(&game);
-	
-	// Load images to window.
-	load_images_to_window(&game);
-
-	// Checks if a key was pressed and applies movement + rerenders images. 
-	mlx_key_hook(game.mlx, &key_hook, &game);
-
-	// loop game.
-	mlx_loop(game.mlx);
-
-	// free the map once done.
+		return (free(str_map), ft_error_message(E_MALLOC, 1), 1);
+	check_2d_map_walls(&game, str_map);
+	find_path(game.map, &game);
+	if (game.path == FALSE)
+		return (free_map(game.map), free(str_map),
+			ft_error_message(E_PATH, 1), 1);
 	free_map(game.map);
-	
-	if (game.state != STATE_SUCCESS)
-		free_images_and_textures(&game);
-
-	// terminate game which frees everything. 
-	mlx_terminate(game.mlx);
-
+	game.map = turn_str_into_2d_map(str_map);
+	if (game.map == NULL)
+		return (free(str_map), ft_error_message(E_MALLOC, 1), 1);
+	free(str_map);
+	start_mlx_program(&game);
 	atexit(checkleaks);
 	return (EXIT_SUCCESS);
 }
-

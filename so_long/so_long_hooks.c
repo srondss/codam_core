@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 16:40:09 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/11 17:32:09 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/12 15:21:34 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,11 @@
 
 void	print_map(char **map)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
-
 	while (map[i] != NULL)
 	{
 		while (j < ft_strlen(map[i]))
@@ -33,27 +32,23 @@ void	print_map(char **map)
 	}
 }
 
-void hook(void *param)
+void	escape_key_pressed(t_game *game)
 {
-	t_game *game;
-
-	game = param;
-	load_images_to_window(game);
+	mlx_close_window(game->mlx);
+	game->state = STATE_CLOSING;
+	print_end_result(game);
 }
 
 void	key_hook(mlx_key_data_t keydata, void *param)
 {
-	t_game *game;
+	t_game	*game;
 
 	game = param;
-
 	if (keydata.action == MLX_PRESS)
 	{
 		if (keydata.key == MLX_KEY_ESCAPE)
 		{
-			mlx_close_window(game->mlx);
-			game->state = STATE_CLOSING;
-			print_end_result(game);
+			escape_key_pressed(game);
 		}
 		if (game->exit == FALSE)
 		{
@@ -66,7 +61,7 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 			if ((keydata.key == MLX_KEY_S || keydata.key == MLX_KEY_DOWN))
 				move_down(game);
 		}
-		free_images_and_textures(game);
+		free_images_and_textures(game, 1);
 		load_assets(game);
 		load_images_to_window(game);
 	}
