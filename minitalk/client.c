@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:47:37 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/13 23:10:53 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/14 21:45:36 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	send_binary_signals(int pid, char *string)
 			else
 				kill(pid, SIGUSR2);
 			bit++;
-			usleep(10000);
+			usleep(100);
 		}
 		i++;
 	}
