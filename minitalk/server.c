@@ -6,14 +6,13 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:44:16 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/14 22:31:51 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/15 22:36:01 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
-
 
 void	convert_binary_to_ascii(char *string)
 {
@@ -27,13 +26,14 @@ void	convert_binary_to_ascii(char *string)
 	while (i < 8)
 	{
 		if (string[i] == '1')
-		{	
 			sum += square_two;
-		}
 		square_two /= 2;
 		i++; 
 	}
-	printf("%c\n", sum);
+//	if (sum == 0)
+//		write(1, "\n", 1);
+//	else
+		write(1, &sum, 1);
 }
 
 void	handler_sigusr(int signum)
