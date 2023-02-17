@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 07:39:27 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/12 18:51:24 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/17 14:54:36 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ void	set_default_game(t_game *game)
 	game->moves = 0;
 	game->state = STATE_NULL;
 	game->exit = FALSE;
-	game->path = FALSE;
+	game->path_exit = FALSE;
+	game->path_collectibles = FALSE;
 }
 
 void	init_assets(t_game *game)
@@ -32,11 +33,6 @@ void	init_assets(t_game *game)
 	game->assets.collectible = NULL;
 	game->assets.exit = NULL;
 	game->assets.wall = NULL;
-}
-
-void	checkleaks(void)
-{
-	system("leaks -q so_long");
 }
 
 void	start_mlx_program(t_game *game)
@@ -54,6 +50,28 @@ void	start_mlx_program(t_game *game)
 	mlx_terminate(game->mlx);
 }
 
+void	check_paths(t_game *game, char *str_map)
+{
+	find_path_exit(game->map, game);
+	if (game->path_exit == FALSE)
+		return (free_map(game->map), free(str_map),
+			ft_error_message(E_PATH, 1));
+	free_map(game->map);
+	game->map = turn_str_into_2d_map(str_map);
+	if (game->map == NULL)
+		return (free(str_map), ft_error_message(E_MALLOC, 1));
+	find_path_collectibles(game->map, game);
+	if (game->path_collectibles == FALSE)
+		return (free_map(game->map), free(str_map),
+			ft_error_message(E_PATH_COLLECTIBLES, 1));
+	free_map(game->map);
+	game->map = turn_str_into_2d_map(str_map);
+	if (game->map == NULL)
+		return (free(str_map), ft_error_message(E_MALLOC, 1));
+	check_map_letters_amount(str_map, game);
+	free(str_map);
+}
+
 int	main(int argc, char **argv)
 {
 	t_game	game;
@@ -68,16 +86,7 @@ int	main(int argc, char **argv)
 	if (game.map == NULL)
 		return (free(str_map), ft_error_message(E_MALLOC, 1), 1);
 	check_2d_map_walls(&game, str_map);
-	find_path(game.map, &game);
-	if (game.path == FALSE)
-		return (free_map(game.map), free(str_map),
-			ft_error_message(E_PATH, 1), 1);
-	free_map(game.map);
-	game.map = turn_str_into_2d_map(str_map);
-	if (game.map == NULL)
-		return (free(str_map), ft_error_message(E_MALLOC, 1), 1);
-	free(str_map);
+	check_paths(&game, str_map);
 	start_mlx_program(&game);
-	atexit(checkleaks);
 	return (EXIT_SUCCESS);
 }
