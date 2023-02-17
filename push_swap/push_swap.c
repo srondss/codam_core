@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/26 08:53:07 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/17 19:08:41 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,25 +47,89 @@
 	return (i);
 }*/
 
-int	main(int argc, char **argv)
+void	free_argv(char **argv)
+{
+	int	i;
+
+	i = 1;
+	while (argv[i] != NULL)
+	{
+		free(argv[i]);
+		i++;
+	}
+	free(argv);
+}
+
+void	copy_into_argv(char **src, char **dst)
+{
+	int	i;
+
+	i = 0;
+	dst[0] = "./push_swap";
+	while (src[i] != NULL)
+	{
+		dst[i + 1] = src[i];
+		i++;
+	}
+	dst[i + 1] = NULL;
+}
+
+int	get_length_argv(char **argv)
+{
+	int	i;
+
+	i = 0;
+	while (argv[i] != NULL)
+	{
+		i++;
+	}
+	return (i);
+}
+
+void	run_algo(int argc, char **argv, int flag)
 {
 	struct s_stack	*stack_a;
 	struct s_stack	*stack_b;
 
-	if (check_string(argc, argv) == 1 || argc == 1 || argc == 2 || argc == 3)
-		check_errors(argc, argv);
+	check_errors(argc, argv, flag);
 	stack_a = malloc(sizeof(struct s_stack) * argc - 1);
-	if (!stack_a)
-		return (1);
+	if (!stack_a && flag)
+		return (free_argv(argv), exit(EXIT_SUCCESS));
+	else if (!stack_a)
+		exit(EXIT_SUCCESS);
 	stack_b = NULL;
 	fill_stack(stack_a, argv);
+	if (flag == 1)
+		free_argv(argv);
 	if (check_duplicate(&stack_a) == 1)
 	{
 		free_stack(&stack_a);
-		return (write(2, "Error\n", 6));
+		return (write(2, "Error\n", 6), exit(EXIT_SUCCESS));
 	}
 	quicksort_a(&stack_a, &stack_b, (argc - 1));
 	free_stack(&stack_a);
 	free_stack(&stack_b);
+}
+
+int	main(int argc, char **argv)
+{
+	char			**new_argv;
+	int				flag;
+
+	flag = 0;
+	if (argc == 2)
+	{
+		new_argv = ft_split(argv[1], ' ');
+		if (!new_argv)
+			return (1);
+		argc = ((get_length_argv(new_argv)) + 1);
+		argv = malloc(sizeof(char *) * argc + 1);
+		if (!argv)
+			return (free(new_argv[0]), free_argv(new_argv), 1);
+		copy_into_argv(new_argv, argv);
+		flag = 1;
+		free(new_argv);
+	}
+	run_algo(argc, argv, flag);
 	return (0);
 }

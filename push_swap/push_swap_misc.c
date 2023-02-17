@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 18:00:16 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/26 09:21:49 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/17 19:11:15 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_stack *start_node)
 		new_node = malloc(sizeof(struct s_stack));
 		if (!new_node)
 		{
+			free_argv(string);
 			free_stack(&start_node);
 			write(2, "Error\n", 6);
 			exit(EXIT_SUCCESS);
@@ -47,9 +48,10 @@ void	fill_stack(t_stack *stack_a, char **string)
 	next_node = malloc(sizeof(struct s_stack));
 	if (!next_node)
 	{
-		free(start_node);
+		free_argv(string);
+		free_stack(&stack_a);
 		write(2, "Error\n", 6);
-		return ;
+		exit(EXIT_SUCCESS);
 	}
 	start_node = stack_a;
 	start_node->number = ft_atol(string[1]);
@@ -87,4 +89,28 @@ void	free_and_exit(t_stack **head_a, t_stack **head_b)
 	free_stack(head_b);
 	write(2, "Error\n", 6);
 	exit(EXIT_SUCCESS);
+}
+
+void	check_errors_helper(int argc, char **argv, int flag)
+{
+	if (ft_atol(argv[1]) < ft_atol(argv[2]))
+	{
+		if (flag == 1)
+			free_argv(argv);
+		exit(EXIT_SUCCESS);
+	}
+	else if (ft_atol(argv[1]) == ft_atol(argv[2]))
+	{
+		write(2, "Error\n", 6);
+		if (flag == 1)
+			free_argv(argv);
+		exit(EXIT_SUCCESS);
+	}
+	else
+	{
+		write(1, "sa\n", 3);
+		if (flag == 1)
+			free_argv(argv);
+		exit(EXIT_SUCCESS);
+	}
 }

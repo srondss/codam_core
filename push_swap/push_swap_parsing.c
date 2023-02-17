@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 21:18:37 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/26 09:22:42 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/17 19:11:20 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ long	ft_atol(const char	*nptr)
 	return (sum * sign);
 }
 
+// checks if atol returns 0 meaning an error but the number is not an actual 0.
 int	check_string(int argc, char **argv)
 {
 	int	i;
@@ -89,30 +90,23 @@ int	check_duplicate(t_stack **head_a)
 	return (find_duplicate(node, next, i));
 }
 
-void	check_errors(int argc, char **argv)
+void	check_errors(int argc, char **argv, int flag)
 {
 	if (check_string(argc, argv) == 1)
 	{
 		write(2, "Error\n", 6);
+		if (flag == 1)
+			free_argv(argv);
 		exit(EXIT_SUCCESS);
 	}
 	if (argc == 1)
 		exit(EXIT_SUCCESS);
 	else if (argc == 2)
-		exit(EXIT_SUCCESS);
-	else if (argc == 3)
 	{
-		if (ft_atol(argv[1]) < ft_atol(argv[2]))
-			exit(EXIT_SUCCESS);
-		else if (ft_atol(argv[1]) == ft_atol(argv[2]))
-		{
-			write(2, "Error\n", 6);
-			exit(EXIT_SUCCESS);
-		}
-		else
-		{
-			write(1, "sa\n", 3);
-			exit(EXIT_SUCCESS);
-		}
+		if (flag == 1)
+			free_argv(argv);
+		exit(EXIT_SUCCESS);
 	}
+	else if (argc == 3)
+		check_errors_helper(argc, argv, flag);
 }

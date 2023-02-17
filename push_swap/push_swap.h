@@ -6,14 +6,14 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 11:34:39 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/01/26 09:22:19 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/17 19:07:34 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
 # include <unistd.h>
-//# include "libft/libft.h"
+# include "libft/libft.h"
 # include <stdlib.h>
 
 typedef struct s_stack
@@ -65,8 +65,11 @@ void	sort_three_b_helper(t_stack **head_b, t_stack *node);
 void	sort_three_a_helper3(t_stack **head_b, t_stack *node);
 void	sort_three_a_helper2(t_stack **head_b);
 void	sort_three_a_helper(t_stack **head_b, t_stack *node);
-void	check_errors(int argc, char **argv);
+void	check_errors(int argc, char **argv, int flag);
+void	check_errors_helper(int argc, char **argv, int flag);
 void	quicksort_b_helper3(t_stack **head_b, int i, int pushed_numbers);
 void	quicksort_a_helper3(t_stack **head_a, int i, int pushed_numbers);
 long	ft_atol(const char *nptr);
+void	free_argv(char **argv);
+
 #endif
