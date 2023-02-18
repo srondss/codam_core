@@ -21,7 +21,6 @@ $(NAME): $(OBJS)
 
 clean :
 	@printf "Cleaning...\n"
-	@cd ./MLX42/build && make clean
 	@rm -rf $(OBJS)
 	@printf "Cleaned All Files\n"
 
