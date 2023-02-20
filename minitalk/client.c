@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:47:37 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/15 22:35:14 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/20 11:24:04 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ equivalent of every character.
 
 // Add a function which sends a null byte to the server to indicate
 // end of string. 
+int	received_signal;
 
 void	send_null(int pid)
 {
@@ -40,10 +41,35 @@ void	send_null(int pid)
 	while (i < 8)
 	{
 		kill(pid, SIGUSR2);
+		usleep(100);
 		i++;
 	}
 }
 
+void convert_binary_to_ascii(char *string)
+{
+	int i;
+	int sum;
+	int square_two;
+
+	i = 0;
+	sum = 0;
+	square_two = 128;
+	while (i < 8)
+	{
+		if (string[i] == '1')
+			sum += square_two;
+		square_two /= 2;
+		i++;
+	}
+	if (sum == 0)
+	{
+		write(1, "\n", 1);
+		received_signal = 1;
+	}
+	else
+		write(1, &sum, 1);
+}
 
 void	send_binary_signals(int pid, char *string)
 {
@@ -61,19 +87,49 @@ void	send_binary_signals(int pid, char *string)
 			else
 				kill(pid, SIGUSR2);
 			bit++;
-			usleep(100);
+			usleep(1000);
 		}
 		i++;
 	}
-	//send_null(pid);
+	send_null(pid);
+}
+
+void handler_sigusr(int signum, siginfo_t *info, void *context)
+{
+	static char binary_char[8];
+	static int bits = 0;
+
+	if (signum == SIGUSR2)
+		binary_char[bits] = '0';
+	else if (signum == SIGUSR1)
+		binary_char[bits] = '1';
+	bits++;
+	if (bits == 8)
+	{
+		convert_binary_to_ascii(binary_char);
+		bits = 0;
+	}
+	(void)(info);
+	(void)(context);
 }
 
 
 int main(int argc, char **argv)
 {
+
+	struct sigaction sa;
+
 	if (argc != 3)
 		return (printf("Usage: ./client <server_pid> <string>\n"));
-
-	send_binary_signals(atoi(argv[1]), "hello\0abc");
+	received_signal = 0;
+	sa.sa_flags = SA_SIGINFO;
+	sa.sa_sigaction = &handler_sigusr;
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
+	send_binary_signals(atoi(argv[1]), argv[2]);
+	while (received_signal != 1)
+	{
+		pause();
+	}
 	return (1);
 }
