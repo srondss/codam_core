@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:47:37 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/20 11:24:04 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/02/27 16:00:58 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,21 +96,21 @@ void	send_binary_signals(int pid, char *string)
 
 void handler_sigusr(int signum, siginfo_t *info, void *context)
 {
-	static char binary_char[8];
-	static int bits = 0;
 
-	if (signum == SIGUSR2)
-		binary_char[bits] = '0';
-	else if (signum == SIGUSR1)
-		binary_char[bits] = '1';
-	bits++;
-	if (bits == 8)
+	static int	id;
+
+	if (info->si_pid != 0)
+		id = info->si_pid;
+	(void)context;
+	if (signum == SIGUSR1)
 	{
-		convert_binary_to_ascii(binary_char);
-		bits = 0;
+		send_binary_signals(id, NULL);
 	}
-	(void)(info);
-	(void)(context);
+	if (signum == SIGUSR2)
+	{
+		write(1, "Server: 202 OK\n", 15);
+		exit(EXIT_SUCCESS);
+	}
 }
 
 

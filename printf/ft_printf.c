@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/14 15:44:13 by ysrondy       #+#    #+#                 */
-/*   Updated: 2022/12/19 15:25:53 by ysrondy       ########   odam.nl         */
+/*   Updated: 2023/03/01 22:29:47 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_printf.h"
@@ -56,4 +56,5 @@ int	ft_printf(const char *FORMAT, ...)
 {
 	printf("\nOriginal Return %d\n", printf("%%\0%%ba\0ajklsd\n"));
 	ft_printf("\nMine Return %d\n", ft_printf("%%\0%%ba\0ajklsd\n"));
-}*/
+}
+*/
