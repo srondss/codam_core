@@ -21,10 +21,7 @@
 // although the max value for ascii is 2^7, we store 8 bits of data.
 
 /* We want to print the binary represenation of every character in the string. 
-We know 128 can be represented as 
-
-
-1000000. 
+We know 128 can be represented as 1000000. 
 So what we want to do is use the & operator to print out the binary
 equivalent of every character.
 */

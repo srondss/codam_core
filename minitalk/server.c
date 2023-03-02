@@ -15,13 +15,22 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-typedef struct	s_client 
-{
-	int	id;
-	char 	string[9];
-	int	bits;
-	struct	s_client *next;
-}	t_client;
+/*
+Need to fix the following things
+
+1. Server must print the entire string, not just bit by bit.
+In order to facilitate this, I must send the length of the string as the first signal received by server.
+Then calloc a string of x bytes and start filling it in.
+
+2. Client should first send a 'prod' bit to see if it is able to start sending the string.
+If the client doesn't receive approval from the server, it should sleep and try again in a few seconds.
+If too many seconds go by, the user should receive a message saying that it should try later or check pid.
+
+3. If 2 clients are trying to send signals at the same time, server should only process signals from the 
+client that is the current id of the static id variable. Once it receives '\0', it can reset the id to 0 and
+accept the next signal.
+
+*/
 
 void	convert_binary_to_ascii(int pid, char *string)
 {
@@ -48,88 +57,14 @@ void	convert_binary_to_ascii(int pid, char *string)
 		write(1, &sum, 1);
 }
 
-t_client *find_client(t_client **lst_clients, int id)
-{
-	t_client *first;
-	first = *lst_clients;
-
-	if (first == NULL)
-		return (NULL);
-	if (first->id == id)
-		return (first);
-	while (first != NULL)
-	{
-		if (first->id == id)
-			return (first);
-		first = first->next;
-	}
-	return (NULL);
-}
-
-t_client	*create_new_client(t_client **head, int id)
-{
-	t_client	*new;
-	t_client	*first;
-
-	first = *head;
-	new = malloc(sizeof(t_client) * 1);
-	new->id = id;
-	new->next = NULL;
-	if (*head == NULL)
-	{
-		*head = new;
-	}
-	else
-	{
-		while (first->next != NULL)
-			first = first->next;
-		first->next = new;
-	}
-	return (new);
-}
-
-void	update_client(t_client *client, int signum)
-{
-	if (signum == SIGUSR1)
-	{
-		client->string[client->bits] = '1';
-		client->bits++;
-	}
-	if (signum == SIGUSR2)
-	{
-		client->string[client->bits] = '0';
-		client->bits++;
-	}
-	if (client->bits == 8)
-	{
-		client->string[client->bits] = '\0';
-		client->bits = 0;
-		convert_binary_to_ascii(client->id, client->string);
-	}
-}
-
 
 void	handler_sigusr(int signum, siginfo_t *info, void *context)
 {
 	static int	id = 0;	
-	static t_client	**head;
-	t_client	*client;
 
 	if (info->si_pid != 0)
 		id = info->si_pid;
 	(void)(context);
-	if (!head)
-	{
-		head = malloc(sizeof(t_client *) * 1);
-	}
-	client = find_client(head, id);
-	if (!client)
-	{
-		client = create_new_client(head, id);
-		update_client(client, signum);
-	}
-	else
-		update_client(client, signum);
 }
 
 int	main(void)
