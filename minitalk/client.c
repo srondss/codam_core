@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:47:37 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/27 16:00:58 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/03/03 22:32:08 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,22 @@ void	send_binary_signals(int pid, char *string)
 		i++;
 	}
 	send_null(pid);
+}
+
+void	send_str_len(int pid, char *string)
+{
+	int	len;
+	int	int_size;
+
+	len = ft_strlen(string);
+	int_size = 32;
+
+	while (int_size > 0)
+	{
+		// figure out how to send the bit length to the user.
+		int_size--;
+	}
+
 }
 
 void handler_sigusr(int signum, siginfo_t *info, void *context)
