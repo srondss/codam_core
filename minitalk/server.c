@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:44:16 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/27 15:53:05 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/03/04 19:25:58 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ void	handler_sigusr(int signum, siginfo_t *info, void *context)
 
 	if (info->si_pid != 0)
 		id = info->si_pid;
+	(void)(id);
+	(void)(signum);
 	(void)(context);
 }
 

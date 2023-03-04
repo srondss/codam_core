@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:47:37 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/03/03 22:32:08 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/03/04 21:39:35 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,19 +91,40 @@ void	send_binary_signals(int pid, char *string)
 	send_null(pid);
 }
 
+// Need to send 32 bits (4 bytes) worth of data to the server.
+// If len = 20, binary representation should be:
+// 00000000000000000000000000010100
+// 
+
+int	ft_strlen(char const *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+		i++;
+	return (i);
+}
+
 void	send_str_len(int pid, char *string)
 {
 	int	len;
-	int	int_size;
+	int	bit;
 
 	len = ft_strlen(string);
-	int_size = 32;
-
-	while (int_size > 0)
+	if (len == 0)
+		return (send_null(pid));
+	bit = 0;
+	while (bit < 32)
 	{
-		// figure out how to send the bit length to the user.
-		int_size--;
+		if (len & (2147483648 >> bit))
+			kill(pid, SIGUSR1);
+		else
+			kill(pid, SIGUSR2);
+		bit++;
+		usleep(100);
 	}
+	send_null(pid);
 
 }
 
@@ -139,7 +160,8 @@ int main(int argc, char **argv)
 	sa.sa_sigaction = &handler_sigusr;
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
-	send_binary_signals(atoi(argv[1]), argv[2]);
+//	send_binary_signals(atoi(argv[1]), argv[2]);
+	send_str_len(atoi(argv[1]), argv[2]);	
 	while (received_signal != 1)
 	{
 		pause();
