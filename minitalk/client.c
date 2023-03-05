@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:47:37 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/03/04 21:39:35 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/03/05 23:04:45 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ equivalent of every character.
 
 // Add a function which sends a null byte to the server to indicate
 // end of string. 
-int	received_signal;
-
 void	send_null(int pid)
 {
 	int i;
@@ -38,9 +36,12 @@ void	send_null(int pid)
 	while (i < 8)
 	{
 		kill(pid, SIGUSR2);
-		usleep(100);
+		usleep(200);
 		i++;
 	}
+	kill(pid, SIGUSR2);
+	usleep(200);
+	
 }
 
 void convert_binary_to_ascii(char *string)
@@ -60,10 +61,7 @@ void convert_binary_to_ascii(char *string)
 		i++;
 	}
 	if (sum == 0)
-	{
 		write(1, "\n", 1);
-		received_signal = 1;
-	}
 	else
 		write(1, &sum, 1);
 }
@@ -84,7 +82,7 @@ void	send_binary_signals(int pid, char *string)
 			else
 				kill(pid, SIGUSR2);
 			bit++;
-			usleep(1000);
+			usleep(200);
 		}
 		i++;
 	}
@@ -109,23 +107,20 @@ int	ft_strlen(char const *str)
 void	send_str_len(int pid, char *string)
 {
 	int	len;
-	int	bit;
 
 	len = ft_strlen(string);
-	if (len == 0)
-		return (send_null(pid));
-	bit = 0;
-	while (bit < 32)
+	printf("String Length: %d\n", len);
+	if (len) // incase len is NULL.
 	{
-		if (len & (2147483648 >> bit))
+		while (len > 0)
+		{
 			kill(pid, SIGUSR1);
-		else
-			kill(pid, SIGUSR2);
-		bit++;
-		usleep(100);
+			len--;
+			usleep(200);
+		}
 	}
-	send_null(pid);
-
+	kill(pid, SIGUSR2);
+	usleep(200);
 }
 
 void handler_sigusr(int signum, siginfo_t *info, void *context)
@@ -155,14 +150,13 @@ int main(int argc, char **argv)
 
 	if (argc != 3)
 		return (printf("Usage: ./client <server_pid> <string>\n"));
-	received_signal = 0;
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = &handler_sigusr;
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
-//	send_binary_signals(atoi(argv[1]), argv[2]);
 	send_str_len(atoi(argv[1]), argv[2]);	
-	while (received_signal != 1)
+	send_binary_signals(atoi(argv[1]), argv[2]);
+	while (1)
 	{
 		pause();
 	}
