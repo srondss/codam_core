@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:47:37 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/03/05 23:04:45 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/03/06 09:19:44 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@ equivalent of every character.
 
 // Add a function which sends a null byte to the server to indicate
 // end of string. 
+
+static int process = 0;
+
 void	send_null(int pid)
 {
 	int i;
@@ -126,22 +129,16 @@ void	send_str_len(int pid, char *string)
 void handler_sigusr(int signum, siginfo_t *info, void *context)
 {
 
-	static int	id;
-
-	if (info->si_pid != 0)
-		id = info->si_pid;
 	(void)context;
+	(void)(info);
 	if (signum == SIGUSR1)
-	{
-		send_binary_signals(id, NULL);
-	}
+		process++;
 	if (signum == SIGUSR2)
 	{
 		write(1, "Server: 202 OK\n", 15);
 		exit(EXIT_SUCCESS);
 	}
 }
-
 
 int main(int argc, char **argv)
 {
@@ -154,11 +151,20 @@ int main(int argc, char **argv)
 	sa.sa_sigaction = &handler_sigusr;
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
-	send_str_len(atoi(argv[1]), argv[2]);	
-	send_binary_signals(atoi(argv[1]), argv[2]);
-	while (1)
+	
+	while (process == 0)
 	{
-		pause();
+		printf("Waiting for server availablity...\n");
+		kill(atoi(argv[1]), SIGUSR1);
+		sleep(1);
+	}
+	if (process == 1)
+	{
+		printf("Got Confirmation! Sending bits...\n");
+		send_str_len(atoi(argv[1]), argv[2]);	
+		send_binary_signals(atoi(argv[1]), argv[2]);
+		while (1)
+			pause();
 	}
 	return (1);
 }

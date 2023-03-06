@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:44:16 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/03/05 23:02:25 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/03/06 09:25:46 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ int	convert_binary_to_ascii(char *binary_string, char *string, int position)
 		square_two /= 2;
 		i++;
 	}
-	printf("Sum: %d\n", sum);
 	if (sum == 0)
 	{
 		string[position] = '\0';
@@ -70,7 +69,6 @@ int	convert_binary_to_ascii(char *binary_string, char *string, int position)
 	else
 	{
 		string[position] = sum;
-		printf("String: %s\n", string);
 		return (0);
 	}
 }
@@ -81,7 +79,6 @@ void	update_string(int signum, char *string)
 	static int	index = 0;
 	static int	position = 0;
 
-	printf("Index: %d, Position: %d\n", index, position);
 	if (signum == SIGUSR1)
 		binary_string[index] = '1';
 	if (signum == SIGUSR2)
@@ -89,7 +86,6 @@ void	update_string(int signum, char *string)
 	index++;
 	if (index == 8)
 	{
-		printf("Binary_String: %s\n", binary_string);
 		index = convert_binary_to_ascii(binary_string, string, position);
 		if (index == 1)
 			position = 0;
@@ -106,23 +102,23 @@ void	handler_sigusr_server(int signum, siginfo_t *info, void *context)
 	static int	len = 0;
 	static char	*string = NULL;
 
-	if (signum == SIGUSR1)
-		printf("Received 1\n");
-	if (signum == SIGUSR2)
-		printf("Received 0\n");
-	if (info->si_pid != 0)
-		id = info->si_pid;
-	if (process == 0) // First call. Receiving str_len;
+	if (process == 0 && id == 0)
 	{
-		write(1, "Enter Process 0\n", 16);
+		id = info->si_pid;
+		kill(id, SIGUSR1);
+		return;
+	}
+	if (id != info->si_pid)
+		return;	
+	if (process == 0)
+	{
 		if (signum == SIGUSR1)
 			len++;
 		if (signum == SIGUSR2)
 			process++;
 	}
-	else if (process == 1) // Second call. Malloc String.
+	else if (process == 1)
 	{
-		write(1, "Enter Process 1\n", 16);
 		if (!string)
 			string = malloc(sizeof(char) * (len + 1));
 		update_string(signum, string);
@@ -131,9 +127,11 @@ void	handler_sigusr_server(int signum, siginfo_t *info, void *context)
 	{
 		printf("%s\n", string);
 		free(string);
+		string = NULL;
 		process = 0;
 		len = 0;
 		kill(id, SIGUSR2);
+		id = 0;
 	}
 	(void)(id);
 	(void)(context);
