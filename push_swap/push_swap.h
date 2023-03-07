@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 11:34:39 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/17 19:07:34 by ysrondy       ########   odam.nl         */
+/*   Updated: 2023/03/07 16:18:38 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PUSH_SWAP_H
@@ -66,7 +66,7 @@ void	sort_three_a_helper3(t_stack **head_b, t_stack *node);
 void	sort_three_a_helper2(t_stack **head_b);
 void	sort_three_a_helper(t_stack **head_b, t_stack *node);
 void	check_errors(int argc, char **argv, int flag);
-void	check_errors_helper(int argc, char **argv, int flag);
+void	check_errors_helper(char **argv, int flag);
 void	quicksort_b_helper3(t_stack **head_b, int i, int pushed_numbers);
 void	quicksort_a_helper3(t_stack **head_a, int i, int pushed_numbers);
 long	ft_atol(const char *nptr);

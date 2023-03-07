@@ -14,25 +14,23 @@ SRCS =	push_swap.c \
 	push_swap_sort_three_b_helpers.c \
 	push_swap_quicksort_helpers_2.c \
 
-CC = cc
-
-FLAGS = -Wall -Wextra -Werror
-
 OBJS = $(SRCS:.c=.o)
+
+CFLAGS ?= -Wall -Wextra -Werror
 
 all : $(NAME)
 
 $(NAME): $(OBJS)
 	@cd ./libft && make
-	$(CC) $(FLAGS) -o $@ $^ libft/libft.a
+	$(CC) $(CFLAGS) -o $@ $^ libft/libft.a
 
 clean :
 	@cd ./libft && make clean
 	rm -rf $(OBJS)
 
-fclean : clean
+fclean :
 	@cd ./libft && make fclean
-	rm -rf $(NAME)
+	rm -rf $(OBJS) $(NAME)
 
 re :	clean all
 

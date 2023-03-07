@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 18:00:16 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/02/17 19:11:15 by ysrondy       ########   odam.nl         */
+/*   Updated: 2023/03/07 16:18:26 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	free_and_exit(t_stack **head_a, t_stack **head_b)
 	exit(EXIT_SUCCESS);
 }
 
-void	check_errors_helper(int argc, char **argv, int flag)
+void	check_errors_helper(char **argv, int flag)
 {
 	if (ft_atol(argv[1]) < ft_atol(argv[2]))
 	{

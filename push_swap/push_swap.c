@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/03/02 19:24:15 by ysrondy       ########   odam.nl         */
+/*   Updated: 2023/03/07 19:56:58 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,9 @@ void	run_algo(int argc, char **argv, int flag)
 	check_errors(argc, argv, flag);
 	stack_a = malloc(sizeof(struct s_stack) * argc - 1);
 	if (!stack_a && flag)
-		return (free_argv(argv), exit(EXIT_SUCCESS));
+		return (write(2, "Error\n", 6), free_argv(argv), exit(EXIT_SUCCESS));
 	else if (!stack_a)
-		exit(EXIT_SUCCESS);
+		return (write(2, "Error\n", 6), exit(EXIT_SUCCESS));
 	stack_b = NULL;
 	fill_stack(stack_a, argv);
 	if (flag == 1)
@@ -119,13 +119,16 @@ int	main(int argc, char **argv)
 	flag = 0;
 	if (argc == 2)
 	{
+		if (argv[1] == NULL)
+			return (write(2, "Error\n", 6), 1);
 		new_argv = ft_split(argv[1], ' ');
 		if (!new_argv)
-			return (1);
+			return (write(2, "Error\n", 6), 1);
 		argc = ((get_length_argv(new_argv)) + 1);
 		argv = malloc(sizeof(char *) * argc + 1);
 		if (!argv)
-			return (free(new_argv[0]), free_argv(new_argv), 1);
+			return (write(2, "Error\n", 6), free(new_argv[0]),
+				free_argv(new_argv), 1);
 		copy_into_argv(new_argv, argv);
 		flag = 1;
 		free(new_argv);
