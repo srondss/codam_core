@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:47:37 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/03/06 09:19:44 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/03/08 19:32:43 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,11 @@
 #include <strings.h>
 #include <unistd.h>
 
-// ASCII values go up to 127.
-// Because a char is equal to 1 byte or 8 bits,
-// although the max value for ascii is 2^7, we store 8 bits of data.
-
-/* We want to print the binary represenation of every character in the string. 
-We know 128 can be represented as 1000000. 
-So what we want to do is use the & operator to print out the binary
-equivalent of every character.
-*/
-
-// Add a function which sends a null byte to the server to indicate
-// end of string. 
-
-static int process = 0;
+static int	g_process = 0;
 
 void	send_null(int pid)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < 8)
@@ -44,14 +31,13 @@ void	send_null(int pid)
 	}
 	kill(pid, SIGUSR2);
 	usleep(200);
-	
 }
 
-void convert_binary_to_ascii(char *string)
+void	convert_binary_to_ascii(char *string)
 {
-	int i;
-	int sum;
-	int square_two;
+	int	i;
+	int	sum;
+	int	square_two;
 
 	i = 0;
 	sum = 0;
@@ -71,8 +57,8 @@ void convert_binary_to_ascii(char *string)
 
 void	send_binary_signals(int pid, char *string)
 {
-	int i; 
-	int bit;
+	int	i;
+	int	bit;
 
 	i = 0;
 	while (string[i])
@@ -92,11 +78,6 @@ void	send_binary_signals(int pid, char *string)
 	send_null(pid);
 }
 
-// Need to send 32 bits (4 bytes) worth of data to the server.
-// If len = 20, binary representation should be:
-// 00000000000000000000000000010100
-// 
-
 int	ft_strlen(char const *str)
 {
 	int	i;
@@ -113,7 +94,7 @@ void	send_str_len(int pid, char *string)
 
 	len = ft_strlen(string);
 	printf("String Length: %d\n", len);
-	if (len) // incase len is NULL.
+	if (len)
 	{
 		while (len > 0)
 		{
@@ -126,13 +107,12 @@ void	send_str_len(int pid, char *string)
 	usleep(200);
 }
 
-void handler_sigusr(int signum, siginfo_t *info, void *context)
+void	handler_sigusr(int signum, siginfo_t *info, void *context)
 {
-
 	(void)context;
 	(void)(info);
 	if (signum == SIGUSR1)
-		process++;
+		g_process++;
 	if (signum == SIGUSR2)
 	{
 		write(1, "Server: 202 OK\n", 15);
@@ -140,10 +120,9 @@ void handler_sigusr(int signum, siginfo_t *info, void *context)
 	}
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-
-	struct sigaction sa;
+	struct sigaction	sa;
 
 	if (argc != 3)
 		return (printf("Usage: ./client <server_pid> <string>\n"));
@@ -151,17 +130,16 @@ int main(int argc, char **argv)
 	sa.sa_sigaction = &handler_sigusr;
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
-	
-	while (process == 0)
+	while (g_process == 0)
 	{
 		printf("Waiting for server availablity...\n");
 		kill(atoi(argv[1]), SIGUSR1);
 		sleep(1);
 	}
-	if (process == 1)
+	if (g_process == 1)
 	{
 		printf("Got Confirmation! Sending bits...\n");
-		send_str_len(atoi(argv[1]), argv[2]);	
+		send_str_len(atoi(argv[1]), argv[2]);
 		send_binary_signals(atoi(argv[1]), argv[2]);
 		while (1)
 			pause();

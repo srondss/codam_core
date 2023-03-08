@@ -1,4 +1,3 @@
-NAME =
 CLIENT = client
 SERVER = server
 
@@ -6,27 +5,28 @@ SRC_C = client.c
 SRC_S = server.c
 
 CC = cc
-FLAGS = -Wall -Wextra -Werror
+CFLAGS ?= -Wall -Wextra -Werror
+
+OBJS_C = $(SRC_C:.c=.o)
+OBJS_S = $(SRC_S:.c=.o)
 
 all : $(CLIENT) $(SERVER)
 
-$(NAME): all
+$(SERVER): $(OBJS_C) $(OBJS_S)
+	@$(CC) $(CFLAGS) -o $(SERVER) $(SRC_S)
+	@printf "Sever Executable Ready.\n"
 
-$(SERVER):
-	@ $(CC) -o $(SERVER) $(FLAGS) $(SRC_S)
-	@printf "Sever Ready.\n"
-
-$(CLIENT):
-	@ $(CC) -o $(CLIENT) $(FLAGS) $(SRC_C)
-	@printf "Client Ready.\n"
+$(CLIENT): $(OBJS_C) $(OBJS_S)
+	@$(CC) $(CFLAGS) -o $(CLIENT) $(SRC_C)
+	@printf "Client Executable Ready.\n"
 
 clean :
-	rm -rf $(CLIENT) $(SERVER)
-	@printf "Removed Client & Server.\n"
+	@rm -rf $(OBJS_C) $(OBJS_S)
+	@printf "Removed client.o & server.o files.\n"
 
-fclean : 
-	rm -rf $(CLIENT) $(SERVER)
-	@printf "Removed Client & Server.\n"
+fclean : clean
+	@rm -rf $(CLIENT) $(SERVER)
+	@printf "Removed client & server executables.\n"
 
 re : fclean all
 

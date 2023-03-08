@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:44:16 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/03/06 09:25:46 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/03/08 19:34:14 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-/*
-Need to fix the following things
-
-1. Server must print the entire string, not just bit by bit.
-In order to facilitate this, I must send the length of the string as the first signal received by server.
-Then calloc a string of x bytes and start filling it in.
-
-2. Client should first send a 'prod' bit to see if it is able to start sending the string.
-If the client doesn't receive approval from the server, it should sleep and try again in a few seconds.
-If too many seconds go by, the user should receive a message saying that it should try later or check pid.
-
-3. If 2 clients are trying to send signals at the same time, server should only process signals from the 
-client that is the current id of the static id variable. Once it receives '\0', it can reset the id to 0 and
-accept the next signal.
-
-*/
-
-static int	process = 0;
+static int	g_process = 0;
 
 int	ft_strlen(char const *str)
 {
@@ -63,12 +46,13 @@ int	convert_binary_to_ascii(char *binary_string, char *string, int position)
 	if (sum == 0)
 	{
 		string[position] = '\0';
-		process++;
+		g_process++;
 		return (1);
 	}
 	else
 	{
 		string[position] = sum;
+		printf("%c\n", string[position]);
 		return (0);
 	}
 }
@@ -80,21 +64,29 @@ void	update_string(int signum, char *string)
 	static int	position = 0;
 
 	if (signum == SIGUSR1)
+	{
 		binary_string[index] = '1';
+		printf("Got a 1\n");
+	}
 	if (signum == SIGUSR2)
+	{
 		binary_string[index] = '0';
+		printf("Got a 0\n");
+	}
 	index++;
 	if (index == 8)
 	{
+		printf("Entered index\n");
+		printf("%s", binary_string);
 		index = convert_binary_to_ascii(binary_string, string, position);
 		if (index == 1)
 			position = 0;
 		else
 			position++;
 		index = 0;
+		printf("Left index\n");
 	}
 }
-
 
 void	handler_sigusr_server(int signum, siginfo_t *info, void *context)
 {
@@ -102,33 +94,35 @@ void	handler_sigusr_server(int signum, siginfo_t *info, void *context)
 	static int	len = 0;
 	static char	*string = NULL;
 
-	if (process == 0 && id == 0)
+	if (g_process == 0 && id == 0)
 	{
 		id = info->si_pid;
 		kill(id, SIGUSR1);
-		return;
+		return ;
 	}
 	if (id != info->si_pid)
-		return;	
-	if (process == 0)
+		return ;
+	if (g_process == 0)
 	{
 		if (signum == SIGUSR1)
 			len++;
 		if (signum == SIGUSR2)
-			process++;
+			g_process++;
 	}
-	else if (process == 1)
+	else if (g_process == 1)
 	{
+		printf("Got this pid: %d\n", id);
 		if (!string)
 			string = malloc(sizeof(char) * (len + 1));
 		update_string(signum, string);
 	}
-	else if (process == 2)
+	else if (g_process == 2)
 	{
+		printf("Final Process\n");
 		printf("%s\n", string);
 		free(string);
 		string = NULL;
-		process = 0;
+		g_process = 0;
 		len = 0;
 		kill(id, SIGUSR2);
 		id = 0;
