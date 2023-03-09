@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/15 18:00:16 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/03/07 16:18:26 by ysrondy       ########   odam.nl         */
+/*   Updated: 2023/03/09 17:57:08 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_stack *start_node)
 			free_argv(string);
 			free_stack(&start_node);
 			write(2, "Error\n", 6);
-			exit(EXIT_SUCCESS);
+			exit(EXIT_FAILURE);
 		}
 		new_node->prev = next_node;
 		next_node->next = new_node;
@@ -51,7 +51,7 @@ void	fill_stack(t_stack *stack_a, char **string)
 		free_argv(string);
 		free_stack(&stack_a);
 		write(2, "Error\n", 6);
-		exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
 	}
 	start_node = stack_a;
 	start_node->number = ft_atol(string[1]);
@@ -88,7 +88,7 @@ void	free_and_exit(t_stack **head_a, t_stack **head_b)
 	free_stack(head_a);
 	free_stack(head_b);
 	write(2, "Error\n", 6);
-	exit(EXIT_SUCCESS);
+	exit(EXIT_FAILURE);
 }
 
 void	check_errors_helper(char **argv, int flag)
@@ -104,7 +104,7 @@ void	check_errors_helper(char **argv, int flag)
 		write(2, "Error\n", 6);
 		if (flag == 1)
 			free_argv(argv);
-		exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 21:18:37 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/03/07 17:54:47 by ysrondy       ########   odam.nl         */
+/*   Updated: 2023/03/09 18:01:27 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,27 @@ long	ft_atol(const char	*nptr)
 	return (sum * sign);
 }
 
-// checks if atol returns 0 meaning an error but the number is not an actual 0.
-// also makes sure string is not null.
 int	check_string(int argc, char **argv)
 {
 	int	i;
+	int	j;
 
 	i = 1;
+	j = 0;
 	while (i < argc)
 	{
 		if (argv[i] == NULL)
 			return (1);
-		if (argv[i][0] != 48 && ft_atol(argv[i]) == 0)
+		if (argv[i][0] != '0' && ft_atol(argv[i]) == 0)
 			return (1);
+		while (argv[i][j] != '\0')
+		{
+			if (argv[i][j] >= '0' && argv[i][j] <= '9')
+				j++;
+			else
+				return (1);
+		}
+		j = 0;
 		i++;
 	}
 	return (0);
@@ -100,7 +108,7 @@ void	check_errors(int argc, char **argv, int flag)
 		write(2, "Error\n", 6);
 		if (flag == 1)
 			free_argv(argv);
-		exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
 	}
 	if (argc == 1)
 		exit(EXIT_SUCCESS);

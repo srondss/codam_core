@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 10:38:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/03/07 19:56:58 by ysrondy       ########   odam.nl         */
+/*   Updated: 2023/03/09 17:55:11 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,9 @@ void	run_algo(int argc, char **argv, int flag)
 	check_errors(argc, argv, flag);
 	stack_a = malloc(sizeof(struct s_stack) * argc - 1);
 	if (!stack_a && flag)
-		return (write(2, "Error\n", 6), free_argv(argv), exit(EXIT_SUCCESS));
+		return (write(2, "Error\n", 6), free_argv(argv), exit(EXIT_FAILURE));
 	else if (!stack_a)
-		return (write(2, "Error\n", 6), exit(EXIT_SUCCESS));
+		return (write(2, "Error\n", 6), exit(EXIT_FAILURE));
 	stack_b = NULL;
 	fill_stack(stack_a, argv);
 	if (flag == 1)
@@ -104,7 +104,7 @@ void	run_algo(int argc, char **argv, int flag)
 	if (check_duplicate(&stack_a) == 1)
 	{
 		free_stack(&stack_a);
-		return (write(2, "Error\n", 6), exit(EXIT_SUCCESS));
+		return (write(2, "Error\n", 6), exit(EXIT_FAILURE));
 	}
 	quicksort_a(&stack_a, &stack_b, (argc - 1));
 	free_stack(&stack_a);
