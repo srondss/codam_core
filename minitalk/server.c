@@ -64,10 +64,7 @@ void	update_string(int signum, char *string)
 	static int	position = 0;
 
 	if (signum == SIGUSR1)
-	{
 		binary_string[index] = '1';
-		printf("Got a 1\n");
-	}
 	if (signum == SIGUSR2)
 	{
 		binary_string[index] = '0';

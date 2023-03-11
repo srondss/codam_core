@@ -16,6 +16,20 @@
 #include <strings.h>
 #include <unistd.h>
 
+/*
+Okay, so...
+
+We need to send a bit and wait for a response before sending the next one.
+Logic will be:
+
+process == 0 => client is trying to make connection with server.
+process == 1 => client has successfully made connection with server.
+process == 2 => client has sent a bit and is waiting for confirmation of receipt.
+process == 3 => client has received confirmation and will proceed to send next bit.
+
+*/
+
+
 static int	g_process = 0;
 
 void	send_null(int pid)
@@ -25,34 +39,17 @@ void	send_null(int pid)
 	i = 0;
 	while (i < 8)
 	{
-		kill(pid, SIGUSR2);
-		usleep(200);
-		i++;
+		if (g_process == 3)
+		{
+			kill(pid, SIGUSR2);
+			g_process--;
+			usleep(100);
+			i++;
+		}
 	}
 	kill(pid, SIGUSR2);
-	usleep(200);
-}
-
-void	convert_binary_to_ascii(char *string)
-{
-	int	i;
-	int	sum;
-	int	square_two;
-
-	i = 0;
-	sum = 0;
-	square_two = 128;
-	while (i < 8)
-	{
-		if (string[i] == '1')
-			sum += square_two;
-		square_two /= 2;
-		i++;
-	}
-	if (sum == 0)
-		write(1, "\n", 1);
-	else
-		write(1, &sum, 1);
+	g_process = 2;
+	usleep(100);
 }
 
 void	send_binary_signals(int pid, char *string)
@@ -66,12 +63,16 @@ void	send_binary_signals(int pid, char *string)
 		bit = 0;
 		while (bit < 8)
 		{
-			if (string[i] & (128 >> bit))
-				kill(pid, SIGUSR1);
-			else
-				kill(pid, SIGUSR2);
-			bit++;
-			usleep(200);
+			if (g_process == 3)
+			{
+				if (string[i] & (128 >> bit))
+					kill(pid, SIGUSR1);
+				else
+					kill(pid, SIGUSR2);
+				g_process--;
+				bit++;
+				usleep(100);
+			}
 		}
 		i++;
 	}
@@ -93,18 +94,21 @@ void	send_str_len(int pid, char *string)
 	int	len;
 
 	len = ft_strlen(string);
-	printf("String Length: %d\n", len);
 	if (len)
 	{
 		while (len > 0)
 		{
-			kill(pid, SIGUSR1);
-			len--;
-			usleep(200);
+			if (g_process == 3)
+			{
+				kill(pid, SIGUSR1);
+				len--;
+				g_process = 2;
+				usleep(100);
+			}
 		}
 	}
 	kill(pid, SIGUSR2);
-	usleep(200);
+	g_process = 2;
 }
 
 void	handler_sigusr(int signum, siginfo_t *info, void *context)
@@ -112,7 +116,9 @@ void	handler_sigusr(int signum, siginfo_t *info, void *context)
 	(void)context;
 	(void)(info);
 	if (signum == SIGUSR1)
+	{
 		g_process++;
+	}
 	if (signum == SIGUSR2)
 	{
 		write(1, "Server: 202 OK\n", 15);
@@ -139,6 +145,7 @@ int	main(int argc, char **argv)
 	if (g_process == 1)
 	{
 		printf("Got Confirmation! Sending bits...\n");
+		g_process = 3;
 		send_str_len(atoi(argv[1]), argv[2]);
 		send_binary_signals(atoi(argv[1]), argv[2]);
 		while (1)
