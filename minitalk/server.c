@@ -27,7 +27,7 @@ int	ft_strlen(char const *str)
 	return (i);
 }
 
-int	convert_binary_to_ascii(char *binary_string, char *string, int position)
+int	convert_binary_to_ascii(char *binary_string, char *string, int position, int id)
 {
 	int	i;
 	int	sum;
@@ -43,85 +43,97 @@ int	convert_binary_to_ascii(char *binary_string, char *string, int position)
 		square_two /= 2;
 		i++;
 	}
+	// if null-terminating byte, change state.
 	if (sum == 0)
 	{
 		string[position] = '\0';
 		g_process++;
+		kill(id, SIGUSR1);
 		return (1);
 	}
+	// if not null-terminating byte, append char to malloc string and keep going.
 	else
 	{
 		string[position] = sum;
-		printf("%c\n", string[position]);
+		kill(id, SIGUSR1);
 		return (0);
 	}
 }
 
-void	update_string(int signum, char *string)
+void	update_string(int signum, char *string, int id)
 {
 	static char	binary_string[8];
-	static int	index = 0;
-	static int	position = 0;
+	static int	index = 0; // index of binary_string.
+	static int	position = 0; // position in malloced string.
 
 	if (signum == SIGUSR1)
 		binary_string[index] = '1';
 	if (signum == SIGUSR2)
-	{
 		binary_string[index] = '0';
-		printf("Got a 0\n");
-	}
 	index++;
 	if (index == 8)
 	{
-		printf("Entered index\n");
-		printf("%s", binary_string);
-		index = convert_binary_to_ascii(binary_string, string, position);
-		if (index == 1)
+		printf("Binary String: %s\n", binary_string);
+		index = convert_binary_to_ascii(binary_string, string, position, id);
+		if (index == 1) // string is finished, reset values.
 			position = 0;
 		else
-			position++;
-		index = 0;
-		printf("Left index\n");
+			position++; // still more chars to be appended to string, need to increase position index by 1.
+		index = 0; // reset index of binary_string as binary_string is finished.
 	}
+	else
+		kill(id, SIGUSR1); // send confirmation of receipt to client.
 }
 
 void	handler_sigusr_server(int signum, siginfo_t *info, void *context)
 {
-	static int	id = 0;	
+	static int	id = 0;
 	static int	len = 0;
 	static char	*string = NULL;
 
+// Checks if a client is already being handled.
 	if (g_process == 0 && id == 0)
 	{
 		id = info->si_pid;
 		kill(id, SIGUSR1);
 		return ;
 	}
+// If another client is trying to interact with server, will just be ignored.
 	if (id != info->si_pid)
 		return ;
+// Receives the length of the string that needs to be allocated.
+// Sends a bit back to client acknowledging receipt.
 	if (g_process == 0)
 	{
 		if (signum == SIGUSR1)
+		{
 			len++;
+			kill(id, SIGUSR1);
+		}
+		// Move to next state as client finished sending all bits.
 		if (signum == SIGUSR2)
+		{
 			g_process++;
+			kill(id, SIGUSR1);
+		}
 	}
+	// Mallocs string if doesn't exist or updates string if exists.
 	else if (g_process == 1)
 	{
-		printf("Got this pid: %d\n", id);
+		printf("Received string bit from %d\n", id);
 		if (!string)
 			string = malloc(sizeof(char) * (len + 1));
-		update_string(signum, string);
+		update_string(signum, string, id);
 	}
+	// prints string and reinitialises state.
 	else if (g_process == 2)
 	{
-		printf("Final Process\n");
 		printf("%s\n", string);
 		free(string);
 		string = NULL;
 		g_process = 0;
 		len = 0;
-		kill(id, SIGUSR2);
+		kill(id, SIGUSR2); // kills client.
 		id = 0;
 	}
 	(void)(id);

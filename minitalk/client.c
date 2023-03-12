@@ -24,8 +24,9 @@ Logic will be:
 
 process == 0 => client is trying to make connection with server.
 process == 1 => client has successfully made connection with server.
-process == 2 => client has sent a bit and is waiting for confirmation of receipt.
-process == 3 => client has received confirmation and will proceed to send next bit.
+
+process == 3 => client is going to (or has) send/sent a bit and is waiting for confirmation to send next one.
+process == 4 => client has received confirmation and process becomes 3 again.
 
 */
 
@@ -42,14 +43,13 @@ void	send_null(int pid)
 		if (g_process == 3)
 		{
 			kill(pid, SIGUSR2);
+			pause();
 			g_process--;
-			usleep(100);
 			i++;
 		}
 	}
 	kill(pid, SIGUSR2);
-	g_process = 2;
-	usleep(100);
+	pause();
 }
 
 void	send_binary_signals(int pid, char *string)
@@ -69,9 +69,9 @@ void	send_binary_signals(int pid, char *string)
 					kill(pid, SIGUSR1);
 				else
 					kill(pid, SIGUSR2);
+				pause();
 				g_process--;
 				bit++;
-				usleep(100);
 			}
 		}
 		i++;
@@ -101,14 +101,15 @@ void	send_str_len(int pid, char *string)
 			if (g_process == 3)
 			{
 				kill(pid, SIGUSR1);
+				pause();
 				len--;
-				g_process = 2;
-				usleep(100);
+				g_process--;
 			}
 		}
 	}
 	kill(pid, SIGUSR2);
-	g_process = 2;
+	pause();
+	g_process--;
 }
 
 void	handler_sigusr(int signum, siginfo_t *info, void *context)
@@ -138,7 +139,7 @@ int	main(int argc, char **argv)
 	sigaction(SIGUSR2, &sa, NULL);
 	while (g_process == 0)
 	{
-		printf("Waiting for server availablity...\n");
+		printf("Sending prod bit...\n");
 		kill(atoi(argv[1]), SIGUSR1);
 		sleep(1);
 	}
