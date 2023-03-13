@@ -118,6 +118,7 @@ void	handler_sigusr(int signum, siginfo_t *info, void *context)
 	(void)(info);
 	if (signum == SIGUSR1)
 	{
+		printf("Received BIT!\n");
 		g_process++;
 	}
 	if (signum == SIGUSR2)

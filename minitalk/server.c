@@ -48,6 +48,7 @@ int	convert_binary_to_ascii(char *binary_string, char *string, int position, int
 	{
 		string[position] = '\0';
 		g_process++;
+		usleep(200);
 		kill(id, SIGUSR1);
 		return (1);
 	}
@@ -55,6 +56,7 @@ int	convert_binary_to_ascii(char *binary_string, char *string, int position, int
 	else
 	{
 		string[position] = sum;
+		usleep(200);
 		kill(id, SIGUSR1);
 		return (0);
 	}
@@ -82,7 +84,10 @@ void	update_string(int signum, char *string, int id)
 		index = 0; // reset index of binary_string as binary_string is finished.
 	}
 	else
+	{
+		usleep(200);
 		kill(id, SIGUSR1); // send confirmation of receipt to client.
+	}
 }
 
 void	handler_sigusr_server(int signum, siginfo_t *info, void *context)
@@ -108,19 +113,20 @@ void	handler_sigusr_server(int signum, siginfo_t *info, void *context)
 		if (signum == SIGUSR1)
 		{
 			len++;
+			usleep(500);
 			kill(id, SIGUSR1);
 		}
 		// Move to next state as client finished sending all bits.
 		if (signum == SIGUSR2)
 		{
 			g_process++;
+			usleep(200);
 			kill(id, SIGUSR1);
 		}
 	}
 	// Mallocs string if doesn't exist or updates string if exists.
 	else if (g_process == 1)
 	{
-		printf("Received string bit from %d\n", id);
 		if (!string)
 			string = malloc(sizeof(char) * (len + 1));
 		update_string(signum, string, id);
