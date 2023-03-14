@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:47:37 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/03/08 19:32:43 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/03/14 15:26:28 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ process == 4 => client has received confirmation and process becomes 3 again.
 */
 
 
-static int	g_process = 0;
+static int	breakout = 0;
 
 void	send_null(int pid)
 {
@@ -40,17 +40,17 @@ void	send_null(int pid)
 	i = 0;
 	while (i < 8)
 	{
-		if (g_process == 3)
-		{
-			kill(pid, SIGUSR2);
-			pause();
-			g_process--;
-			i++;
-		}
+		// printf("Sent NULL Bit\n");
+		kill(pid, SIGUSR2);
+		while (!breakout)
+			;
+		breakout = 0;
+		i++;
 	}
-	kill(pid, SIGUSR2);
 	pause();
 }
+// 'a' =>      0110 0001 = 97
+// a & 128 =>  1000 0000 = 128
 
 void	send_binary_signals(int pid, char *string)
 {
@@ -63,16 +63,16 @@ void	send_binary_signals(int pid, char *string)
 		bit = 0;
 		while (bit < 8)
 		{
-			if (g_process == 3)
-			{
-				if (string[i] & (128 >> bit))
-					kill(pid, SIGUSR1);
-				else
-					kill(pid, SIGUSR2);
-				pause();
-				g_process--;
-				bit++;
-			}
+			// printf("Sent STR Bit: %d\n", bit);
+			if (string[i] & (128 >> bit))
+				kill(pid, SIGUSR1);
+			else
+				kill(pid, SIGUSR2);
+			while (!breakout)
+				;
+			// printf("POST STR PAUSE\n");
+			breakout = 0;
+			bit++;
 		}
 		i++;
 	}
@@ -98,18 +98,20 @@ void	send_str_len(int pid, char *string)
 	{
 		while (len > 0)
 		{
-			if (g_process == 3)
-			{
-				kill(pid, SIGUSR1);
-				pause();
-				len--;
-				g_process--;
-			}
+			// printf("Sent LEN Bit\n");
+			kill(pid, SIGUSR1);
+			while (!breakout)
+				;
+			breakout = 0;
+			len--;
 		}
 	}
+	// printf("Sent FINAL LEN Bit\n");
 	kill(pid, SIGUSR2);
-	pause();
-	g_process--;
+	while (breakout == 0)
+		;
+	// printf("POST FINAL LEN PAUSE\n");
+	breakout = 0;
 }
 
 void	handler_sigusr(int signum, siginfo_t *info, void *context)
@@ -118,8 +120,8 @@ void	handler_sigusr(int signum, siginfo_t *info, void *context)
 	(void)(info);
 	if (signum == SIGUSR1)
 	{
-		printf("Received BIT!\n");
-		g_process++;
+		// printf("Received BIT!\n");
+		breakout = 1;
 	}
 	if (signum == SIGUSR2)
 	{
@@ -134,24 +136,25 @@ int	main(int argc, char **argv)
 
 	if (argc != 3)
 		return (printf("Usage: ./client <server_pid> <string>\n"));
-	sa.sa_flags = SA_SIGINFO;
+
+	sa.sa_flags = SA_SIGINFO | SA_NODEFER;
+	sigemptyset(&sa.sa_mask);
 	sa.sa_sigaction = &handler_sigusr;
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
-	while (g_process == 0)
+
+	while (breakout == 0)
 	{
 		printf("Sending prod bit...\n");
 		kill(atoi(argv[1]), SIGUSR1);
 		sleep(1);
 	}
-	if (g_process == 1)
+	if (breakout == 1)
 	{
+		breakout = 0;
 		printf("Got Confirmation! Sending bits...\n");
-		g_process = 3;
 		send_str_len(atoi(argv[1]), argv[2]);
 		send_binary_signals(atoi(argv[1]), argv[2]);
-		while (1)
-			pause();
 	}
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:44:16 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/03/08 19:34:14 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/03/14 15:26:30 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,67 +27,33 @@ int	ft_strlen(char const *str)
 	return (i);
 }
 
-int	convert_binary_to_ascii(char *binary_string, char *string, int position, int id)
-{
-	int	i;
-	int	sum;
-	int	square_two;
-
-	i = 0;
-	sum = 0;
-	square_two = 128;
-	while (i < 8)
-	{
-		if (binary_string[i] == '1')
-			sum += square_two;
-		square_two /= 2;
-		i++;
-	}
-	// if null-terminating byte, change state.
-	if (sum == 0)
-	{
-		string[position] = '\0';
-		g_process++;
-		usleep(200);
-		kill(id, SIGUSR1);
-		return (1);
-	}
-	// if not null-terminating byte, append char to malloc string and keep going.
-	else
-	{
-		string[position] = sum;
-		usleep(200);
-		kill(id, SIGUSR1);
-		return (0);
-	}
-}
-
 void	update_string(int signum, char *string, int id)
 {
-	static char	binary_string[8];
+	static char c = 0;
 	static int	index = 0; // index of binary_string.
 	static int	position = 0; // position in malloced string.
 
+	c <<= 1; 
 	if (signum == SIGUSR1)
-		binary_string[index] = '1';
+		c |= 1;
 	if (signum == SIGUSR2)
-		binary_string[index] = '0';
+		c |= 0; // doesn't change anything.
 	index++;
 	if (index == 8)
 	{
-		printf("Binary String: %s\n", binary_string);
-		index = convert_binary_to_ascii(binary_string, string, position, id);
-		if (index == 1) // string is finished, reset values.
+		// printf("|%c|\n", c);
+		string[position] = c;
+		position++;
+		index = 0;
+		if (c == 0)
+		{
+			g_process++;
 			position = 0;
-		else
-			position++; // still more chars to be appended to string, need to increase position index by 1.
-		index = 0; // reset index of binary_string as binary_string is finished.
+		}
+		c = 0;
 	}
-	else
-	{
-		usleep(200);
-		kill(id, SIGUSR1); // send confirmation of receipt to client.
-	}
+	// usleep(500);
+	kill(id, SIGUSR1); // send confirmation of receipt to client.
 }
 
 void	handler_sigusr_server(int signum, siginfo_t *info, void *context)
@@ -111,33 +77,29 @@ void	handler_sigusr_server(int signum, siginfo_t *info, void *context)
 	if (g_process == 0)
 	{
 		if (signum == SIGUSR1)
-		{
 			len++;
-			usleep(500);
-			kill(id, SIGUSR1);
-		}
 		// Move to next state as client finished sending all bits.
 		if (signum == SIGUSR2)
-		{
 			g_process++;
-			usleep(200);
-			kill(id, SIGUSR1);
-		}
+		kill(id, SIGUSR1);
 	}
 	// Mallocs string if doesn't exist or updates string if exists.
 	else if (g_process == 1)
 	{
+		// printf("Length Received: %d from %d\n", len, id);
+		// printf("Received string bit.\n");
 		if (!string)
 			string = malloc(sizeof(char) * (len + 1));
 		update_string(signum, string, id);
 	}
 	// prints string and reinitialises state.
-	else if (g_process == 2)
+	if (g_process == 2)
 	{
 		printf("%s\n", string);
 		free(string);
 		string = NULL;
 		g_process = 0;
+		// position = 0;
 		len = 0;
 		kill(id, SIGUSR2); // kills client.
 		id = 0;
@@ -150,7 +112,9 @@ int	main(void)
 {
 	struct sigaction	sa;
 
-	sa.sa_flags = SA_SIGINFO;
+
+	sa.sa_flags = SA_SIGINFO | SA_NODEFER;
+	sigemptyset(&sa.sa_mask);
 	sa.sa_sigaction = &handler_sigusr_server;
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
