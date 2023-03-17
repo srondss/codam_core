@@ -6,11 +6,18 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 18:49:13 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/03/16 18:49:14 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/03/17 22:37:28 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+
+/*
+	How am I going to give the forks to each thread?
+	Monitor Solution || Resource Allocation [Dijkstra]
+*/
+
 
 void	parse_arguments(char **argv)
 {
@@ -47,45 +54,65 @@ void	init_philo_struct(t_thread_info *philosophers_info, char **argv)
 		philosophers_info->required_meals = 0;
 }
 
-void	*start_execution(void)
+void	*start_execution(void *philosopher)
 {
-	return (1);
+	t_philo	*philo;
+	struct timeval current_time;
+
+	philo = (t_philo *)philosopher;
+	gettimeofday(&current_time, NULL);
+	printf("Execution Completed.\n");
+	return (philo);
 }
 
-// TODO: Join the threads using the pthread function in the library.
-void	join_threads(t_philo **head)
+void	check_leaks(void)
 {
-	t_philo *first;
+	system("leaks -q philo");
+}
 
-	first = *head;
-	while (first != NULL)
+void	create_and_join_threads(t_philo **head, t_thread_info *philo_info)
+{
+	t_philo	*philo;
+
+	philo = *head;
+	while (philo != NULL)
 	{
-
+		if (pthread_create(&(philo->thread), NULL,
+				&start_execution, philo) != 0)
+			(free_philosophers(head), free(philo_info), print_error(E_THREAD));
+		printf("Philo %d has started.\n", philo->number);
+		philo = philo->next;
+	}
+	philo = *head;
+	while (philo != NULL)
+	{
+		if (pthread_join(philo->thread, NULL) != 0)
+			(free_philosophers(head), free(philo_info), print_error(E_THREAD));
+		printf("Philo %d has finished execution.\n", philo->number);
+		philo = philo->next;
 	}
 }
+
 
 int	main(int argc, char **argv)
 {
 	t_thread_info	*philosophers_info;
 	t_philo			**head;
 
+	atexit(check_leaks);
 	if (argc < 5 || argc > 6)
 		return (printf(E_ARG));
-
 	parse_arguments(argv);
-
 	philosophers_info = malloc(sizeof(t_thread_info) * 1);
 	if (!philosophers_info)
 		return (printf(E_MALLOC));
-
 	init_philo_struct(philosophers_info, argv);
 	head = malloc(sizeof(t_philo *) * 1);
 	if (!head)
 		(free(philosophers_info), print_error(E_MALLOC));
-
 	create_philosophers(philosophers_info, head);
+	create_and_join_threads(head, philosophers_info);
 
-	join_threads(head);
-
+	free_philosophers(head);
 	free(philosophers_info);
 }

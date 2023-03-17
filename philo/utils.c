@@ -44,5 +44,3 @@ long	ft_atol(const char	*nptr)
 		return (0);
 	return (sum * sign);
 }
-
-

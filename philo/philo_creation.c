@@ -33,19 +33,21 @@ void	first_philo(t_philo **head, t_thread_info *philosophers_info, int i)
 	first_philo = malloc(sizeof(t_philo) * 1);
 	if (!first_philo)
 		(free(philosophers_info), free(head), exit(EXIT_FAILURE));
+	*head = first_philo;
 	first_philo->forks = 1;
 	first_philo->number = i;
 	first_philo->state = STATE_WAITING_FOR_FORK;
-	pthread_create(first_philo->thread, NULL, &start_execution, NULL);
 	first_philo->next = NULL;
 }
 
 /*Adds a philosopher to an already existing linked list of philosophers*/
-void	add_philosopher(t_philo *previous_philo, t_philo *new_philo, int i)
+void	add_philosopher(t_philo **head, t_philo *new_philo, int i)
 {
+	t_philo	*previous_philo;
+
+	previous_philo = get_last_philo(head);
 	new_philo->forks = 1;
 	new_philo->number = i;
-	pthread_create(new_philo->thread, NULL, &start_execution, NULL);
 	new_philo->state = STATE_WAITING_FOR_FORK;
 	new_philo->next = NULL;
 	previous_philo->next = new_philo;
@@ -58,14 +60,19 @@ void	free_philosophers(t_philo **head)
 	t_philo	*prev;
 
 	curr = *head;
-	prev = *head;
-	while (curr->next != NULL)
+	if (curr == NULL)
 	{
+		printf("List is empty.\n");
+		return ;
+	}
+	prev = *head;
+	while (curr != NULL)
+	{
+		printf("Freeing: %d\n", curr->number);
+		curr = curr->next;
 		free(prev);
 		prev = curr;
-		curr = curr->next;
 	}
-	free(curr);
 	free(head);
 }
 
@@ -87,8 +94,8 @@ void	create_philosophers(t_thread_info *philosophers_info, t_philo **head)
 		{
 			new_philo = malloc(sizeof(t_philo) * 1);
 			if (!new_philo)
-				(free_philos(head), printf(E_MALLOC), EXIT_FAILURE);
-			add_philosopher(last_philo, new_philo, i);
+				(free_philosophers(head), printf(E_MALLOC), exit(EXIT_FAILURE));
+			add_philosopher(head, new_philo, i);
 		}
 		i++;
 	}
