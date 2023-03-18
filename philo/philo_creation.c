@@ -26,29 +26,34 @@ t_philo	*get_last_philo(t_philo **head)
 }
 
 /*Creates the first philosopher in the linked list of philsophers.*/
-void	first_philo(t_philo **head, t_thread_info *philosophers_info, int i)
+void	first_philo(t_philo **head, t_thread_info *philo_info, int i)
 {
 	t_philo	*first_philo;
 
 	first_philo = malloc(sizeof(t_philo) * 1);
 	if (!first_philo)
-		(free(philosophers_info), free(head), exit(EXIT_FAILURE));
+		(free(philo_info), free(head), exit(EXIT_FAILURE));
 	*head = first_philo;
-	first_philo->forks = 1;
+	first_philo->forks = 0;
 	first_philo->number = i;
-	first_philo->state = STATE_WAITING_FOR_FORK;
+	first_philo->state = STATE_THINKING;
+	first_philo->last_meal_time = 0;
+	first_philo->philo_info = philo_info;
 	first_philo->next = NULL;
 }
 
 /*Adds a philosopher to an already existing linked list of philosophers*/
-void	add_philosopher(t_philo **head, t_philo *new_philo, int i)
+void	add_philosopher(t_philo **head, t_philo *new_philo,
+	t_thread_info *philo_info, int i)
 {
 	t_philo	*previous_philo;
 
 	previous_philo = get_last_philo(head);
-	new_philo->forks = 1;
+	new_philo->forks = 0;
 	new_philo->number = i;
-	new_philo->state = STATE_WAITING_FOR_FORK;
+	new_philo->state = STATE_THINKING;
+	new_philo->philo_info = philo_info;
+	new_philo->last_meal_time = 0;
 	new_philo->next = NULL;
 	previous_philo->next = new_philo;
 }
@@ -77,7 +82,7 @@ void	free_philosophers(t_philo **head)
 }
 
 /*Creates a linked list of philosophers and activates their threads.*/
-void	create_philosophers(t_thread_info *philosophers_info, t_philo **head)
+void	create_philosophers(t_thread_info *philo_info, t_philo **head)
 {
 	t_philo	*last_philo;
 	t_philo	*new_philo;
@@ -85,17 +90,17 @@ void	create_philosophers(t_thread_info *philosophers_info, t_philo **head)
 
 	i = 0;
 	*head = NULL;
-	while (i < philosophers_info->number_of_philosophers)
+	while (i < philo_info->forks_on_table)
 	{
 		last_philo = get_last_philo(head);
 		if (!last_philo)
-			first_philo(head, philosophers_info, i);
+			first_philo(head, philo_info, i);
 		else
 		{
 			new_philo = malloc(sizeof(t_philo) * 1);
 			if (!new_philo)
 				(free_philosophers(head), printf(E_MALLOC), exit(EXIT_FAILURE));
-			add_philosopher(head, new_philo, i);
+			add_philosopher(head, new_philo, philo_info, i);
 		}
 		i++;
 	}

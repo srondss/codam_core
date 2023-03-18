@@ -2,11 +2,12 @@ NAME = philo
 
 SRCS = philo.c \
 	utils.c \
-	philo_creation.c
+	philo_creation.c \
+	philo_init_structs.c
 
 OBJS = $(SRCS:.c=.o)
 
-CFLAGS ?= -g -pthread -Wall -Wextra -Werror
+CFLAGS ?= -g -pthread -Wall -Wextra -Werror 
 
 all : $(NAME)
 

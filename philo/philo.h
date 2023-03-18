@@ -29,42 +29,56 @@
 
 typedef struct s_thread_info
 {
-	int	number_of_philosophers;
+	int	forks_on_table;
 	int	time_to_die;
 	int	time_to_eat;
 	int	time_to_sleep;
 	int	required_meals;
+	int	dead_philos;
 }				t_thread_info;
 typedef enum e_state
 {
-	STATE_WAITING_FOR_FORK = 0,
+	STATE_ALLOWED_TO_EAT = 0,
 	STATE_EATING = 1,
 	STATE_SLEEPING = 2,
 	STATE_THINKING = 3,
-	STATE_DEAD = 4,
+	STATE_DEAD = 4
 }				t_state;
 
 typedef struct s_philo
 {
 	pthread_t		thread;
+	t_thread_info	*philo_info;
 	int				number;
 	int				forks;
+	long long		last_meal_time;
 	t_state			state;
 	struct s_philo	*next;
 }				t_philo;
 
-long	ft_atol(const char	*nptr);
-t_philo	*get_last_philo(t_philo **head);
-void	first_philo(t_philo **head, t_thread_info *philosophers_info, int i);
-void	add_philosopher(t_philo **head, t_philo *new_philo, int i);
-void	free_philosophers(t_philo **head);
-void	create_philosophers(t_thread_info *philosophers_info, t_philo **head);
-void	*start_execution(void *philosopher);
-t_philo	*get_last_philo(t_philo **head);
-void	init_philo_struct(t_thread_info *philosophers_info, char **argv);
-void	parse_arguments(char **argv);
-void	print_error(char *error);
-void	free_philosophers(t_philo **head);
-void	join_threads(t_philo **head);
+typedef struct s_waiter
+{
+	pthread_t		thread;
+	t_philo			**head;
+	t_thread_info	*philo_info;
+}				t_waiter;
 
+long		ft_atol(const char	*nptr);
+t_philo		*get_last_philo(t_philo **head);
+void		first_philo(t_philo **head, t_thread_info *philo_info, int i);
+void		add_philosopher(t_philo **head, t_philo *new_philo,
+				t_thread_info *philo_info, int i);
+void		free_philosophers(t_philo **head);
+void		create_philosophers(t_thread_info *philo_info, t_philo **head);
+void		*philo_execution(void *philosopher);
+t_philo		*get_last_philo(t_philo **head);
+void		init_philo_struct(t_thread_info *philo_info, char **argv);
+void		parse_arguments(char **argv);
+void		print_error(char *error);
+void		free_philosophers(t_philo **head);
+void		init_waiter_struct(t_waiter *waiter, t_philo **head,
+				t_thread_info *philo_info);
+void		init_philo_struct(t_thread_info *philosophers_info, char **argv);
+long long	get_elapsed_time(void);
+long long	get_time(void);
 #endif
