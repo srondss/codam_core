@@ -38,6 +38,8 @@ void	first_philo(t_philo **head, t_thread_info *philo_info, int i)
 	first_philo->number = i;
 	first_philo->state = STATE_THINKING;
 	first_philo->last_meal_time = 0;
+	pthread_mutex_init(&(first_philo->mutex), NULL);
+	first_philo->head = head;
 	first_philo->philo_info = philo_info;
 	first_philo->next = NULL;
 }
@@ -54,6 +56,8 @@ void	add_philosopher(t_philo **head, t_philo *new_philo,
 	new_philo->state = STATE_THINKING;
 	new_philo->philo_info = philo_info;
 	new_philo->last_meal_time = 0;
+	new_philo->head = head;
+	pthread_mutex_init(&(new_philo->mutex), NULL);
 	new_philo->next = NULL;
 	previous_philo->next = new_philo;
 }

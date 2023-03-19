@@ -24,10 +24,3 @@ void	init_philo_struct(t_thread_info *philosophers_info, char **argv)
 		philosophers_info->required_meals = 0;
 	philosophers_info->dead_philos = 0;
 }
-
-void	init_waiter_struct(t_waiter *waiter, t_philo **head,
-	t_thread_info *philo_info)
-{
-	waiter->head = head;
-	waiter->philo_info = philo_info;
-}

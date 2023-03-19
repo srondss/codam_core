@@ -48,20 +48,16 @@ typedef enum e_state
 typedef struct s_philo
 {
 	pthread_t		thread;
+	pthread_mutex_t	mutex;
 	t_thread_info	*philo_info;
 	int				number;
 	int				forks;
 	long long		last_meal_time;
 	t_state			state;
+	struct s_philo	**head;
 	struct s_philo	*next;
 }				t_philo;
 
-typedef struct s_waiter
-{
-	pthread_t		thread;
-	t_philo			**head;
-	t_thread_info	*philo_info;
-}				t_waiter;
 
 long		ft_atol(const char	*nptr);
 t_philo		*get_last_philo(t_philo **head);
@@ -76,8 +72,6 @@ void		init_philo_struct(t_thread_info *philo_info, char **argv);
 void		parse_arguments(char **argv);
 void		print_error(char *error);
 void		free_philosophers(t_philo **head);
-void		init_waiter_struct(t_waiter *waiter, t_philo **head,
-				t_thread_info *philo_info);
 void		init_philo_struct(t_thread_info *philosophers_info, char **argv);
 long long	get_elapsed_time(void);
 long long	get_time(void);
