@@ -1,28 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk_utils_client.c                            :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/15 10:42:20 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/03/20 12:34:50 by ysrondy       ########   odam.nl         */
+/*   Created: 2022/10/07 14:00:58 by ysrondy           #+#    #+#             */
+/*   Updated: 2022/10/23 16:47:59 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "minitalk.h"
-
-int	ft_strlen(char const *str)
-{
-	int	i;
-
-	if (str == NULL)
-		return (0);
-	i = 0;
-	while (str[i] != '\0')
-		i++;
-	return (i);
-}
 
 int	ft_atoi(const char *nptr)
 {
@@ -50,39 +36,10 @@ int	ft_atoi(const char *nptr)
 	return (sum * sign);
 }
 
-void	wait_for_connection(int pid)
+/*int main(void)
 {
-	static int	sleepcount = 0;
-
-	ft_printf("Trying to connect to server...\n");
-	if (kill(pid, SIGUSR1) == -1)
-		error_handling_client();
-	sleep(1);
-	sleepcount++;
-	if (sleepcount == 15)
-	{
-		ft_printf("TIMEOUT.\nCould not connect with server.\n");
-		ft_printf("Please check pid or try again later...\n");
-		exit(EXIT_FAILURE);
-	}
-}
-
-void	send_bit(char *string, int bit, int pid, int i)
-{
-	if (string[i] & (128 >> bit))
-	{
-		if (kill(pid, SIGUSR1) == -1)
-			error_handling_client();
-	}
-	else
-	{
-		if (kill(pid, SIGUSR2) == -1)
-			error_handling_client();
-	}
-}
-
-void	error_handling_client(void)
-{
-	ft_printf("Client-side Error.\n");
-	exit(EXIT_FAILURE);
-}
+	char str[] = "\x0e15";
+	
+	printf("Og: %d\n", atoi(str));
+	printf("Mine: %d\n", ft_atoi(str));
+}*/

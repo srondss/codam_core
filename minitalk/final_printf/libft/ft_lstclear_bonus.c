@@ -1,32 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk_utils_server.c                            :+:      :+:    :+:   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/15 11:06:48 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/03/15 12:00:19 by ysrondy          ###   ########.fr       */
+/*   Created: 2022/10/22 11:57:29 by ysrondy           #+#    #+#             */
+/*   Updated: 2022/10/23 16:28:19 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+#include "libft.h"
 
-#include "minitalk.h"
-
-void	handle_string_chars(int signum, char **string, int id, int len)
+void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
-	if (*string == NULL)
+	t_list	*tmp;
+
+	if (!lst || !del)
+		return ;
+	while (*lst != NULL)
 	{
-		*string = malloc(sizeof(char) * (len + 1));
-		if (*string == NULL)
-			error_handling_server(*string);
+		tmp = (*lst)->next;
+		ft_lstdelone(*lst, del);
+		(*lst) = tmp;
 	}
-	update_string(signum, *string, id);
-}
-
-void	error_handling_server(char *str)
-{
-	if (str)
-		free(str);
-	ft_printf("Server-side Error\n");
-	exit(EXIT_FAILURE);
+	*lst = NULL;
 }

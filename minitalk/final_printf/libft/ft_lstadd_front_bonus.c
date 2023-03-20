@@ -1,32 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk_utils_server.c                            :+:      :+:    :+:   */
+/*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/15 11:06:48 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/03/15 12:00:19 by ysrondy          ###   ########.fr       */
+/*   Created: 2022/10/22 10:49:10 by ysrondy           #+#    #+#             */
+/*   Updated: 2022/10/23 16:49:03 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+#include "libft.h"
 
-#include "minitalk.h"
-
-void	handle_string_chars(int signum, char **string, int id, int len)
+void	ft_lstadd_front(t_list **lst, t_list *new)
 {
-	if (*string == NULL)
+	if (lst && new)
 	{
-		*string = malloc(sizeof(char) * (len + 1));
-		if (*string == NULL)
-			error_handling_server(*string);
+		new->next = (*lst);
+		(*lst) = new;
 	}
-	update_string(signum, *string, id);
-}
-
-void	error_handling_server(char *str)
-{
-	if (str)
-		free(str);
-	ft_printf("Server-side Error\n");
-	exit(EXIT_FAILURE);
 }

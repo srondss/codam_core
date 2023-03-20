@@ -85,7 +85,7 @@ void	handler_sigusr(int signum, siginfo_t *info, void *context)
 		g_breakout = 1;
 	if (signum == SIGUSR2)
 	{
-		printf("Server: 202 OK\n");
+		ft_printf("Server: 202 OK\n");
 		exit(EXIT_SUCCESS);
 	}
 }
@@ -95,7 +95,7 @@ int	main(int argc, char **argv)
 	struct sigaction	sa;
 
 	if (argc != 3)
-		return (printf("Usage: ./client <server_pid> <string>\n"));
+		return (ft_printf("Usage: ./client <server_pid> <string>\n"));
 	sa.sa_flags = SA_SIGINFO | SA_NODEFER;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_sigaction = &handler_sigusr;
@@ -106,7 +106,7 @@ int	main(int argc, char **argv)
 	if (g_breakout == 1)
 	{
 		g_breakout = 0;
-		printf("Connected!\n");
+		ft_printf("Connected!\n");
 		send_str_len(ft_atoi(argv[1]), argv[2]);
 		send_binary_signals(ft_atoi(argv[1]), argv[2]);
 	}

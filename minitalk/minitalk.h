@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 10:26:55 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/03/15 12:10:04 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/03/20 12:25:06 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <stdlib.h>
 # include <strings.h>
 # include <unistd.h>
+
+# include "final_printf/ft_printf.h"
 
 int		ft_strlen(char const *str);
 void	handler_sigusr_server(int signum, siginfo_t *info, void *context);

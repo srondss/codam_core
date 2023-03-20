@@ -69,7 +69,7 @@ void		create_philosophers(t_thread_info *philo_info, t_philo **head);
 void		*philo_execution(void *philosopher);
 t_philo		*get_last_philo(t_philo **head);
 void		init_philo_struct(t_thread_info *philo_info, char **argv);
-void		parse_arguments(char **argv);
+int			parse_arguments(char **argv);
 void		print_error(char *error);
 void		free_philosophers(t_philo **head);
 void		init_philo_struct(t_thread_info *philosophers_info, char **argv);

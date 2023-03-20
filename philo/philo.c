@@ -94,7 +94,9 @@ void	*philo_execution(void *philosopher)
 		if (philo->last_meal_time != 0 && (get_elapsed_time()
 				- philo->last_meal_time) >= philo->philo_info->time_to_die)
 			break ;
+		//pthread lock
 		ask_waiter(philo);
+		//pthread unlock
 		if (philo->forks == 2)
 		{
 			eating(philo);
@@ -135,25 +137,31 @@ void	create_and_join_threads(t_philo **head, t_thread_info *philo_info)
 	}
 }
 
+//TODO: Change all occurences of exit into returns to that main exits.
+//TODO: Remove linked list as amount of philos is known. 
+/*
+	Suggestions from Ruben: 
+		1. Philosophers MUST have 1 fork. There should be a fork to their left and a fork to their right.
+		2. Create an array of philos 
+
+*/ 
+
 int	main(int argc, char **argv)
 {
-	t_thread_info	*philo_info;
-	t_philo			**head;
+	t_thread_info	philo_info;
+
 
 	atexit(check_leaks);
 	if (argc < 5 || argc > 6)
 		return (printf(E_ARG));
-	parse_arguments(argv);
-	philo_info = malloc(sizeof(t_thread_info) * 1);
-	if (!philo_info)
-		return (printf(E_MALLOC));
-	init_philo_struct(philo_info, argv);
+	if (parse_arguments(argv) == -1)
+		return (printf(E_PARSE));
+	init_philo_struct(&philo_info, argv);
 	head = malloc(sizeof(t_philo *) * 1);
 	if (!head)
-		(free(philo_info), print_error(E_MALLOC));
-	create_philosophers(philo_info, head);
-	create_and_join_threads(head, philo_info);
+		(print_error(E_MALLOC));
+	create_philosophers(&philo_info, head);
+	create_and_join_threads(head, &philo_info);
 
 	free_philosophers(head);
-	free(philo_info);
 }

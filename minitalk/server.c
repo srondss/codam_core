@@ -44,7 +44,7 @@ void	update_string(int signum, char *string, int id)
 
 void	print_and_reset(char **string, int *ptr_len, int *ptr_id)
 {
-	printf("%s\n", *string);
+	ft_printf("%s\n", *string);
 	free(*string);
 	*string = NULL;
 	g_process = 0;
@@ -88,8 +88,6 @@ void	handler_sigusr_server(int signum, siginfo_t *info, void *context)
 	(void)(context);
 }
 
-//TODO: Add real ft_printf & atoi function.
-
 int	main(void)
 {
 	struct sigaction	sa;
@@ -99,7 +97,7 @@ int	main(void)
 	sa.sa_sigaction = &handler_sigusr_server;
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
-	printf("Server PID: %d\n", getpid());
+	ft_printf("Server PID: %d\n", getpid());
 	while (1)
 		pause();
 }

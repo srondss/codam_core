@@ -45,7 +45,7 @@ long	ft_atol(const char	*nptr)
 	return (sum * sign);
 }
 
-void	parse_arguments(char **argv)
+int	parse_arguments(char **argv)
 {
 	int	i;
 	int	j;
@@ -55,17 +55,18 @@ void	parse_arguments(char **argv)
 	while (argv[i] != NULL)
 	{
 		if (argv[i][0] != '0' && ft_atol(argv[i]) == 0)
-			return (printf(E_PARSE), exit(EXIT_FAILURE));
+			return (-1);
 		while (argv[i][j] != '\0')
 		{
 			if (argv[i][j] >= '0' && argv[i][j] <= '9')
 				j++;
 			else
-				return (printf(E_PARSE), exit(EXIT_FAILURE));
+				return (-1);
 		}
 		i++;
 		j = 0;
 	}
+	return (1);
 }
 
 /*Function to get the current time in
