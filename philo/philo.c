@@ -12,73 +12,102 @@
 
 #include "philo.h"
 
-t_philo	*find_hungriest_philo(t_philo **head)
+int	philo_is_dead(t_philo *philo)
 {
-	t_philo	*philo;
-	t_philo	*hungriest_philo;
+	// long long elapsed_time;
 
-	philo = *head;
-	hungriest_philo = *head;
-	while (philo != NULL)
+	// printf("Philo %d Entered lock.\n", philo->id);
+	if (pthread_mutex_lock(&philo->info->dead_mutex) != 0)
 	{
-		printf("Waiter is looking for hungriest philo.\n");
-		printf("Curr philo: %d with %lld last meal\n", philo->number, philo->last_meal_time);
-		if (philo->last_meal_time == 0 && philo->forks != 2 && philo->state == STATE_THINKING)
-		{
-			printf("First round.\n");
-			return (philo);
-		}
-		if (philo->last_meal_time < hungriest_philo->last_meal_time && philo->state == STATE_THINKING && philo->forks != 2)
-		{
-			printf("Hungriest Philo %d with last meal at %lld is now replaced by philo %d with last meal at %lld\n", hungriest_philo->number, hungriest_philo->last_meal_time, philo->number, philo->last_meal_time);
-			hungriest_philo = philo;
-		}
-		philo = philo->next;
+		printf("Lock fails.\n");
+		return (1);
+	} // need to destroy
+	// printf("Philo %d Inside lock.\n", philo->id);
+	if (philo->info->someone_died == 1)
+	{
+		// printf("Philo %d Exited lock.\n", philo->id);
+		pthread_mutex_unlock(&philo->info->dead_mutex);
+		return (1);
 	}
-	printf("Returning hungriest philo.\n");
-	return (hungriest_philo);
+	if (get_elapsed_time() - philo->last_meal_time > philo->info->time_to_die)
+	{
+		printf("Last Meal Time: %lld | Elapsed Time: %lld | Diff: %lld. | Time to Die: %d.\n", philo->last_meal_time, get_elapsed_time(), (get_elapsed_time() - philo->last_meal_time), philo->info->time_to_die);
+		philo->info->someone_died = 1;
+		printf("Philo %d has died at %lld ms.\n", philo->id, get_elapsed_time());
+		pthread_mutex_unlock(&philo->info->dead_mutex);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->info->dead_mutex);
+	// printf("Philo %d exited lock.\n", philo->id);
+	return (0);
 }
 
-void	ask_waiter(t_philo *philo)
+int	p_grab_fork(t_philo *philo)
 {
-	t_philo		*hungriest_philo;
+	pthread_mutex_lock(&philo->info->forks[philo->id_fork_right]);
 
-	printf("Waiter has been requested.\n");
-	printf("Forks on table: %d\n", philo->philo_info->forks_on_table);
-	if ((philo->philo_info->forks_on_table - 2) >= 0)
+	if (philo_is_dead(philo))
 	{
-		hungriest_philo = find_hungriest_philo(philo->head);
-		printf("Hungriest Philo: %d\n", hungriest_philo->number);
-		hungriest_philo->forks += 2;
-		philo->philo_info->forks_on_table -= 2;
-		hungriest_philo->state = STATE_EATING;
-		hungriest_philo->last_meal_time = (get_elapsed_time() + philo->philo_info->time_to_eat);
-		printf("Exited waiter while loop.\n");
+		pthread_mutex_unlock(&philo->info->forks[philo->id_fork_right]);
+		return (-1);
 	}
+
+	printf("Philo %d grabbed fork on his right [id: %d].\n", philo->id, philo->id_fork_right);
+
+	pthread_mutex_lock(&philo->info->forks[philo->id_fork_left]);
+
+	if (philo_is_dead(philo))
+	{
+		pthread_mutex_unlock(&philo->info->forks[philo->id_fork_right]);
+		pthread_mutex_unlock(&philo->info->forks[philo->id_fork_left]);
+		return (-1);
+	}
+
+	printf("Philo %d grabbed fork on his left [id: %d].\n", philo->id, philo->id_fork_left);
+	return (1);
 }
 
-void	eating(t_philo *philo)
+int	p_eat(t_philo *philo)
 {
+
+	if (philo_is_dead(philo))
+	{
+		pthread_mutex_unlock(&philo->info->forks[philo->id_fork_right]);
+		pthread_mutex_unlock(&philo->info->forks[philo->id_fork_left]);
+		return (-1);
+	}
+
 	printf("Philo %d has started eating at %lld ms.\n",
-		philo->number, get_elapsed_time());
-	usleep(philo->philo_info->time_to_eat * 1000);
-	philo->forks = 0;
-	philo->philo_info->forks_on_table += 2;
+		philo->id, get_elapsed_time());
+	usleep(philo->info->time_to_eat * 1000);
+
+	pthread_mutex_lock(&philo->last_meal_time_mutex);
+	philo->last_meal_time = get_elapsed_time();
+	pthread_mutex_unlock(&philo->last_meal_time_mutex);
+
+	printf("Philo %d finished his meal at %lld ms. Forks %d and %d are now available.\n", philo->id, philo->last_meal_time, philo->id_fork_left, philo->id_fork_right);
+	pthread_mutex_unlock(&philo->info->forks[philo->id_fork_left]);
+	pthread_mutex_unlock(&philo->info->forks[philo->id_fork_right]);
+	return (1);
 }
 
-void	sleeping(t_philo *philo)
+int	p_sleep(t_philo *philo)
 {
-	philo->state = STATE_SLEEPING;
+	if (philo_is_dead(philo))
+		return (-1);
 	printf("Philo %d has started sleeping at %lld ms.\n",
-		philo->number, get_elapsed_time());
-	usleep(philo->philo_info->time_to_sleep * 1000);
+		philo->id, get_elapsed_time());
+	usleep(philo->info->time_to_sleep * 1000);
+	return (1);
 }
 
-void	thinking(t_philo *philo)
+int	p_think(t_philo *philo)
 {
-	philo->state = STATE_THINKING;
+	if (philo_is_dead(philo))
+		return (-1);
 	printf("Philo %d has started thinking at %lld ms.\n",
-		philo->number, get_elapsed_time());
+		philo->id, get_elapsed_time());
+	return (1);
 }
 
 void	*philo_execution(void *philosopher)
@@ -86,28 +115,20 @@ void	*philo_execution(void *philosopher)
 	t_philo		*philo;
 
 	philo = (t_philo *)philosopher;
+	if (philo->id % 2 == 0) // if philo is has an even id, he will wait to make sure no deadlocks happen.
+		usleep(50);
 	while (1)
 	{
-		if (get_elapsed_time() >= philo->philo_info->time_to_die &&
-			philo->last_meal_time == 0)
+		if (p_grab_fork(philo) == -1)
 			break ;
-		if (philo->last_meal_time != 0 && (get_elapsed_time()
-				- philo->last_meal_time) >= philo->philo_info->time_to_die)
+		if (p_eat(philo) == -1)
 			break ;
-		//pthread lock
-		ask_waiter(philo);
-		//pthread unlock
-		if (philo->forks == 2)
-		{
-			eating(philo);
-			sleeping(philo);
-			thinking(philo);
-		}
+		if (p_sleep(philo) == -1)
+			break ;
+		if (p_think(philo) == -1)
+			break ;
 	}
-	philo->state = STATE_DEAD;
-	philo->philo_info->dead_philos += 1;
-	printf("OMG! Philo %d died at: %lld ms.\n", philo->number, get_elapsed_time());
-	return (philo);
+	return (NULL);
 }
 
 void	check_leaks(void)
@@ -115,53 +136,66 @@ void	check_leaks(void)
 	system("leaks -q philo");
 }
 
-void	create_and_join_threads(t_philo **head, t_thread_info *philo_info)
+int	create_and_join_threads(t_philo *philos)
 {
-	t_philo	*philo;
+	int i;
 
-	philo = *head;
-	while (philo != NULL)
+	i = 0;
+	while (i < philos[0].info->number_of_philos)
 	{
-		if (pthread_create(&(philo->thread), NULL,
-				&philo_execution, philo) != 0)
-			(free_philosophers(head), free(philo_info), print_error(E_THREAD));
-		philo = philo->next;
+		if (pthread_create(&(philos[i].thread), NULL, &philo_execution, &philos[i]) != 0)
+			return (-1);
+		i++;
 	}
-	philo = *head;
-	while (philo != NULL)
+	i = 0;
+	while (i < philos[0].info->number_of_philos)
 	{
-		if (pthread_join(philo->thread, NULL) != 0)
-			(free_philosophers(head), free(philo_info), print_error(E_THREAD));
-		printf("Philo %d has finished execution.\n", philo->number);
-		philo = philo->next;
+		if (pthread_join(philos[i].thread, NULL) != 0)
+			return (-1);
+		i++;
+	}
+	return (1);
+}
+
+void	loop_philo_state(t_thread_info *info)
+{
+	int i;
+
+	while (1)
+	{
+		i = 0;
+		while (i < info->number_of_philos)
+		{
+			if (info->someone_died == 1)
+				return;
+			i++;
+		}
 	}
 }
 
-//TODO: Change all occurences of exit into returns to that main exits.
-//TODO: Remove linked list as amount of philos is known. 
-/*
-	Suggestions from Ruben: 
-		1. Philosophers MUST have 1 fork. There should be a fork to their left and a fork to their right.
-		2. Create an array of philos 
-
-*/ 
-
 int	main(int argc, char **argv)
 {
-	t_thread_info	philo_info;
-
+	t_thread_info	info;
+	t_philo			*philos;
 
 	atexit(check_leaks);
 	if (argc < 5 || argc > 6)
 		return (printf(E_ARG));
+
 	if (parse_arguments(argv) == -1)
 		return (printf(E_PARSE));
-	init_philo_struct(&philo_info, argv);
-	head = malloc(sizeof(t_philo *) * 1);
-	if (!head)
-		(print_error(E_MALLOC));
-	create_philosophers(&philo_info, head);
-	create_and_join_threads(head, &philo_info);
+	if (init_info_struct(&info, argv) == -1)
+		return (printf(E_MALLOC));
 
-	free_philosophers(head);
+	philos = malloc(sizeof(t_philo) * info.number_of_philos);
+	if (!philos)
+		return (free(info.forks), printf(E_MALLOC));
+
+	if (create_philosophers(&info, philos) == -1)
+		return (printf(E_THREAD));
+	create_and_join_threads(philos);
+	loop_philo_state(&info);
+
+	free(philos);
+	free(info.forks);
 }

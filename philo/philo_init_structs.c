@@ -12,15 +12,22 @@
 
 #include "philo.h"
 
-void	init_philo_struct(t_thread_info *philosophers_info, char **argv)
+int	init_info_struct(t_thread_info *info, char **argv)
 {
-	philosophers_info->forks_on_table = ft_atol(argv[1]);
-	philosophers_info->time_to_die = ft_atol(argv[2]);
-	philosophers_info->time_to_eat = ft_atol(argv[3]);
-	philosophers_info->time_to_sleep = ft_atol(argv[4]);
+	info->number_of_philos = ft_atol(argv[1]);
+	info->time_to_die = ft_atol(argv[2]);
+	info->time_to_eat = ft_atol(argv[3]);
+	info->time_to_sleep = ft_atol(argv[4]);
 	if (argv[5])
-		philosophers_info->required_meals = ft_atol(argv[5]);
+		info->required_meals = ft_atol(argv[5]);
 	else
-		philosophers_info->required_meals = 0;
-	philosophers_info->dead_philos = 0;
+		info->required_meals = 0;
+	info->someone_died = 0;
+	// I don't think I need to malloc here considering it is a constant variable.
+	info->forks = malloc(sizeof(pthread_mutex_t) * info->number_of_philos);
+	if (!info->forks)
+		return (-1);
+	if (pthread_mutex_init(&info->dead_mutex, NULL) != 0)
+		return (-1);
+	return (1);
 }

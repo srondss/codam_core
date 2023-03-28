@@ -12,100 +12,59 @@
 
 #include "philo.h"
 
-/*Returns the last philosopher in the list.*/
-t_philo	*get_last_philo(t_philo **head)
-{
-	t_philo	*first;
 
-	first = *head;
-	if (first == NULL)
-		return (first);
-	while (first->next != NULL)
-		first = first->next;
-	return (first);
+void	init_philo(t_thread_info *info, t_philo *philos, int i)
+{
+	philos[i].id = i;
+	philos[i].last_meal_time = get_elapsed_time();
+	philos[i].meals_eaten = 0;
+	philos[i].id_fork_right = i;
+	philos[i].id_fork_left = ((i + 1) % info->number_of_philos);
+	philos[i].info = info;
 }
 
-/*Creates the first philosopher in the linked list of philsophers.*/
-void	first_philo(t_philo **head, t_thread_info *philo_info, int i)
+int	destroy_mutexes(t_philo *philos, int fork_mutexes, int meal_mutexes)
 {
-	t_philo	*first_philo;
-
-	first_philo = malloc(sizeof(t_philo) * 1);
-	if (!first_philo)
-		(free(philo_info), free(head), exit(EXIT_FAILURE));
-	*head = first_philo;
-	first_philo->forks = 0;
-	first_philo->number = i;
-	first_philo->state = STATE_THINKING;
-	first_philo->last_meal_time = 0;
-	pthread_mutex_init(&(first_philo->mutex), NULL);
-	first_philo->head = head;
-	first_philo->philo_info = philo_info;
-	first_philo->next = NULL;
-}
-
-/*Adds a philosopher to an already existing linked list of philosophers*/
-void	add_philosopher(t_philo **head, t_philo *new_philo,
-	t_thread_info *philo_info, int i)
-{
-	t_philo	*previous_philo;
-
-	previous_philo = get_last_philo(head);
-	new_philo->forks = 0;
-	new_philo->number = i;
-	new_philo->state = STATE_THINKING;
-	new_philo->philo_info = philo_info;
-	new_philo->last_meal_time = 0;
-	new_philo->head = head;
-	pthread_mutex_init(&(new_philo->mutex), NULL);
-	new_philo->next = NULL;
-	previous_philo->next = new_philo;
-}
-
-/* Will always be called after one philosopher has been malloced.*/
-void	free_philosophers(t_philo **head)
-{
-	t_philo	*curr;
-	t_philo	*prev;
-
-	curr = *head;
-	if (curr == NULL)
-	{
-		printf("List is empty.\n");
-		return ;
-	}
-	prev = *head;
-	while (curr != NULL)
-	{
-		printf("Freeing: %d\n", curr->number);
-		curr = curr->next;
-		free(prev);
-		prev = curr;
-	}
-	free(head);
-}
-
-/*Creates a linked list of philosophers and activates their threads.*/
-void	create_philosophers(t_thread_info *philo_info, t_philo **head)
-{
-	t_philo	*last_philo;
-	t_philo	*new_philo;
-	int		i;
+	int	i;
 
 	i = 0;
-	*head = NULL;
-	while (i < philo_info->forks_on_table)
+	while (i < fork_mutexes)
 	{
-		last_philo = get_last_philo(head);
-		if (!last_philo)
-			first_philo(head, philo_info, i);
-		else
-		{
-			new_philo = malloc(sizeof(t_philo) * 1);
-			if (!new_philo)
-				(free_philosophers(head), printf(E_MALLOC), exit(EXIT_FAILURE));
-			add_philosopher(head, new_philo, philo_info, i);
-		}
+		pthread_mutex_destroy(&philos[0].info->forks[i]);
 		i++;
 	}
+	i = 0;
+	while (i < meal_mutexes)
+	{
+		pthread_mutex_destroy(&philos[i].last_meal_time_mutex);
+		i++;
+	}
+	pthread_mutex_destroy(&philos->info->dead_mutex);
+	return (-1);
+}
+
+int	create_philosophers(t_thread_info *info, t_philo *philos)
+{
+	int	fork_mutexes;
+	int	meal_mutexes;
+	int i;
+
+	i = 0;
+	fork_mutexes = 0;
+	meal_mutexes = 0;
+	while (i < info->number_of_philos)
+	{
+		init_philo(info, philos, i);
+		// mutex for making sure no philo can use a fork which is already used.
+		if (pthread_mutex_init(&info->forks[i], NULL) != 0)
+			return (destroy_mutexes(philos, fork_mutexes, meal_mutexes));
+		fork_mutexes++;
+		// mutex for making sure no philo can change last meal time when it is being updated.
+		if (pthread_mutex_init(&philos[i].last_meal_time_mutex, NULL) != 0)
+			return (destroy_mutexes(philos, fork_mutexes, meal_mutexes));
+		meal_mutexes++;
+		i++;
+	}
+	return (1);
+
 }
