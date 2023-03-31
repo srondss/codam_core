@@ -39,6 +39,7 @@ int	destroy_mutexes(t_philo *philos, int fork_mutexes, int meal_mutexes)
 		pthread_mutex_destroy(&philos[i].last_meal_time_mutex);
 		i++;
 	}
+	printf("Destroyed dead mutex.\n");
 	pthread_mutex_destroy(&philos->info->dead_mutex);
 	return (-1);
 }

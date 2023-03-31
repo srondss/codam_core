@@ -28,6 +28,9 @@ int	init_info_struct(t_thread_info *info, char **argv)
 	if (!info->forks)
 		return (-1);
 	if (pthread_mutex_init(&info->dead_mutex, NULL) != 0)
+	{
+		printf("Failed to init dead mutex.\n");
 		return (-1);
+	}
 	return (1);
 }
