@@ -55,13 +55,13 @@ int	parse_arguments(char **argv)
 	while (argv[i] != NULL)
 	{
 		if (argv[i][0] != '0' && ft_atol(argv[i]) == 0)
-			return (-1);
+			return (printf(E_ARG), -1);
 		while (argv[i][j] != '\0')
 		{
 			if (argv[i][j] >= '0' && argv[i][j] <= '9')
 				j++;
 			else
-				return (-1);
+				return (printf(E_ARG), -1);
 		}
 		i++;
 		j = 0;

@@ -25,27 +25,37 @@
 [number_of_times_each_philosopher_must_eat].\n"
 # define E_PARSE "Not all arguments are integers.\n"
 # define E_MALLOC "Malloc failed. Execution halted.\n"
-# define E_THREAD "Creation of thread failed. Execution halted.\n"
-
+# define E_THREAD "Thread Error. Execution halted.\n"
+# define E_MUTEX "Mutex Error. Execution halted.\n"
+# define FALSE 0
+# define TRUE 1
 typedef struct s_thread_info
 {
+	long long		start_time;
 	int				number_of_philos;
+
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
+
 	int				required_meals;
-	int				someone_died;
+	int				philo_died;
+
 	pthread_mutex_t	*forks;
-	pthread_mutex_t dead_mutex;
+	pthread_mutex_t philo_died_mutex;
 }				t_thread_info;
 typedef struct s_philo
 {
 	pthread_t		thread;
 	t_thread_info	*info;
+
 	int				id_fork_left;
 	int				id_fork_right;
 	int				id;
+
 	int				meals_eaten;
+	pthread_mutex_t	meals_eaten_mutex;
+
 	long long		last_meal_time;
 	pthread_mutex_t last_meal_time_mutex;
 

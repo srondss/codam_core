@@ -12,26 +12,35 @@
 
 #include "philo.h"
 
+
+// int	message_if_alive(t_philo *philo, int message)
+// {
+// 	int	time;
+
+// 	time =
+// }
+
+
 int	philo_is_dead(t_philo *philo)
 {
-	if (pthread_mutex_lock(&philo->info->dead_mutex) != 0)
+	if (pthread_mutex_lock(&philo->info->philo_died_mutex) != 0)
 	{
 		printf("Lock fails.\n");
 		return (1);
 	} // need to destroy
-	if (philo->info->someone_died == 1)
+	if (philo->info->philo_died == 1)
 	{
-		pthread_mutex_unlock(&philo->info->dead_mutex);
+		pthread_mutex_unlock(&philo->info->philo_died_mutex);
 		return (1);
 	}
 	if ((get_elapsed_time() - philo->last_meal_time) > philo->info->time_to_die)
 	{
-		philo->info->someone_died = 1;
+		philo->info->philo_died = 1;
 		printf("Philo %d has died at %lld ms.\n", philo->id, get_elapsed_time());
-		pthread_mutex_unlock(&philo->info->dead_mutex);
+		pthread_mutex_unlock(&philo->info->philo_died_mutex);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->info->dead_mutex);
+	pthread_mutex_unlock(&philo->info->philo_died_mutex);
 
 	return (0);
 }
@@ -39,24 +48,20 @@ int	philo_is_dead(t_philo *philo)
 int	p_grab_fork(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->info->forks[philo->id_fork_right]);
-
 	if (philo_is_dead(philo))
 	{
 		pthread_mutex_unlock(&philo->info->forks[philo->id_fork_right]);
 		return (-1);
 	}
-
 	printf("Philo %d grabbed fork on his right [id: %d] [ms: %lld].\n", philo->id, philo->id_fork_right, get_elapsed_time());
 
 	pthread_mutex_lock(&philo->info->forks[philo->id_fork_left]);
-
 	if (philo_is_dead(philo))
 	{
 		pthread_mutex_unlock(&philo->info->forks[philo->id_fork_right]);
 		pthread_mutex_unlock(&philo->info->forks[philo->id_fork_left]);
 		return (-1);
 	}
-
 	printf("Philo %d grabbed fork on his left [id: %d] [ms: %lld].\n", philo->id, philo->id_fork_left, get_elapsed_time());
 	return (1);
 }
@@ -66,7 +71,7 @@ void	wait_ms(long long time_to_wait)
 	long long start_time;
 
 	start_time = get_elapsed_time();
-	while ((get_elapsed_time() - start_time) < time_to_wait)
+	while ((get_elapsed_time() - start_time) <= time_to_wait)
 	{
 		usleep(100);
 	}
@@ -75,6 +80,10 @@ void	wait_ms(long long time_to_wait)
 int	p_eat(t_philo *philo)
 {
 
+	pthread_mutex_lock(&philo->last_meal_time_mutex);
+	philo->last_meal_time = get_elapsed_time();
+	pthread_mutex_unlock(&philo->last_meal_time_mutex);
+
 	if (philo_is_dead(philo))
 	{
 		pthread_mutex_unlock(&philo->info->forks[philo->id_fork_right]);
@@ -82,9 +91,6 @@ int	p_eat(t_philo *philo)
 		return (-1);
 	}
 
-	pthread_mutex_lock(&philo->last_meal_time_mutex);
-	philo->last_meal_time = get_elapsed_time();
-	pthread_mutex_unlock(&philo->last_meal_time_mutex);
 	printf("Philo %d has started eating at %lld ms.\n",
 		philo->id, get_elapsed_time());
 	wait_ms(philo->info->time_to_eat);
@@ -115,13 +121,34 @@ int	p_think(t_philo *philo)
 	return (1);
 }
 
+void	*one_philo(t_philo *philo)
+{
+	printf("Philo %d grabbed fork on his right [id: %d] [ms: %lld].\n", philo->id, philo->id_fork_right, get_elapsed_time());
+	pthread_mutex_lock(&philo->info->forks[philo->id_fork_right]);
+	wait_ms(philo->info->time_to_die);
+	pthread_mutex_unlock(&philo->info->forks[philo->id_fork_right]);
+	return (NULL);
+}
+
 void	*philo_execution(void *philosopher)
 {
 	t_philo		*philo;
 
 	philo = (t_philo *)philosopher;
-	if (philo->id % 2 == 0) // if philo is has an even id, he will wait to make sure no deadlocks happen.
+
+	pthread_mutex_lock(&philo->last_meal_time_mutex);
+	philo->last_meal_time = get_elapsed_time();
+	pthread_mutex_unlock(&philo->last_meal_time_mutex);
+
+	if (philo->info->number_of_philos == 1)
+		return (one_philo(philo));
+
+	if (philo->id % 2 == 1) // if philo does not have an even id, he will wait to make sure no deadlocks happen.
+	{
+		printf("Philo %d has to wait...\n", philo->id);
 		usleep(500);
+	}
+
 	while (1)
 	{
 		if (p_grab_fork(philo) == -1)
@@ -141,7 +168,7 @@ void	check_leaks(void)
 	system("leaks -q philo");
 }
 
-int	create_and_join_threads(t_philo *philos)
+int	create_threads(t_philo *philos)
 {
 	int i;
 
@@ -152,13 +179,6 @@ int	create_and_join_threads(t_philo *philos)
 			return (-1);
 		i++;
 	}
-	i = 0;
-	// while (i < philos[0].info->number_of_philos)
-	// {
-	// 	if (pthread_join(philos[i].thread, NULL) != 0)
-	// 		return (-1);
-	// 	i++;
-	// }
 	return (1);
 }
 
@@ -182,9 +202,49 @@ void	loop_philo_state(t_thread_info *info, t_philo *philos)
 	}
 }
 
-// TODO: Add single philo mode.
+// TODO: Add single philo mode. // Done
 // TODO: Fix delay in ms.
-// TODO: Double check if everything is freed and destroyed.
+// TODO: Double check if everything is freed and destroyed. // DONE.
+
+int	free_and_destroy(t_thread_info *info)
+{
+	free(info->forks);
+	pthread_mutex_destroy(&info->philo_died_mutex);
+	printf(E_MALLOC);
+	return (EXIT_FAILURE);
+}
+
+
+int join_and_free(t_thread_info *info, t_philo *philos, int ret_value)
+{
+	int i;
+
+	i = 0;
+	while (i < philos[0].info->number_of_philos)
+	{
+		if (pthread_join(philos[i].thread, NULL) != 0)
+			return (EXIT_FAILURE);
+		i++;
+	}
+	pthread_mutex_destroy(&info->philo_died_mutex);
+	i = 0;
+	while (i < info->number_of_philos)
+	{
+		pthread_mutex_destroy(&info->forks[i]);
+		pthread_mutex_destroy(&philos[i].last_meal_time_mutex);
+		if (info->required_meals > 0)
+			pthread_mutex_destroy(&philos[i].meals_eaten_mutex);
+		i++;
+	}
+	free(philos);
+	free(info->forks);
+	if (ret_value)
+	{
+		printf(E_THREAD);
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
 
 int	main(int argc, char **argv)
 {
@@ -196,26 +256,20 @@ int	main(int argc, char **argv)
 		return (printf(E_ARG));
 
 	if (parse_arguments(argv) == -1)
-		return (printf(E_PARSE));
+		return (EXIT_FAILURE);
 	if (init_info_struct(&info, argv) == -1)
-		return (printf(E_MALLOC));
+		return (EXIT_FAILURE);
 
 	philos = malloc(sizeof(t_philo) * info.number_of_philos);
 	if (!philos)
-		return (free(info.forks), printf(E_MALLOC));
+		return (free_and_destroy(&info));
 
 	if (create_philosophers(&info, philos) == -1)
-		return (printf(E_THREAD));
-	create_and_join_threads(philos);
+		return (EXIT_FAILURE);
+
+	if (create_threads(philos) == -1)
+		return (join_and_free(&info, philos, 1));
+
 	loop_philo_state(&info, philos);
-	int i;
-	i = 0;
-	while (i < philos[0].info->number_of_philos)
-	{
-		if (pthread_join(philos[i].thread, NULL) != 0)
-			return (-1);
-		i++;
-	}
-	free(philos);
-	free(info.forks);
+	return (join_and_free(&info, philos, 0));
 }

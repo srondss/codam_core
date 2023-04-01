@@ -23,7 +23,7 @@ void	init_philo(t_thread_info *info, t_philo *philos, int i)
 	philos[i].info = info;
 }
 
-int	destroy_mutexes(t_philo *philos, int fork_mutexes, int meal_mutexes)
+int	destroy_mutexes(t_philo *philos, int fork_mutexes, int l_meal_mutexes, int r_meal_mutexes)
 {
 	int	i;
 
@@ -34,13 +34,20 @@ int	destroy_mutexes(t_philo *philos, int fork_mutexes, int meal_mutexes)
 		i++;
 	}
 	i = 0;
-	while (i < meal_mutexes)
+	while (i < l_meal_mutexes)
 	{
 		pthread_mutex_destroy(&philos[i].last_meal_time_mutex);
 		i++;
 	}
-	printf("Destroyed dead mutex.\n");
-	pthread_mutex_destroy(&philos->info->dead_mutex);
+	i = 0;
+	while (i < r_meal_mutexes)
+	{
+		pthread_mutex_destroy(&philos[i].meals_eaten_mutex);
+		i++;
+	}
+	pthread_mutex_destroy(&philos->info->philo_died_mutex);
+	free(philos->info->forks);
+	printf(E_MUTEX);
 	return (-1);
 }
 
@@ -58,12 +65,18 @@ int	create_philosophers(t_thread_info *info, t_philo *philos)
 		init_philo(info, philos, i);
 		// mutex for making sure no philo can use a fork which is already used.
 		if (pthread_mutex_init(&info->forks[i], NULL) != 0)
-			return (destroy_mutexes(philos, fork_mutexes, meal_mutexes));
+			return (destroy_mutexes(philos, fork_mutexes, meal_mutexes, i));
 		fork_mutexes++;
 		// mutex for making sure no philo can change last meal time when it is being updated.
 		if (pthread_mutex_init(&philos[i].last_meal_time_mutex, NULL) != 0)
-			return (destroy_mutexes(philos, fork_mutexes, meal_mutexes));
+			return (destroy_mutexes(philos, fork_mutexes, meal_mutexes, i));
 		meal_mutexes++;
+		// mutex for making sure philo doesn't continue eating after last meal. 
+		if (info->required_meals > 0)
+		{
+			if (pthread_mutex_init(&philos[i].meals_eaten_mutex, NULL) != 0)
+				return (destroy_mutexes(philos, fork_mutexes, meal_mutexes, i));
+		}
 		i++;
 	}
 	return (1);
