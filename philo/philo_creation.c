@@ -46,12 +46,14 @@ int	destroy_mutexes(t_philo *philos, int fork_mutexes, int l_meal_mutexes, int r
 		i++;
 	}
 	pthread_mutex_destroy(&philos->info->philo_died_mutex);
+	pthread_mutex_destroy(&philos->info->creation_mutex);
 	free(philos->info->forks);
+	free(philos);
 	printf(E_MUTEX);
 	return (-1);
 }
 
-int	create_philosophers(t_thread_info *info, t_philo *philos)
+int	init_philosophers(t_thread_info *info, t_philo *philos)
 {
 	int	fork_mutexes;
 	int	meal_mutexes;
@@ -71,7 +73,7 @@ int	create_philosophers(t_thread_info *info, t_philo *philos)
 		if (pthread_mutex_init(&philos[i].last_meal_time_mutex, NULL) != 0)
 			return (destroy_mutexes(philos, fork_mutexes, meal_mutexes, i));
 		meal_mutexes++;
-		// mutex for making sure philo doesn't continue eating after last meal. 
+		// mutex for making sure philo doesn't continue eating after last meal.
 		if (info->required_meals > 0)
 		{
 			if (pthread_mutex_init(&philos[i].meals_eaten_mutex, NULL) != 0)

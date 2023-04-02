@@ -173,12 +173,18 @@ int	create_threads(t_philo *philos)
 	int i;
 
 	i = 0;
+	// pthread_mutex_lock(&philos->info->creation_mutex);
 	while (i < philos[0].info->number_of_philos)
 	{
 		if (pthread_create(&(philos[i].thread), NULL, &philo_execution, &philos[i]) != 0)
+		{
+			// pthread_mutex_unlock(&philos->info->creation_mutex);
 			return (-1);
+		}
 		i++;
+		usleep(250);
 	}
+
 	return (1);
 }
 
@@ -202,9 +208,6 @@ void	loop_philo_state(t_thread_info *info, t_philo *philos)
 	}
 }
 
-// TODO: Add single philo mode. // Done
-// TODO: Fix delay in ms.
-// TODO: Double check if everything is freed and destroyed. // DONE.
 
 int	free_and_destroy(t_thread_info *info)
 {
@@ -246,12 +249,16 @@ int join_and_free(t_thread_info *info, t_philo *philos, int ret_value)
 	return (EXIT_SUCCESS);
 }
 
+// TODO: Fix delay in ms.
+// TODO: Add support for required meals.
+// TODO: Complete integrtion of creation_mutex.
+
 int	main(int argc, char **argv)
 {
 	t_thread_info	info;
 	t_philo			*philos;
 
-	atexit(check_leaks);
+	// atexit(check_leaks);
 	if (argc < 5 || argc > 6)
 		return (printf(E_ARG));
 
@@ -264,7 +271,7 @@ int	main(int argc, char **argv)
 	if (!philos)
 		return (free_and_destroy(&info));
 
-	if (create_philosophers(&info, philos) == -1)
+	if (init_philosophers(&info, philos) == -1)
 		return (EXIT_FAILURE);
 
 	if (create_threads(philos) == -1)

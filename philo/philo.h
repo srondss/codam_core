@@ -34,15 +34,20 @@ typedef struct s_thread_info
 	long long		start_time;
 	int				number_of_philos;
 
+	int				created_threads;
+	pthread_mutex_t creation_mutex;
+
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
 
 	int				required_meals;
+
 	int				philo_died;
+	pthread_mutex_t philo_died_mutex;
+
 
 	pthread_mutex_t	*forks;
-	pthread_mutex_t philo_died_mutex;
 }				t_thread_info;
 typedef struct s_philo
 {
@@ -63,7 +68,7 @@ typedef struct s_philo
 
 
 long		ft_atol(const char	*nptr);
-int			create_philosophers(t_thread_info *info, t_philo *philos);
+int			init_philosophers(t_thread_info *info, t_philo *philos);
 void		*philo_execution(void *philosopher);
 int			init_info_struct(t_thread_info *info, char **argv);
 void		init_philo(t_thread_info *info, t_philo *philos, int i);

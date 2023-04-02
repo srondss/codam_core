@@ -7,7 +7,7 @@ SRCS = philo.c \
 
 OBJS = $(SRCS:.c=.o)
 
-CFLAGS ?= -g -pthread -Wall -Wextra -Werror 
+CFLAGS ?= -g -pthread -Wall -Wextra -Werror
 
 all : $(NAME)
 
