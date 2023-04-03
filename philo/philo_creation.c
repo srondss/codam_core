@@ -45,11 +45,7 @@ int	destroy_mutexes(t_philo *philos, int fork_mutexes, int l_meal_mutexes, int r
 		pthread_mutex_destroy(&philos[i].meals_eaten_mutex);
 		i++;
 	}
-	pthread_mutex_destroy(&philos->info->philo_died_mutex);
-	pthread_mutex_destroy(&philos->info->creation_mutex);
-	free(philos->info->forks);
 	free(philos);
-	printf(E_MUTEX);
 	return (-1);
 }
 

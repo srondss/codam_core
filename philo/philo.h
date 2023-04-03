@@ -29,6 +29,13 @@
 # define E_MUTEX "Mutex Error. Execution halted.\n"
 # define FALSE 0
 # define TRUE 1
+# define TAKE_FORK 2
+# define EAT 3
+# define SLEEP 4
+# define THINK 5
+# define DIED 6
+
+
 typedef struct s_thread_info
 {
 	long long		start_time;

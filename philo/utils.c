@@ -69,29 +69,10 @@ int	parse_arguments(char **argv)
 	return (1);
 }
 
-/*Function to get the current time in
-milliseconds using gettimeofday() function.
-Returns the current time in milliseconds. */
-long long	get_time(void)
-{
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return ((long long)(tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-}
-
-/* Function to calculate the elapsed time in
-milliseconds since the first call of the function.
-Returns the elapsed time in milliseconds.*/
 long long	get_elapsed_time(void)
 {
-	static long long	start_time = 0;
-	long long			current_time;
+	struct timeval	current_time;
 
-	current_time = get_time();
-	if (start_time == 0)
-		start_time = current_time;
-	return (current_time - start_time);
+	gettimeofday(&current_time, NULL);
+	return (current_time.tv_sec * 1000 + current_time.tv_usec / 1000);
 }
-
-
