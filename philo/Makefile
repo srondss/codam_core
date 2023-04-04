@@ -1,9 +1,13 @@
 NAME = philo
 
-SRCS = philo.c \
-	utils.c \
-	philo_creation.c \
-	philo_init_structs.c
+SRCS = main.c	\
+	init.c		\
+	utils.c		\
+	time.c		\
+	tasks.c		\
+	check_state.c \
+	monitoring.c \
+	free_or_destroy.c
 
 OBJS = $(SRCS:.c=.o)
 

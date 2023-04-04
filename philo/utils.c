@@ -12,12 +12,6 @@
 
 #include "philo.h"
 
-void	print_error(char *error)
-{
-	printf("%s", error);
-	exit(EXIT_FAILURE);
-}
-
 long	ft_atol(const char	*nptr)
 {
 	long	sign;
@@ -67,12 +61,4 @@ int	parse_arguments(char **argv)
 		j = 0;
 	}
 	return (1);
-}
-
-long long	get_elapsed_time(void)
-{
-	struct timeval	current_time;
-
-	gettimeofday(&current_time, NULL);
-	return (current_time.tv_sec * 1000 + current_time.tv_usec / 1000);
 }

@@ -35,14 +35,13 @@
 # define THINK 5
 # define DIED 6
 
-
 typedef struct s_thread_info
 {
 	long long		start_time;
 	int				number_of_philos;
 
 	int				created_threads;
-	pthread_mutex_t creation_mutex;
+	pthread_mutex_t	creation_mutex;
 
 	int				time_to_die;
 	int				time_to_eat;
@@ -51,8 +50,7 @@ typedef struct s_thread_info
 	int				required_meals;
 
 	int				philo_died;
-	pthread_mutex_t philo_died_mutex;
-
+	pthread_mutex_t	philo_died_mutex;
 
 	pthread_mutex_t	*forks;
 }				t_thread_info;
@@ -69,18 +67,34 @@ typedef struct s_philo
 	pthread_mutex_t	meals_eaten_mutex;
 
 	long long		last_meal_time;
-	pthread_mutex_t last_meal_time_mutex;
+	pthread_mutex_t	last_meal_time_mutex;
 
 }				t_philo;
 
-
 long		ft_atol(const char	*nptr);
+int			parse_arguments(char **argv);
 int			init_philosophers(t_thread_info *info, t_philo *philos);
-void		*philo_execution(void *philosopher);
 int			init_info_struct(t_thread_info *info, char **argv);
 void		init_philo(t_thread_info *info, t_philo *philos, int i);
-int			parse_arguments(char **argv);
-void		print_error(char *error);
 long long	get_elapsed_time(void);
-long long	get_time(void);
+int			p_think(t_philo *philo);
+int			p_sleep(t_philo *philo);
+int			p_eat(t_philo *philo);
+int			p_grab_fork(t_philo *philo);
+int			check_philo_death(t_thread_info *info, t_philo *philo);
+int			check_death_or_limit_meals(t_philo *philo);
+int			check_thread_creation(t_philo *philo);
+int			free_and_destroy(t_thread_info *info);
+int			join_and_free(t_thread_info *info, t_philo *philos, int ret_value);
+int			destroy_mutexes(t_philo *philos, int fork_mutexes,
+				int l_meal_mutexes, int r_meal_mutexes);
+void		*philo_execution(void *philosopher);
+void		*one_philo(t_philo *philo);
+int			create_threads(t_philo *philos);
+void		loop_philo_state(t_thread_info *info, t_philo *philos);
+int			message_if_alive(t_philo *philo, int message);
+void		wait_ms(long long time_to_wait, t_philo *philo);
+long long	get_time_since_start(t_philo *philo);
+long long	get_elapsed_time(void);
+
 #endif
