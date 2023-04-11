@@ -43,16 +43,69 @@ You will need to implement job control using system calls like fork(), waitpid()
 
 #include "minishell.h"
 
+
+int	is_whitespace(char c)
+{
+	if (c == '\f' || c == ' ' || c == '\n' || c == '\r'
+		|| c == '\t' || c == '\v')
+		return (TRUE);
+	else
+		return (FALSE);
+}
+
+int	find_token_type(char c)
+{
+	if (c == '|')
+		return (PIPE);
+	if (c == '<')
+		return (LESS);
+	if (c == '>')
+		return (GREATER);
+	return (LITERAL);
+}
+
+void	parse_input(char *string, t_token **tokens_head)
+{
+	int		i;
+	int		j;
+	t_token	*node;
+
+	// *tokens_head = first_node;
+	i = 0;
+	j = 0;
+	while (string[i] != '\0')
+	{
+		if (is_whitespace(string[i]) == TRUE)
+			i++;
+		else
+		{
+			// Create new node function (lst_add_back);
+			node = malloc(sizeof(t_token) * 1);
+			node->token = string[i];
+			node->type = find_token_type(string[i]);
+			node->index = j;
+			node->next == NULL;
+			j++;
+			i++;
+		}
+	}
+}
+
+
 int	main(int argc, char **argv)
 {
 	char	*string;
+	t_token	**tokens;
 
 	if (argc != 1)
 		return (EXIT_FAILURE);
 
-	string = readline("Minishell: ");
-	printf("%s\n", string);
-	free(string);
+	while (1)
+	{
+		string = readline("Minishell: ");
+		parse_input(string, tokens);
+		free(string);
+	}
 
 	(void)(argv);
 	return (0);
