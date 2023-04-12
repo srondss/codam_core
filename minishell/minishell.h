@@ -33,19 +33,34 @@ typedef enum s_type
 	GREATER = 4,
 }	t_type;
 
-
-
 /*
 	A token is part of a linked list which refers to every single
 	character inputted by the user.
 */
-
 typedef struct s_token
 {
 	char			token;
+	char			*cmd;
 	t_type			type;
 	int				index;
-	struct s_lexer	*next;
+	struct s_token	*next;
 }				t_token;
+
+// typedef struct s_commands
+// {
+// 	char	*cmd,
+
+
+// }
+
+				/* Parsing */
+int		is_whitespace(char c);
+int		find_token_type(char c);
+t_token	*last_node(t_token **lst_head);
+void	add_node_back(t_token **lst_head, t_token *node);
+void	parse_input(char *string, t_token **tokens_head);
+
+
+
 
 #endif

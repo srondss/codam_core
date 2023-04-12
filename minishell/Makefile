@@ -1,6 +1,6 @@
 NAME = minishell
 
-SRCS = main.c
+SRCS = main.c parsing_tokens.c
 
 OBJS = $(SRCS:.c=.o)
 

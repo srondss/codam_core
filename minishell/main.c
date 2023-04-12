@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 10:38:04 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/04/10 10:38:05 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/04/12 08:22:10 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,62 +43,35 @@ You will need to implement job control using system calls like fork(), waitpid()
 
 #include "minishell.h"
 
-
-int	is_whitespace(char c)
+void	free_list(t_token **lst_head)
 {
-	if (c == '\f' || c == ' ' || c == '\n' || c == '\r'
-		|| c == '\t' || c == '\v')
-		return (TRUE);
-	else
-		return (FALSE);
-}
+	t_token	*tmp;
+	t_token	*first;
 
-int	find_token_type(char c)
-{
-	if (c == '|')
-		return (PIPE);
-	if (c == '<')
-		return (LESS);
-	if (c == '>')
-		return (GREATER);
-	return (LITERAL);
-}
-
-void	parse_input(char *string, t_token **tokens_head)
-{
-	int		i;
-	int		j;
-	t_token	*node;
-
-	// *tokens_head = first_node;
-	i = 0;
-	j = 0;
-	while (string[i] != '\0')
+	first = *lst_head;
+	tmp = first->next;
+	while (tmp != NULL)
 	{
-		if (is_whitespace(string[i]) == TRUE)
-			i++;
-		else
-		{
-			// Create new node function (lst_add_back);
-			node = malloc(sizeof(t_token) * 1);
-			node->token = string[i];
-			node->type = find_token_type(string[i]);
-			node->index = j;
-			node->next == NULL;
-			j++;
-			i++;
-		}
+		free(first);
+		first = tmp;
+		tmp = tmp->next;
 	}
+	free(first);
+	free(lst_head);
 }
-
 
 int	main(int argc, char **argv)
 {
 	char	*string;
 	t_token	**tokens;
 
+	tokens = malloc(sizeof(t_token *) * 1);
+	if (!tokens)
+		return (EXIT_FAILURE);
 	if (argc != 1)
 		return (EXIT_FAILURE);
+
+	*tokens = NULL;
 
 	while (1)
 	{
@@ -107,6 +80,7 @@ int	main(int argc, char **argv)
 		free(string);
 	}
 
+	free_list(tokens);
 	(void)(argv);
 	return (0);
 }
