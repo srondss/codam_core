@@ -49,18 +49,22 @@ typedef struct s_token
 // typedef struct s_commands
 // {
 // 	char	*cmd,
-
-
 // }
 
-				/* Parsing */
+				/* Parsing Tokens */
 int		is_whitespace(char c);
 int		find_token_type(char c);
 t_token	*last_node(t_token **lst_head);
 void	add_node_back(t_token **lst_head, t_token *node);
 void	parse_input(char *string, t_token **tokens_head);
 
+				/* Parsing Commands */
+void	create_string(t_token **head_list, t_token *node_token,
+			int i, int non_literals);
+void	join_tokens(t_token **head_list);
 
-
+				/* Utils */
+void	check_leaks(void);
+void	print_list(t_token **lst_head);
 
 #endif

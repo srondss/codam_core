@@ -18,7 +18,6 @@ Project needs to be divided into the following sections:
 Parsing Input:
 The first step in creating a shell is to parse the input from the user.
 You will need to read the input from the user and then parse it into a series of tokens that represent the command and its arguments.
-You can use functions like strtok() to split the input into tokens.
 
 Creating a Command Execution Engine:
 Once the input is parsed, you will need to execute the command.
@@ -52,6 +51,7 @@ void	free_list(t_token **lst_head)
 	tmp = first->next;
 	while (tmp != NULL)
 	{
+		free(tmp->cmd);
 		free(first);
 		first = tmp;
 		tmp = tmp->next;
@@ -65,21 +65,22 @@ int	main(int argc, char **argv)
 	char	*string;
 	t_token	**tokens;
 
+	atexit(check_leaks);
+	if (argc != 1)
+		return (EXIT_FAILURE);
+
 	tokens = malloc(sizeof(t_token *) * 1);
 	if (!tokens)
-		return (EXIT_FAILURE);
-	if (argc != 1)
 		return (EXIT_FAILURE);
 
 	*tokens = NULL;
 
-	while (1)
-	{
-		string = readline("Minishell: ");
-		parse_input(string, tokens);
-		free(string);
-	}
+	string = readline("Minishell: ");
+	parse_input(string, tokens);
+	join_tokens(tokens);
+	print_list(tokens);
 
+	free(string);
 	free_list(tokens);
 	(void)(argv);
 	return (0);
