@@ -1,20 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/13 09:07:16 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/04/13 09:07:22 by ysrondy          ###   ########.fr       */
+/*   Created: 2022/10/22 11:57:29 by ysrondy           #+#    #+#             */
+/*   Updated: 2022/10/23 16:28:19 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+#include "libft.h"
 
-#include "minishell.h"
-
-void	check_leaks(void)
+void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
-	system("leaks -q minishell");
+	t_list	*tmp;
+
+	if (!lst || !del)
+		return ;
+	while (*lst != NULL)
+	{
+		tmp = (*lst)->next;
+		ft_lstdelone(*lst, del);
+		(*lst) = tmp;
+	}
+	*lst = NULL;
 }
-
-

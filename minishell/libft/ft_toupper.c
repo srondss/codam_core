@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/13 09:07:16 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/04/13 09:07:22 by ysrondy          ###   ########.fr       */
+/*   Created: 2022/10/06 12:09:52 by ysrondy           #+#    #+#             */
+/*   Updated: 2022/10/23 16:55:47 by ysrondy       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-void	check_leaks(void)
+int	ft_toupper(int c)
 {
-	system("leaks -q minishell");
+	if (c >= 'a' && c <= 'z')
+	{
+		c -= 32;
+		return (c);
+	}
+	else
+		return (c);
 }
 
-
+/*int main(void)
+{
+	char h = 'A';
+	printf("%c", h);
+	printf("%c", toupper(h));
+}*/

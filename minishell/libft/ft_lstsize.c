@@ -1,20 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_lstsize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/13 09:07:16 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/04/13 09:07:22 by ysrondy          ###   ########.fr       */
+/*   Created: 2022/10/22 11:12:28 by ysrondy           #+#    #+#             */
+/*   Updated: 2022/10/22 11:17:15 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include "libft.h"
 
-#include "minishell.h"
-
-void	check_leaks(void)
+int	ft_lstsize(t_list *lst)
 {
-	system("leaks -q minishell");
+	int	i;
+
+	i = 1;
+	if (!lst)
+		return (0);
+	while (lst->next != NULL)
+	{
+		lst = lst->next;
+		i++;
+	}
+	return (i);
 }
-
-

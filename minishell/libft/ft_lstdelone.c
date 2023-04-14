@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/13 09:07:16 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/04/13 09:07:22 by ysrondy          ###   ########.fr       */
+/*   Created: 2022/10/22 11:47:23 by ysrondy           #+#    #+#             */
+/*   Updated: 2022/10/22 11:54:00 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include "libft.h"
 
-#include "minishell.h"
-
-void	check_leaks(void)
+void	ft_lstdelone(t_list *lst, void (*del)(void *))
 {
-	system("leaks -q minishell");
+	if (!lst || !del)
+		return ;
+	del(lst->content);
+	free(lst);
 }
-
-

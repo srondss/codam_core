@@ -18,6 +18,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <unistd.h>
+# include "libft/libft.h"
 
 # define FALSE 0
 # define TRUE 1
@@ -39,32 +40,33 @@ typedef enum s_type
 */
 typedef struct s_token
 {
-	char			token;
 	char			*cmd;
 	t_type			type;
-	int				index;
 	struct s_token	*next;
 }				t_token;
 
-// typedef struct s_commands
-// {
-// 	char	*cmd,
-// }
+typedef struct s_commands
+{
+	char				**cmd;
+	// int					(*builtin);
+	t_token				*redirections;
+	char				*hd_file_name;
+	struct s_commands	*next;
+}				t_commands;
 
 				/* Parsing Tokens */
 int		is_whitespace(char c);
 int		find_token_type(char c);
-t_token	*last_node(t_token **lst_head);
-void	add_node_back(t_token **lst_head, t_token *node);
 void	parse_input(char *string, t_token **tokens_head);
 
-				/* Parsing Commands */
-void	create_string(t_token **head_list, t_token *node_token,
-			int i, int non_literals);
-void	join_tokens(t_token **head_list);
+
+				/* Linked_List Functions */
+t_token	*last_node(t_token **lst_head);
+void	add_node_back(t_token **lst_head, t_token *node);
+void	create_node(t_token **tokens_head, char *string, int start, int j);
+void	print_list(t_token **lst_head);
 
 				/* Utils */
 void	check_leaks(void);
-void	print_list(t_token **lst_head);
 
 #endif

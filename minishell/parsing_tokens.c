@@ -38,68 +38,42 @@ int	find_token_type(char c)
 	return (LITERAL);
 }
 
-/*
-	Returns the last node of the linked list.
-*/
-t_token	*last_node(t_token **lst_head)
+int	skip_whitespaces(char *string)
 {
-	t_token	*last;
+	int	i;
 
-	last = *lst_head;
-	while (last->next != NULL)
-		last = last->next;
-	return (last);
+	i = 0;
+	while (is_whitespace(string[i]))
+		i++;
+	return (i);
 }
 
 /*
-	Adds node to the back of the linked list.
-*/
-void	add_node_back(t_token **lst_head, t_token *node)
-{
-	t_token	*tmp;
-
-	if (lst_head && node)
-	{
-		if (*lst_head == NULL)
-			*lst_head = node;
-		else
-		{
-			tmp = last_node(lst_head);
-			tmp->next = node;
-		}
-	}
-}
-
-/*
-	Loops through string and skips char if it is a whitespace.
-	Otherwise, will malloc a node, initialise it, and add it to the
-	end of the linked_list.
+	Loops through string and creates t_token nodes delimited by a whitespace or the end of the string.
 */
 void	parse_input(char *string, t_token **tokens_head)
 {
 	int		i;
-	int		j;
-	t_token	*node;
+	int		start;
+	int		len;
 
-	i = 0;
-	j = 0;
+	i = skip_whitespaces(string);
+	len = skip_whitespaces(string);
+	start = i;
 	while (string[i] != '\0')
 	{
-		if (is_whitespace(string[i]) == TRUE)
-			i++;
-		else
+		if ((is_whitespace(string[i]) == TRUE \
+			&& is_whitespace(string[i - 1]) == FALSE) \
+			|| (string[i + 1] == '\0' && is_whitespace(string[i]) == FALSE))
 		{
-			node = malloc(sizeof(t_token) * 1);
-			if (!node)
-				exit(EXIT_FAILURE);
-			node->token = string[i];
-			node->type = find_token_type(string[i]);
-			node->cmd = NULL;
-			node->index = j;
-			node->next = NULL;
-			add_node_back(tokens_head, node);
-			j++;
-			i++;
+			if (string[i + 1] == '\0')
+				len++;
+			create_node(tokens_head, string, start, len);
+			start = i + 1;
 		}
+		if (is_whitespace(string[start]))
+			start++;
+		len++;
+		i++;
 	}
 }

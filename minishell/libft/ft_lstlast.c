@@ -1,20 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_lstlast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/13 09:07:16 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/04/13 09:07:22 by ysrondy          ###   ########.fr       */
+/*   Created: 2022/10/22 11:18:12 by ysrondy           #+#    #+#             */
+/*   Updated: 2022/10/22 11:42:25 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include "libft.h"
 
-#include "minishell.h"
-
-void	check_leaks(void)
+t_list	*ft_lstlast(t_list *lst)
 {
-	system("leaks -q minishell");
+	if (!lst)
+		return (NULL);
+	while (lst->next != NULL)
+		lst = lst->next;
+	return (lst);
 }
-
-

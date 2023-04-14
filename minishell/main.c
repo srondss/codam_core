@@ -47,16 +47,19 @@ void	free_list(t_token **lst_head)
 	t_token	*tmp;
 	t_token	*first;
 
+	if (!lst_head)
+		return ;
 	first = *lst_head;
-	tmp = first->next;
+	if (!first)
+		return (free(lst_head));
+	tmp = first;
 	while (tmp != NULL)
 	{
-		free(tmp->cmd);
+		tmp = tmp->next;
+		free(first->cmd);
 		free(first);
 		first = tmp;
-		tmp = tmp->next;
 	}
-	free(first);
 	free(lst_head);
 }
 
@@ -65,7 +68,7 @@ int	main(int argc, char **argv)
 	char	*string;
 	t_token	**tokens;
 
-	atexit(check_leaks);
+	// atexit(check_leaks);
 	if (argc != 1)
 		return (EXIT_FAILURE);
 
@@ -77,7 +80,6 @@ int	main(int argc, char **argv)
 
 	string = readline("Minishell: ");
 	parse_input(string, tokens);
-	join_tokens(tokens);
 	print_list(tokens);
 
 	free(string);

@@ -1,6 +1,8 @@
 NAME = minishell
 
-SRCS = main.c parsing_tokens.c parsing_commands.c utils.c
+SRCS = main.c parsing_tokens.c linked_list_functions.c utils.c
+
+LIBFT = libft/libft.a
 
 OBJS = $(SRCS:.c=.o)
 
@@ -9,14 +11,17 @@ CFLAGS ?= -Wall -Wextra -Werror
 all : $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -lreadline
+	@cd libft && make
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline
 	@printf "Compiled ./minishell executable succesfully.\n"
 
 clean :
+	@cd libft && make clean
 	@rm -rf $(OBJS)
 	@printf "Removed .o files successfully.\n"
 
 fclean : clean
+	@cd libft && make fclean
 	@rm -rf $(NAME)
 	@printf "Removed ./minishell executable successfully.\n"
 
