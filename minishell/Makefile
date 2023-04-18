@@ -1,6 +1,6 @@
 NAME = minishell
 
-SRCS = main.c parsing_tokens.c linked_list_functions.c utils.c
+SRCS = main.c parsing_tokens.c linked_list_functions.c utils.c parsing_commands.c
 
 LIBFT = libft/libft.a
 

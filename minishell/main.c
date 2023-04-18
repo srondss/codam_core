@@ -60,30 +60,30 @@ void	free_list(t_token **lst_head)
 		free(first);
 		first = tmp;
 	}
-	free(lst_head);
 }
 
 int	main(int argc, char **argv)
 {
-	char	*string;
-	t_token	**tokens;
+	char		*string;
+	t_token		*tokens_head;
+	t_commands	*cmds_head;
 
 	// atexit(check_leaks);
 	if (argc != 1)
 		return (EXIT_FAILURE);
 
-	tokens = malloc(sizeof(t_token *) * 1);
-	if (!tokens)
-		return (EXIT_FAILURE);
-
-	*tokens = NULL;
+	tokens_head = NULL;
+	cmds_head = NULL;
 
 	string = readline("Minishell: ");
-	parse_input(string, tokens);
-	print_list(tokens);
+	parse_input(string, &tokens_head);
+	print_token_list(&tokens_head);
+	parse_cmds(&tokens_head, &cmds_head);
+	print_cmds_list(&cmds_head);
 
 	free(string);
-	free_list(tokens);
+	free_list(&tokens_head);
+	// add function free cmds_head;
 	(void)(argv);
 	return (0);
 }
