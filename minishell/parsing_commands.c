@@ -31,25 +31,25 @@ int	is_builtin(char *string)
 	return (FALSE);
 }
 
-void	create_cmd(t_token *start_node, t_token *target_node, t_commands **cmd_head, int num_nodes)
+void	create_cmd(t_token *start_node, t_token *target_node,
+		t_commands **cmd_head, int num_nodes)
 {
 	t_commands	*node_cmds;
 	int			i;
 
 	i = 0;
-
 	node_cmds = malloc(sizeof(t_commands));
 	if (!node_cmds)
 		exit(EXIT_FAILURE);
 	node_cmds->cmds = malloc(sizeof(char *) * num_nodes);
 	if (!node_cmds->cmds)
 		exit(EXIT_FAILURE);
-
-	node_cmds->builtin = 0;
+	node_cmds->builtin = 0; // temporary
 	node_cmds->redirections = NULL;
 	while (start_node != target_node)
 	{
-		node_cmds->cmds[i] = start_node->cmd;
+		if (start_node->type == LITERAL)
+			node_cmds->cmds[i] = start_node->cmd;
 		if (start_node->type == GREATER)
 			node_cmds->redirections = start_node->next;
 		if (is_builtin(start_node->cmd))
@@ -59,7 +59,7 @@ void	create_cmd(t_token *start_node, t_token *target_node, t_commands **cmd_head
 	}
 	node_cmds->cmds[i] = NULL;
 	node_cmds->next = NULL;
-	add_node_back_cmds(cmd_head, node_cmds);
+	add_node_back((void **)cmd_head, node_cmds, CMDS_LIST);
 }
 
 void	parse_cmds(t_token **tokens_head, t_commands **cmd_head)
@@ -71,6 +71,8 @@ void	parse_cmds(t_token **tokens_head, t_commands **cmd_head)
 	num_nodes = 0;
 	start_node = *tokens_head;
 	node_token = *tokens_head;
+	if (!node_token)
+		return ;
 	while (node_token->next != NULL)
 	{
 		num_nodes++;

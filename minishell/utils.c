@@ -17,4 +17,42 @@ void	check_leaks(void)
 	system("leaks -q minishell");
 }
 
+void	free_token_list(t_token **lst_head)
+{
+	t_token	*tmp;
+	t_token	*first;
 
+	if (!lst_head)
+		return ;
+	first = *lst_head;
+	if (!first)
+		return ;
+	tmp = first;
+	while (tmp != NULL)
+	{
+		tmp = tmp->next;
+		free(first->cmd);
+		free(first);
+		first = tmp;
+	}
+}
+
+void	free_cmd_list(t_commands **lst_head)
+{
+	t_commands	*tmp;
+	t_commands	*first;
+
+	if (!lst_head)
+		return ;
+	first = *lst_head;
+	if (!first)
+		return ;
+	tmp = first;
+	while (tmp != NULL)
+	{
+		tmp = tmp->next;
+		free(first->cmds);
+		free(first);
+		first = tmp;
+	}
+}

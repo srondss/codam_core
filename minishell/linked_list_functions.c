@@ -20,6 +20,8 @@ void	print_token_list(t_token **lst_head)
 	t_token	*node;
 
 	node = *lst_head;
+	if (!node)
+		return ;
 	while (node)
 	{
 		printf("Lexer: {%s} | Type: {%d} | Index: {%d}\n", node->cmd, node->type, node->index);
@@ -33,7 +35,7 @@ void	print_token_list(t_token **lst_head)
 void	print_cmds_list(t_commands **lst_head)
 {
 	t_commands	*node;
-	int i;
+	int			i;
 
 	i = 0;
 	node = *lst_head;
@@ -55,66 +57,57 @@ void	print_cmds_list(t_commands **lst_head)
 }
 
 /*
-	Returns the last node of the t_token linked list.
+	Returns the last node of a linked list.
 */
-t_token	*last_node_token(t_token **lst_head)
+void	*last_node(void *lst, t_lst_type type)
 {
-	t_token	*last;
+	t_token		*token;
+	t_commands	*cmd;
 
-	last = *lst_head;
-	while (last->next != NULL)
-		last = last->next;
-	return (last);
-}
-
-/*
-	Returns the last node of the t_cmds linked list.
-*/
-t_commands	*last_node_cmds(t_commands **lst_head)
-{
-	t_commands	*last;
-
-	last = *lst_head;
-	while (last->next != NULL)
-		last = last->next;
-	return (last);
-}
-
-/*
-	Adds node to the back of the linked list.
-*/
-void	add_node_back_token(t_token **lst_head, t_token *node)
-{
-	t_token	*tmp;
-
-	if (lst_head && node)
+	if (type == TOKEN_LIST)
 	{
-		if (*lst_head == NULL)
-			*lst_head = node;
-		else
-		{
-			tmp = last_node_token(lst_head);
-			tmp->next = node;
-		}
+		token = lst;
+		while (token && token->next)
+			token = token->next;
+		return (token);
 	}
+	else if (type == CMDS_LIST)
+	{
+		cmd = lst;
+		while (cmd && cmd->next)
+			cmd = cmd->next;
+		return (cmd);
+	}
+	return (NULL);
 }
 
 /*
 	Adds node to the back of the linked list.
 */
-void	add_node_back_cmds(t_commands **lst_head, t_commands *node)
+void	add_node_back(void **lst_head, void *node, t_lst_type type)
 {
-	t_commands	*tmp;
+	t_token		*token_tmp;
+	t_commands	*cmd_tmp;
 
-	if (lst_head && node)
+	if (type == TOKEN_LIST && node)
 	{
 		if (*lst_head == NULL)
-			*lst_head = node;
-		else
 		{
-			tmp = last_node_cmds(lst_head);
-			tmp->next = node;
+			*lst_head = node;
+			return ;
 		}
+		token_tmp = last_node(*lst_head, TOKEN_LIST);
+		token_tmp->next = node;
+	}
+	if (type == CMDS_LIST && node)
+	{
+		if (*lst_head == NULL)
+		{
+			*lst_head = node;
+			return ;
+		}
+		cmd_tmp = last_node(*lst_head, CMDS_LIST);
+		cmd_tmp->next = node;
 	}
 }
 
@@ -136,5 +129,5 @@ void	create_node(t_token **tokens_head, char *string, int start, int len)
 	node->index = i;
 	i++;
 	node->next = NULL;
-	add_node_back_token(tokens_head, node);
+	add_node_back((void **)tokens_head, node, TOKEN_LIST);
 }

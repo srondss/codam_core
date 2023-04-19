@@ -34,6 +34,12 @@ typedef enum s_type
 	GREATER = 4,
 }	t_type;
 
+typedef enum s_lst_type
+{
+	TOKEN_LIST = 1,
+	CMDS_LIST = 2,
+}	t_lst_type;
+
 /*
 	A token is part of a linked list which refers to every single
 	character inputted by the user.
@@ -67,16 +73,16 @@ void	create_cmd(t_token *start_node, t_token *target_node,
 int		is_builtin(char *string);
 
 				/* Linked_List Functions */
-t_token		*last_node_token(t_token **lst_head);
-t_commands	*last_node_cmds(t_commands **lst_head);
-void		add_node_back_token(t_token **lst_head, t_token *node);
-void		add_node_back_cmds(t_commands **lst_head, t_commands *node);
-void		create_node(t_token **tokens_head, char *string, int start, int j);
-void		print_token_list(t_token **lst_head);
-void		print_cmds_list(t_commands **lst_head);
+void	*last_node(void *lst, t_lst_type type);
+void	add_node_back(void **lst_head, void *node, t_lst_type type);
+void	create_node(t_token **tokens_head, char *string, int start, int j);
+void	print_token_list(t_token **lst_head);
+void	print_cmds_list(t_commands **lst_head);
 
 
 				/* Utils */
 void	check_leaks(void);
+void	free_token_list(t_token **lst_head);
+void	free_cmd_list(t_commands **lst_head);
 
 #endif

@@ -42,33 +42,13 @@ You will need to implement job control using system calls like fork(), waitpid()
 
 #include "minishell.h"
 
-void	free_list(t_token **lst_head)
-{
-	t_token	*tmp;
-	t_token	*first;
-
-	if (!lst_head)
-		return ;
-	first = *lst_head;
-	if (!first)
-		return (free(lst_head));
-	tmp = first;
-	while (tmp != NULL)
-	{
-		tmp = tmp->next;
-		free(first->cmd);
-		free(first);
-		first = tmp;
-	}
-}
-
 int	main(int argc, char **argv)
 {
 	char		*string;
 	t_token		*tokens_head;
 	t_commands	*cmds_head;
 
-	// atexit(check_leaks);
+	atexit(check_leaks);
 	if (argc != 1)
 		return (EXIT_FAILURE);
 
@@ -82,8 +62,8 @@ int	main(int argc, char **argv)
 	print_cmds_list(&cmds_head);
 
 	free(string);
-	free_list(&tokens_head);
-	// add function free cmds_head;
+	free_token_list(&tokens_head);
+	free_cmd_list(&cmds_head);
 	(void)(argv);
 	return (0);
 }
