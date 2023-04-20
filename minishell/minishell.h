@@ -31,9 +31,13 @@ typedef enum s_type
 	LITERAL = 1,
 	PIPE = 2,
 	LESS = 3,
-	GREATER = 4,
+	REDIRECTION = 4,
+	A_REDIRECTION = 5,
 }	t_type;
 
+/*
+	An enum to easily identify the type of linked list.
+*/
 typedef enum s_lst_type
 {
 	TOKEN_LIST = 1,
@@ -52,14 +56,31 @@ typedef struct s_token
 	struct s_token	*next;
 }				t_token;
 
+// typedef struct s_tools
+// {
+// 	char					*args;
+// 	char					**paths;
+// 	char					**envp;
+// 	struct s_simple_cmds	*simple_cmds;
+// 	t_token					*lexer_list;
+// 	char					*pwd;
+// 	char					*old_pwd;
+// 	int						pipes;
+// 	int						*pid;
+// 	bool					heredoc;
+// 	bool					reset;
+// }	t_tools;
+
+
 typedef struct s_commands
 {
 	char				**cmds;
-	int					builtin;
+	char				*builtin;
 	t_token				*redirections;
 	char				*hd_file_name;
 	struct s_commands	*next;
 }				t_commands;
+
 
 				/* Parsing Tokens */
 int		is_whitespace(char c);
@@ -79,6 +100,8 @@ void	create_node(t_token **tokens_head, char *string, int start, int j);
 void	print_token_list(t_token **lst_head);
 void	print_cmds_list(t_commands **lst_head);
 
+				/* Execution of Commands */
+void	execute(t_commands **cmd_head);
 
 				/* Utils */
 void	check_leaks(void);

@@ -50,7 +50,7 @@ void	print_cmds_list(t_commands **lst_head)
 			printf("Redirection: {%s}\n", node->redirections->cmd);
 		else
 			printf("Redirection: {%p}.\n", node->redirections);
-		printf("Builtin: {%d}\n", node->builtin);
+		printf("Builtin: {%s}\n", node->builtin);
 		node = node->next;
 		i = 0;
 	}

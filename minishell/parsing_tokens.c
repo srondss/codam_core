@@ -34,7 +34,7 @@ int	find_token_type(char c)
 	if (c == '<')
 		return (LESS);
 	if (c == '>')
-		return (GREATER);
+		return (REDIRECTION);
 	return (LITERAL);
 }
 

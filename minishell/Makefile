@@ -1,12 +1,12 @@
 NAME = minishell
 
-SRCS = main.c parsing_tokens.c linked_list_functions.c utils.c parsing_commands.c
+SRCS = main.c parsing_tokens.c linked_list_functions.c utils.c parsing_commands.c execute_cmd.c
 
 LIBFT = libft/libft.a
 
 OBJS = $(SRCS:.c=.o)
 
-CFLAGS ?= -Wall -Wextra -Werror
+CFLAGS ?= -Wall -Wextra -Werror #-g -fsanitize=address
 
 all : $(NAME)
 
