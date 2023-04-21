@@ -47,23 +47,29 @@ int	main(int argc, char **argv, char **envp)
 	char		*string;
 	t_token		*tokens_head;
 	t_commands	*cmds_head;
+	t_tools		tools;
 
-	// atexit(check_leaks);
+	atexit(check_leaks);
 	if (argc != 1)
 		return (EXIT_FAILURE);
 
+
 	tokens_head = NULL;
 	cmds_head = NULL;
+	init_tools(&tools, envp);
 
 	string = readline("Minishell: ");
 	parse_input(string, &tokens_head);
 	print_token_list(&tokens_head);
 	parse_cmds(&tokens_head, &cmds_head);
 	print_cmds_list(&cmds_head);
+	execute(&tools, &cmds_head);
 
 	free(string);
 	free_token_list(&tokens_head);
 	free_cmd_list(&cmds_head);
+	free_2d_arr(tools.envp);
+	free_2d_arr(tools.paths);
 	(void)(argv);
 	(void)(envp);
 	return (0);

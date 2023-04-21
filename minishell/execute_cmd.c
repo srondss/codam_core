@@ -13,26 +13,36 @@
 #include "minishell.h"
 
 /*
-Execve takes a path which needs to be passed to the function.
-Basically what I need to do is to loop through the path env variable,
-which will be given to me in the main through the envp. I need to parse
-the envp first to make sure that is ready to be looped through and basically
-split the ':'. Once the envp is ready, then I pass each string in my envp as
-the first arg to the execve function. If it works, great. Otherwise, I need to
-throw an error. I need to use the access() function for this. I will need to create a tools variable to be able to hold the
-envp and probably a bunch of other things.
-That will enable me to run 1 command.
-Then I need to figure out how to use forks and pipes to have multiple commands work.
-Explanation: https://www.youtube.com/watch?v=iq7puCxsgHQ
-https://www.youtube.com/watch?v=Mqb2dVRe0uo
+	Function that loops through all paths in 'PATH=' env variable
+	and runs executable if it exists inside one of the paths.
+	Currently only supports 1 command.
+	I need to figure out how to use forks and pipes to have multiple commands work.
+	Also need to turn this into a loop instead of exiting.
+	Resources -> https://www.youtube.com/watch?v=iq7puCxsgHQ
+				-> https://www.youtube.com/watch?v=Mqb2dVRe0uo
 */
-
-void	execute(t_commands **cmd_head)
+void	execute(t_tools *tools, t_commands **cmd_head)
 {
-	t_commands	*first;
+	char		*exec_string;
+	int			i;
 
-	first = *cmd_head;
-	printf("Execution happening now.\n");
-	if (execve("/bin/ls", first->cmds, NULL) == -1)
-		perror("ERROR -> ");
+	i = 0;
+	while (tools->paths[i] != NULL)
+	{
+		exec_string = ft_strjoin(tools->paths[i], (*cmd_head)->cmds[0]);
+		if (access(exec_string, X_OK) == 0)
+		{
+			printf("---------------EXECUTION--------------------\n");
+			if (execve(exec_string, (*cmd_head)->cmds, NULL) == -1)
+			{
+				perror("Error ->");
+				exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			i++;
+			free(exec_string);
+		}
+	}
 }

@@ -56,20 +56,20 @@ typedef struct s_token
 	struct s_token	*next;
 }				t_token;
 
-// typedef struct s_tools
-// {
-// 	char					*args;
-// 	char					**paths;
-// 	char					**envp;
-// 	struct s_simple_cmds	*simple_cmds;
-// 	t_token					*lexer_list;
-// 	char					*pwd;
-// 	char					*old_pwd;
-// 	int						pipes;
-// 	int						*pid;
-// 	bool					heredoc;
-// 	bool					reset;
-// }	t_tools;
+typedef struct s_tools
+{
+	// char					*args;
+	char					**paths;
+	char					**envp;
+	// struct s_simple_cmds	*simple_cmds;
+	// t_token					*lexer_list;
+	// char					*pwd;
+	// char					*old_pwd;
+	// int						pipes;
+	// int						*pid;
+	// bool					heredoc;
+	// bool					reset;
+}	t_tools;
 
 
 typedef struct s_commands
@@ -93,19 +93,29 @@ void	create_cmd(t_token *start_node, t_token *target_node,
 			t_commands **cmd_head, int num_nodes);
 int		is_builtin(char *string);
 
+				/* Init Tools */
+char	**ft_arrdup(char **arr);
+char	**find_path(char **envp);
+void	add_bslash_path(char **paths);
+void	init_tools(t_tools *tools, char **envp_arg);
+
 				/* Linked_List Functions */
 void	*last_node(void *lst, t_lst_type type);
 void	add_node_back(void **lst_head, void *node, t_lst_type type);
 void	create_node(t_token **tokens_head, char *string, int start, int j);
-void	print_token_list(t_token **lst_head);
-void	print_cmds_list(t_commands **lst_head);
 
 				/* Execution of Commands */
-void	execute(t_commands **cmd_head);
+void	execute(t_tools *tools, t_commands **cmd_head);
+
+				/* Printing (DEBUGGING) */
+void	print_token_list(t_token **lst_head);
+void	print_cmds_list(t_commands **lst_head);
+void	print_2d_array(char **arr);
 
 				/* Utils */
 void	check_leaks(void);
 void	free_token_list(t_token **lst_head);
 void	free_cmd_list(t_commands **lst_head);
+void	free_2d_arr(char **arr);
 
 #endif

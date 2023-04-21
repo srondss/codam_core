@@ -56,3 +56,18 @@ void	free_cmd_list(t_commands **lst_head)
 		first = tmp;
 	}
 }
+
+void	free_2d_arr(char **arr)
+{
+	int	i;
+
+	i = 0;
+	if (!arr)
+		return ;
+	while (arr[i] != NULL)
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+}
