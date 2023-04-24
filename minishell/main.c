@@ -71,6 +71,5 @@ int	main(int argc, char **argv, char **envp)
 	free_2d_arr(tools.envp);
 	free_2d_arr(tools.paths);
 	(void)(argv);
-	(void)(envp);
 	return (0);
 }
