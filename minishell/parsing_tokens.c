@@ -27,12 +27,16 @@ int	is_whitespace(char c)
 /*
 	Returns the type of the character.
 */
-int	find_token_type(char c)
+int	find_token_type(char c, char c_next)
 {
 	if (c == '|')
 		return (PIPE);
+	if (c == '<' && c_next == '<')
+		return (HEREDOC);
+	if (c == '>' && c_next == '>')
+		return (A_REDIRECTION);
 	if (c == '<')
-		return (LESS);
+		return (IN_FILE);
 	if (c == '>')
 		return (REDIRECTION);
 	return (LITERAL);

@@ -30,9 +30,10 @@ typedef enum s_type
 {
 	LITERAL = 1,
 	PIPE = 2,
-	LESS = 3,
-	REDIRECTION = 4,
-	A_REDIRECTION = 5,
+	IN_FILE = 3,
+	HEREDOC = 4,
+	REDIRECTION = 5,
+	A_REDIRECTION = 6,
 }	t_type;
 
 /*
@@ -75,16 +76,16 @@ typedef struct s_tools
 typedef struct s_commands
 {
 	char				**cmds;
-	char				*builtin;
+	char				*builtin; // needs to become function call
 	t_token				*redirections;
-	char				*hd_file_name;
+	char				*hd_file_name; // not sure
 	struct s_commands	*next;
 }				t_commands;
 
 
 				/* Parsing Tokens */
 int		is_whitespace(char c);
-int		find_token_type(char c);
+int		find_token_type(char c, char c_next);
 void	parse_input(char *string, t_token **tokens_head);
 
 				/* Parsing Commands */

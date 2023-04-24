@@ -32,21 +32,20 @@ int	is_builtin(char *string)
 }
 
 void	create_cmd(t_token *start_node, t_token *target_node,
-		t_commands **cmd_head, int num_nodes)
+		t_commands **cmd_head, int s_cmds)
 {
 	t_commands	*node_cmds;
 	int			i;
 	int			redirection;
 
 	i = 0;
-	redirection = 0;
+	redirection = FALSE;
 	node_cmds = malloc(sizeof(t_commands));
 	if (!node_cmds)
 		exit(EXIT_FAILURE);
-	node_cmds->cmds = malloc(sizeof(char *) * num_nodes);
+	node_cmds->cmds = malloc(sizeof(char *) * s_cmds);
 	if (!node_cmds->cmds)
 		exit(EXIT_FAILURE);
-	printf("Allocated %d nodes for command.\n", num_nodes);
 	node_cmds->builtin = NULL; // temporary
 	node_cmds->redirections = NULL;
 
@@ -58,7 +57,7 @@ void	create_cmd(t_token *start_node, t_token *target_node,
 				redirection = FALSE;
 			else
 			{
-				printf("Node %s is %d\n", start_node->cmd, start_node->type);
+				// printf("Node %s is %d\n", start_node->cmd, start_node->type);
 				node_cmds->cmds[i] = start_node->cmd;
 			}
 		}
@@ -72,19 +71,20 @@ void	create_cmd(t_token *start_node, t_token *target_node,
 		i++;
 		start_node = start_node->next;
 	}
-	node_cmds->cmds[num_nodes - 1] = NULL;
+	node_cmds->cmds[s_cmds - 1] = NULL;
 	node_cmds->next = NULL;
 	add_node_back((void **)cmd_head, node_cmds, CMDS_LIST);
 }
+// [ls] [-l] [|] [echo] [a] [>>] [file]
 
 void	parse_cmds(t_token **tokens_head, t_commands **cmd_head)
 {
 	t_token		*node_token;
 	t_token		*start_node;
-	int			num_nodes;
+	int			s_cmds;
 	int			redirection;
 
-	num_nodes = 0;
+	s_cmds = 0;
 	start_node = *tokens_head;
 	node_token = *tokens_head;
 	redirection = 0;
@@ -96,18 +96,19 @@ void	parse_cmds(t_token **tokens_head, t_commands **cmd_head)
 		if (node_token->next->type != LITERAL && node_token->next->type != PIPE)
 			redirection = !redirection;
 		if (redirection != TRUE)
-			num_nodes++;
+			s_cmds++;
 		if (node_token->type == PIPE)
 		{
-			create_cmd(start_node, node_token, cmd_head, num_nodes);
+			create_cmd(start_node, node_token, cmd_head, s_cmds);
 			start_node = node_token->next;
-			num_nodes = 0;
+			s_cmds = 0;
 		}
 		node_token = node_token->next;
 	}
 	if (node_token->type == LITERAL)
 	{
-		num_nodes += 2;
-		create_cmd(start_node, node_token->next, cmd_head, num_nodes);
+		s_cmds += 2;
+		create_cmd(start_node, node_token->next, cmd_head, s_cmds);
 	}
 }
+                // 
