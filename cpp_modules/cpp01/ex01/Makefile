@@ -14,11 +14,11 @@ COMPILE = c++
 
 FLAGS = -Wall -Werror -Wextra -std=c++98
 
-FILES = main.cpp Zombie.cpp newZombie.cpp randomChump.cpp
+FILES = main.cpp Zombie.cpp zombieHorde.cpp
 
 OFILES = $(FILES:.cpp=.o)
 
-NAME = zombie
+NAME = zombieHorde
 
 all: $(NAME)
 
