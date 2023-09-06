@@ -59,7 +59,7 @@ initialized to 8 like in exercise 00.
 */
 Fixed::Fixed(const float value) {
 	std::cout << "Float constructor called" << std::endl;
-	this->_value = roundf(value * (1 << this->_bits));
+	this->_value = ((int)roundf(value * (1 << this->_bits)));
 }
 
 // converts the fixed-point value to a float value.
@@ -69,7 +69,7 @@ float	Fixed::toFloat(void) const {
 
 // converts the fixed-point value to an integer value.
 int		Fixed::toInt(void) const {
-	return (this->_value / (int)(1 << this->_bits));
+	return (this->_value >> this->_bits);
 }
 
 /*
