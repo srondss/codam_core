@@ -22,7 +22,7 @@
 // How do we represent a number in fixed point notation?
 // Let's say we want to store the value 8.63 in a 8 bit integer with 4 bits for the fractional part.
 // We have to first split up the number into integer and fractional parts.
-// The 4 leftmost bits will be for the integer part and 4 rightmost bits will be for the fractional part.
+// The 4 leftmost bits (range) will be for the integer part and 4 rightmost bits (accuracy) will be for the fractional part.
 // The leftmost bits use the normal binary representation (2^0, 2^1, 2^2, 2^3, 2^4, 2^5, 2^6, 2^7, etc..)
 // The rightmost bits use the negative powers of 2 (2^-1, 2^-2, 2^-3, 2^-4, etc..)
 // So the binary representation of 8.63 is 1000.1010.
@@ -48,25 +48,20 @@
 
 int main( void ) {
 
+	// Fixed a( 8.625f);
+	// Fixed b( 8.63f);
+	// std::cout << a << std::endl;
+	// std::cout << b << std::endl;
+	// std::cout << (a == b) << std::endl;
+
 	Fixed a;
-	Fixed const b( 10 );
-	Fixed const c( 42.42f );
-	Fixed const d( b );
-
-	Fixed e( 8.63f );
-	Fixed f( 8.625f);
-
-	std::cout << "e is " << e << std::endl;
-	std::cout << "f is " << f << std::endl;
-	std::cout << (e.getRawBits() == f.getRawBits()) << std::endl;
-	// std::cout << "a is " << a << std::endl;
-	// std::cout << "b is " << b << std::endl;
-	// std::cout << "c is " << c << std::endl;
-	// std::cout << "d is " << d << std::endl;
-
-	// std::cout << "a is " << a.toInt() << " as integer" << std::endl;
-	// std::cout << "b is " << b.toInt() << " as integer" << std::endl;
-	// std::cout << "c is " << c.toInt() << " as integer" << std::endl;
-	// std::cout << "d is " << d.toInt() << " as integer" << std::endl;
+	Fixed const b( Fixed( 5.05f ) * Fixed( 2 ) );
+	std::cout << a << std::endl;
+	std::cout << ++a << std::endl;
+	std::cout << a << std::endl;
+	std::cout << a++ << std::endl;
+	std::cout << a << std::endl;
+	std::cout << b << std::endl;
+	std::cout << Fixed::max( a, b ) << std::endl;
 	return 0;
 }
