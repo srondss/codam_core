@@ -14,7 +14,7 @@ COMPILE = c++
 
 FLAGS = -Wall -Werror -Wextra -std=c++98
 
-FILES = main.cpp ClapTrap.cpp ScavTrap.cpp
+FILES = main.cpp ClapTrap.cpp ScavTrap.cpp FragTrap.cpp
 
 OFILES = $(FILES:.cpp=.o)
 
