@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 10:16:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/09/09 10:50:06 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/09/10 12:26:26 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,20 @@
 # include <stdbool.h>
 # include <unistd.h>
 
+typedef struct s_player
+{
+	mlx_image_t	*player_images;
+	float		delta_x;
+	float		delta_y;
+	float		angle;
+}				t_player;
 
+typedef struct s_game
+{
+	mlx_t		*mlx;
+	t_player	*player;
+	int			*map;
+}				t_game;
 
 
 #endif
