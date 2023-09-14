@@ -6,13 +6,13 @@
 #    By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/09 10:02:31 by ysrondy           #+#    #+#              #
-#    Updated: 2023/09/09 11:16:54 by ysrondy          ###   ########.fr        #
+#    Updated: 2023/09/11 09:53:07 by ysrondy          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := cub3d
 
-CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address,undefined
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address,undefined
 
 #Directories
 LIBFT_DIR = ./lib/libft

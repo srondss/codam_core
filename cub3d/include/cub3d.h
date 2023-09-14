@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 10:16:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/09/10 12:26:26 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/09/12 14:22:38 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,19 @@
 typedef struct s_player
 {
 	mlx_image_t	*player_images;
+	mlx_image_t	*player_line;
 	float		delta_x;
 	float		delta_y;
 	float		angle;
+	int			mx;
+	int			my;
+	int			mp;
+	int			dof;
+	float		rx; // ray x coordinate
+	float		ry; // ray y coordinate
+	float		ra; // ray angle
+	float		xo;
+	float		yo;
 }				t_player;
 
 typedef struct s_game
