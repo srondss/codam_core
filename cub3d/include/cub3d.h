@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 10:16:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/09/12 14:22:38 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/09/23 21:34:56 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "../Lib/MLX42/include/MLX42/MLX42.h"
 # include "../Lib/libft/libft.h"
+# include "./get_next_line.h"
 # include <math.h>
 # include <fcntl.h>
 # include <stdio.h>
@@ -40,11 +41,27 @@ typedef struct s_player
 	float		yo;
 }				t_player;
 
+typedef struct s_map
+{
+	int		width;
+	int		height;
+	int		**map_2d;
+	char	*no_texture;
+	char	*so_texture;
+	char	*we_texture;
+	char	*ea_texture;
+	char	*floor_color;
+	char	*ceiling_color;
+	char	direction;
+	int		player_count;
+	int		num_lines_file;
+}				t_map;
+
 typedef struct s_game
 {
 	mlx_t		*mlx;
 	t_player	*player;
-	int			*map;
+	t_map		*map;
 }				t_game;
 
 

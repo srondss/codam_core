@@ -6,7 +6,7 @@
 #    By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/09 10:02:31 by ysrondy           #+#    #+#              #
-#    Updated: 2023/09/11 09:53:07 by ysrondy          ###   ########.fr        #
+#    Updated: 2023/09/23 18:51:52 by ysrondy          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ MLX_FLAGS_LINKING = -ldl -lglfw -pthread -lm -L"/opt/homebrew/opt/glfw/lib"
 HEADERS := -I ./include -I $(LIBFT_DIR) -I ./include -I $(MLX_DIR)/include
 
 #Sources
-SRCS = src/main.c
+SRCS = src/main.c src/get_next_line.c src/get_next_line_utils.c
 
 #Objects
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
