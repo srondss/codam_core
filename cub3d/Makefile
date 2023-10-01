@@ -6,13 +6,13 @@
 #    By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/09 10:02:31 by ysrondy           #+#    #+#              #
-#    Updated: 2023/09/23 18:51:52 by ysrondy          ###   ########.fr        #
+#    Updated: 2023/09/28 13:25:25 by ysrondy          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := cub3d
 
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address,undefined
+CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address,undefined
 
 #Directories
 LIBFT_DIR = ./lib/libft
@@ -30,7 +30,12 @@ MLX_FLAGS_LINKING = -ldl -lglfw -pthread -lm -L"/opt/homebrew/opt/glfw/lib"
 HEADERS := -I ./include -I $(LIBFT_DIR) -I ./include -I $(MLX_DIR)/include
 
 #Sources
-SRCS = src/main.c src/get_next_line.c src/get_next_line_utils.c
+SRCS = src/main.c \
+		src/get_next_line.c \
+		src/get_next_line_utils.c \
+		src/map_parsing_utils.c \
+		src/texture_check.c \
+		src/ceiling_floor_check.c \
 
 #Objects
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
@@ -40,7 +45,6 @@ all : $(NAME)
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(@D)
 	@$(CC) $(CFLAGS) -o $@ -c $<
-	@printf "All object files are in obj directories.\n"
 
 $(NAME): $(LIB_LIBFT) $(LIB_MLX) $(OBJS)
 	@$(CC) $(CFLAGS) $(HEADERS) $(LIB_LIBFT) $(LIB_MLX) $(MLX_FLAGS_LINKING) $(OBJS)  -o $(NAME)

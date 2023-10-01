@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 14:30:44 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/09/23 22:49:58 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/01 21:47:39 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,154 +210,30 @@
 	// return ((deg * M_PI) / 180);
 // }
 
-bool	is_whitespace(char c)
+bool	check_map_line(t_game *game, char *line, int first_map_line)
 {
-	if (c == '\f' || c == ' ' || c == '\n' || c == '\r'
-		|| c == '\t' || c == '\v')
-		return (true);
-	else
-		return (false);
-}
-
-bool	check_no_texture(t_game *game, char *line, int i, bool found_map)
-{
-	int	j;
-
-	if (found_map)
-		return (printf("Error: Map should be last element.\n"), false);
-	while (is_whitespace(line[i]))
-		i++;
-	j = i;
-	while (!is_whitespace(line[j]))
-		j++;
-	game->map->no_texture = ft_substr(line, i, j);
-	printf("Found NO texture: %s\n", game->map->no_texture);
-	while (is_whitespace(line[j]))
-		j++;
-	if (line[j] != '\0')
-		return (printf("Error: Invalid NO_Texture line.\n"), false);
-	return (true);
-}
-
-bool	check_so_texture(t_game *game, char *line, int i, bool found_map)
-{
-	int	j;
-
-	if (found_map)
-		return (printf("Error: Map should be last element.\n"), false);
-	while (is_whitespace(line[i]))
-		i++;
-	j = i;
-	while (!is_whitespace(line[j]))
-		j++;
-	game->map->so_texture = ft_substr(line, i, j);
-	printf("Found SO texture: %s\n", game->map->so_texture);
-	while (is_whitespace(line[j]))
-		j++;
-	if (line[j] != '\0')
-		return (printf("Error: Invalid SO_Texture line.\n"), false);
-	return (true);
-}
-
-bool	check_we_texture(t_game *game, char *line, int i, bool found_map)
-{
-	int	j;
-
-	if (found_map)
-		return (printf("Error: Map should be last element.\n"), false);
-	while (is_whitespace(line[i]))
-		i++;
-	j = i;
-	while (!is_whitespace(line[j]))
-		j++;
-	game->map->we_texture = ft_substr(line, i, j);
-	printf("Found WE texture: %s\n", game->map->we_texture);
-	while (is_whitespace(line[j]))
-		j++;
-	if (line[j] != '\0')
-		return (printf("Error: Invalid WE_Texture line.\n"), false);
-	return (true);
-}
-
-bool	check_ea_texture(t_game *game, char *line, int i, bool found_map)
-{
-	int	j;
-
-	if (found_map)
-		return (printf("Error: Map should be last element.\n"), false);
-	while (is_whitespace(line[i]))
-		i++;
-	j = i;
-	while (!is_whitespace(line[j]))
-		j++;
-	game->map->ea_texture = ft_substr(line, i, j);
-	printf("Found EA texture: %s\n", game->map->ea_texture);
-	while (is_whitespace(line[j]))
-		j++;
-	if (line[j] != '\0')
-		return (printf("Error: Invalid EA_Texture line.\n"), false);
-	return (true);
-}
-
-bool	check_floor_color(t_game *game, char *line, int i, bool found_map)
-{
-	int	j;
-
-	if (found_map)
-		return (printf("Error: Map should be last element.\n"), false);
-	while (is_whitespace(line[i]))
-		i++;
-	j = i;
-	while (!is_whitespace(line[j]))
-		j++;
-	game->map->floor_color = ft_substr(line, i, j);
-	printf("Found Floor Color: %s\n", game->map->floor_color);
-	while (is_whitespace(line[j]))
-		j++;
-	if (line[j] != '\0')
-		return (printf("Error: Invalid Floor_Color line.\n"), false);
-	return (true);
-}
-
-bool	check_ceiling_color(t_game *game, char *line, int i, bool found_map)
-{
-	int	j;
-
-	if (found_map)
-		return (printf("Error: Map should be last element.\n"), false);
-	while (is_whitespace(line[i]))
-		i++;
-	j = i;
-	while (!is_whitespace(line[j]))
-		j++;
-	game->map->ceiling_color = ft_substr(line, i, j);
-	printf("Found Ceiling Color: %s\n", game->map->ceiling_color);
-	while (is_whitespace(line[j]))
-		j++;
-	if (line[j] != '\0')
-		return (printf("Error: Invalid Ceiling_Color line.\n"), false);
-	return (true);
-}
-
-bool	check_map_line(t_game *game, char *line, int counter)
-{
-	int	i;
-	int	*line_2d;
+	static int	counter = 0;
+	int			i;
+	int			*line_2d;
 
 	i = 0;
 	line_2d = malloc(sizeof(int) * ft_strlen(line));
+	if (!line_2d)
+		return (false);
+	printf("Num Lines in File: %d\n", game->map->num_lines_file);
+	printf("First Map Line: %d\n", first_map_line);
 	while (line[i])
 	{
 		if (ft_isdigit(line[i]))
 		{
+
 			if (line[i] != '1' && line[i] != '0')
 				return (false);
-			// TODO: FIX THIS COUNTER TO CHECK FOR LAST LINE OF MAP
-			else if ((counter == 0 || counter == game->map->num_lines_file - counter) && (line[i] != '1' && !is_whitespace(line[i])))
-			{
-				printf("Counter: %d\n", counter);
+			else if ((counter == 0 || counter == (game->map->num_lines_file - first_map_line))
+				&& (line[i] != '1' && !is_whitespace(line[i])))
 				return (false);
-			}
+			else if (line[get_pos_first_digit(line)] != '1' || line[get_pos_last_digit(line)] != '1')
+				return (false);
 		}
 		if (ft_isalpha(line[i]))
 		{
@@ -374,6 +250,7 @@ bool	check_map_line(t_game *game, char *line, int counter)
 	}
 	game->map->map_2d[counter] = line_2d;
 	printf("Map_Line is correct: %s", line);
+	counter++;
 	return (true);
 }
 
@@ -383,10 +260,10 @@ void	parse_cub_file(t_game *game, char *map)
 	char	*line;
 	int		i;
 	bool	found_map;
-	int		counter;
+	int		first_map_line;
 
 	i = 0;
-	counter = 0;
+	first_map_line = 1;
 	fd = open(map, O_RDONLY);
 	found_map = false;
 	if (fd < 0)
@@ -428,12 +305,12 @@ void	parse_cub_file(t_game *game, char *map)
 		}
 		else if (line[i] == 'F')
 		{
-			if (check_floor_color(game, line, i + 1, found_map) == false)
+			if (check_floor_color(game, line, found_map) == false)
 				exit(EXIT_FAILURE);
 		}
 		else if (line[i] == 'C')
 		{
-			if (check_ceiling_color(game, line, i + 1, found_map) == false)
+			if (check_ceiling_color(game, line, found_map) == false)
 				exit(EXIT_FAILURE);
 		}
 		else if (line[i] == '\0')
@@ -442,12 +319,11 @@ void	parse_cub_file(t_game *game, char *map)
 		{
 			printf("Found map.\n");
 			found_map = true;
-			if (check_map_line(game, line, counter) == false)
+			if (check_map_line(game, line, first_map_line) == false)
 			{
 				printf("Error: Invalid map line: %s\n", line);
 				exit(EXIT_FAILURE);
 			}
-			counter++;
 		}
 		else
 		{
@@ -457,7 +333,10 @@ void	parse_cub_file(t_game *game, char *map)
 		free(line);
 		i = 0;
 		line = get_next_line(fd);
+		if (!found_map)
+			first_map_line++;
 	}
+	close(fd);
 }
 
 bool	check_valid_map(t_game *game, char *map)
@@ -468,33 +347,8 @@ bool	check_valid_map(t_game *game, char *map)
 		return (printf("Error: Invalid map file specified.\n"), false);
 	parse_cub_file(game, map);
 	if (game->map->player_count == 0 || game->map->player_count > 1)
-		return (printf("Error: Invalid player count.\n"), false);
+		return (printf("Error: Invalid player count of %d.\n", game->map->player_count), false);
 	return (true);
-}
-
-int	get_num_lines_file(char *map)
-{
-	int		fd;
-	char	*line;
-	int		counter;
-
-	counter = 0;
-	fd = open(map, O_RDONLY);
-	if (fd < 0)
-	{
-		printf("Error: Unable to open specified map.\n");
-		exit(EXIT_FAILURE);
-	}
-	line = get_next_line(fd);
-	while (line)
-	{
-		counter++;
-		free(line);
-		line = get_next_line(fd);
-	}
-	close(fd);
-	printf("Found %d lines in map.\n", counter);
-	return (counter);
 }
 
 void	init_map(t_game *game, char *map)
@@ -517,6 +371,11 @@ void	init_map(t_game *game, char *map)
 	}
 	game->map->player_count = 0;
 }
+
+// TODO: Handle map parsing where row[x][y] == 0 && row[x + 1][y] == ' '. This is a potentially valid map because there may be a wall at row[x + 2][y].
+// In order to handle this edge case, we need to loop through all the rows from x to the last row and check if there is a '1' at the same y coordinate.
+// If there is no '1' at the same y coordinate, then the map is invalid.
+// If there is a '1' at the same y coordinate, then the map is potentially valid assuming there are no other '0' values in subsequent rows.
 
 int main(int argc, char **argv)
 {
