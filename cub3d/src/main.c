@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 14:30:44 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/10/01 21:47:39 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/02 09:55:49 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,34 +205,121 @@
 // 	return (1);
 // }
 
-// float	deg2rad(float deg)
-// {
-	// return ((deg * M_PI) / 180);
-// }
+// TODO: Handle tabs because they mess up the map parsing.
+// Why? Because they take up 4 spaces but are only 1 character.
 
-bool	check_map_line(t_game *game, char *line, int first_map_line)
+int	position_player_x(int **map_2d, t_game *game)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (i < game->map->height && game->map->map_2d[i])
+	{
+		while (map_2d[i][j] != '\0')
+		{
+			if (map_2d[i][j] == 'N' || map_2d[i][j] == 'S' || map_2d[i][j] == 'W' || map_2d[i][j] == 'E' || map_2d[i][j] == 'P')
+				return (i);
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+	return (-1);
+}
+
+int	position_player_y(int **map_2d, t_game *game)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (i < game->map->height && game->map->map_2d[i])
+	{
+		while (map_2d[i][j] != '\0')
+		{
+			if (map_2d[i][j] == 'N' || map_2d[i][j] == 'S' || map_2d[i][j] == 'W' || map_2d[i][j] == 'E' || map_2d[i][j] == 'P')
+				return (j);
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+	return (-1);
+}
+
+void	print_map_2d(t_game *game)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (i < game->map->height && game->map->map_2d[i])
+	{
+		while ((game->map->map_2d[i][j]) != '\0')
+		{
+			printf("%c", game->map->map_2d[i][j]);
+			j++;
+		}
+		i++;
+		j = 0;
+	}
+}
+
+bool	find_path_exit(t_game *game, int **map_2d)
+{
+	int	x;
+	int	y;
+
+	x = position_player_x(map_2d, game);
+	y = position_player_y(map_2d, game);
+	printf("Player is at (%d,%d)\n", x, y);
+	print_map_2d(game);
+	if (x == -1 || y == -1)
+	{
+		printf("Player is indeed surrounded by walls.\n");
+		return (true);
+	}
+	if (map_2d[x + 1][y] == '\0' || map_2d[x - 1][y] == '\0'
+			|| map_2d[x][y + 1] == '\0' || map_2d[x][y - 1] == '\0'
+			|| map_2d[x + 1][y] == ' ' || map_2d[x - 1][y] == ' '
+			|| map_2d[x][y + 1] == ' ' || map_2d[x][y - 1] == ' ')
+		{
+			printf("Player is not surrounded by walls at (%d,%d).\n", x, y);
+			printf("%c %c %c %c\n", map_2d[x + 1][y], map_2d[x - 1][y], map_2d[x][y + 1], map_2d[x][y - 1]);
+			return (false);
+		}
+	if (map_2d[x + 1][y] == '0')
+		map_2d[x + 1][y] = 'P';
+	if (map_2d[x - 1][y] == '0')
+		map_2d[x - 1][y] = 'P';
+	if (map_2d[x][y + 1] == '0')
+		map_2d[x][y + 1] = 'P';
+	if (map_2d[x][y - 1] == '0')
+		map_2d[x][y - 1] = 'P';
+	map_2d[x][y] = 'X';
+	printf("\n\n");
+	return (find_path_exit(game, map_2d));
+}
+
+bool	check_map_line(t_game *game, char *line)
 {
 	static int	counter = 0;
 	int			i;
 	int			*line_2d;
 
 	i = 0;
-	line_2d = malloc(sizeof(int) * ft_strlen(line));
+	line_2d = malloc(sizeof(int) * (ft_strlen(line) + 1));
 	if (!line_2d)
 		return (false);
-	printf("Num Lines in File: %d\n", game->map->num_lines_file);
-	printf("First Map Line: %d\n", first_map_line);
 	while (line[i])
 	{
 		if (ft_isdigit(line[i]))
 		{
-
 			if (line[i] != '1' && line[i] != '0')
-				return (false);
-			else if ((counter == 0 || counter == (game->map->num_lines_file - first_map_line))
-				&& (line[i] != '1' && !is_whitespace(line[i])))
-				return (false);
-			else if (line[get_pos_first_digit(line)] != '1' || line[get_pos_last_digit(line)] != '1')
 				return (false);
 		}
 		if (ft_isalpha(line[i]))
@@ -243,14 +330,17 @@ bool	check_map_line(t_game *game, char *line, int first_map_line)
 			{
 				game->map->direction = line[i];
 				game->map->player_count++;
+				if (game->map->player_count > 1)
+					return (false);
 			}
 		}
-		line_2d[i] = line[i] - '0';
+		line_2d[i] = line[i];
 		i++;
 	}
+	line_2d[i] = '\0';
 	game->map->map_2d[counter] = line_2d;
-	printf("Map_Line is correct: %s", line);
 	counter++;
+	game->map->height = counter;
 	return (true);
 }
 
@@ -260,10 +350,8 @@ void	parse_cub_file(t_game *game, char *map)
 	char	*line;
 	int		i;
 	bool	found_map;
-	int		first_map_line;
 
 	i = 0;
-	first_map_line = 1;
 	fd = open(map, O_RDONLY);
 	found_map = false;
 	if (fd < 0)
@@ -319,7 +407,7 @@ void	parse_cub_file(t_game *game, char *map)
 		{
 			printf("Found map.\n");
 			found_map = true;
-			if (check_map_line(game, line, first_map_line) == false)
+			if (check_map_line(game, line) == false)
 			{
 				printf("Error: Invalid map line: %s\n", line);
 				exit(EXIT_FAILURE);
@@ -333,8 +421,6 @@ void	parse_cub_file(t_game *game, char *map)
 		free(line);
 		i = 0;
 		line = get_next_line(fd);
-		if (!found_map)
-			first_map_line++;
 	}
 	close(fd);
 }
@@ -346,9 +432,9 @@ bool	check_valid_map(t_game *game, char *map)
 	else if (ft_strncmp(map + ft_strlen(map) - 4, ".cub", 4) != 0)
 		return (printf("Error: Invalid map file specified.\n"), false);
 	parse_cub_file(game, map);
-	if (game->map->player_count == 0 || game->map->player_count > 1)
+	if (game->map->player_count == 0)
 		return (printf("Error: Invalid player count of %d.\n", game->map->player_count), false);
-	return (true);
+	return (find_path_exit(game, game->map->map_2d));
 }
 
 void	init_map(t_game *game, char *map)
@@ -391,6 +477,7 @@ int main(int argc, char **argv)
 	init_map(game, argv[1]);
 	if (!check_valid_map(game, argv[1]))
 		return (EXIT_FAILURE);
+	printf("Map is valid.\n");
 	return (EXIT_SUCCESS);
 	// game->mlx = mlx_init(WIDTH, HEIGHT, "Map", true);
 	// if (!game->mlx)
