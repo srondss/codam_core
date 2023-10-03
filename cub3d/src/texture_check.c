@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 13:16:19 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/09/28 13:16:35 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/03 09:38:26 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ bool	check_no_texture(t_game *game, char *line, int i, bool found_map)
 {
 	int	j;
 
+	if (game->map->no_texture)
+		return (printf("Error: Duplicate NO found.\n"), false);
 	if (found_map)
 		return (printf("Error: Map should be last element.\n"), false);
 	while (is_whitespace(line[i]))
@@ -36,6 +38,8 @@ bool	check_so_texture(t_game *game, char *line, int i, bool found_map)
 {
 	int	j;
 
+	if (game->map->so_texture)
+		return (printf("Error: Duplicate SO found.\n"), false);
 	if (found_map)
 		return (printf("Error: Map should be last element.\n"), false);
 	while (is_whitespace(line[i]))
@@ -56,6 +60,8 @@ bool	check_we_texture(t_game *game, char *line, int i, bool found_map)
 {
 	int	j;
 
+	if (game->map->we_texture)
+		return (printf("Error: Duplicate WE found.\n"), false);
 	if (found_map)
 		return (printf("Error: Map should be last element.\n"), false);
 	while (is_whitespace(line[i]))
@@ -76,6 +82,8 @@ bool	check_ea_texture(t_game *game, char *line, int i, bool found_map)
 {
 	int	j;
 
+	if (game->map->ea_texture)
+		return (printf("Error: Duplicate EA texture.\n"), false);
 	if (found_map)
 		return (printf("Error: Map should be last element.\n"), false);
 	while (is_whitespace(line[i]))

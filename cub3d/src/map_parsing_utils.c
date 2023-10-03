@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 13:19:49 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/09/28 15:11:09 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/03 17:37:36 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,18 @@ int	get_pos_last_digit(char *line)
 	return (i);
 }
 
-int	get_pos_first_digit(char *line)
+int	get_pos_first_digit(char *line, char c)
 {
 	int	i;
 
 	i = 0;
+	while (line[i] != c)
+		i++;
+	i++;
 	while (line[i] != '\0')
 	{
+		if (is_whitespace(line[i]) == false && ft_isdigit(line[i]) == false)
+			return (0);
 		if (ft_isdigit(line[i]) == true)
 			return (i);
 		i++;

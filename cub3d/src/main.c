@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 14:30:44 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/10/02 09:55:49 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/03 17:57:05 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,6 +267,19 @@ void	print_map_2d(t_game *game)
 		i++;
 		j = 0;
 	}
+	printf("\n");
+}
+
+int	get_row_width(int **map_2d, int row)
+{
+	int	i;
+
+	i = 0;
+	while (map_2d[row][i] != '\0')
+	{
+		i++;
+	}
+	return (i);
 }
 
 bool	find_path_exit(t_game *game, int **map_2d)
@@ -276,35 +289,28 @@ bool	find_path_exit(t_game *game, int **map_2d)
 
 	x = position_player_x(map_2d, game);
 	y = position_player_y(map_2d, game);
-	printf("Player is at (%d,%d)\n", x, y);
-	print_map_2d(game);
 	if (x == -1 || y == -1)
-	{
-		printf("Player is indeed surrounded by walls.\n");
-		return (true);
-	}
-	if (map_2d[x + 1][y] == '\0' || map_2d[x - 1][y] == '\0'
-			|| map_2d[x][y + 1] == '\0' || map_2d[x][y - 1] == '\0'
-			|| map_2d[x + 1][y] == ' ' || map_2d[x - 1][y] == ' '
-			|| map_2d[x][y + 1] == ' ' || map_2d[x][y - 1] == ' ')
-		{
-			printf("Player is not surrounded by walls at (%d,%d).\n", x, y);
-			printf("%c %c %c %c\n", map_2d[x + 1][y], map_2d[x - 1][y], map_2d[x][y + 1], map_2d[x][y - 1]);
-			return (false);
-		}
-	if (map_2d[x + 1][y] == '0')
+		return (printf("Player is indeed surrounded by walls.\n"), true);
+	// print_map_2d(game);
+	if (x == 0 || y == 0
+		|| x == game->map->height || y == get_row_width(map_2d, x)
+		|| map_2d[x + 1][y] == '\0' || map_2d[x - 1][y] == '\0'
+		|| map_2d[x][y + 1] == '\0' || map_2d[x][y - 1] == '\0')
+		return (printf("Error: Player is not surrounded by walls.\n"), false);
+	if (map_2d[x + 1][y] == '0' || map_2d[x + 1][y] == ' ')
 		map_2d[x + 1][y] = 'P';
-	if (map_2d[x - 1][y] == '0')
+	if (map_2d[x - 1][y] == '0' || map_2d[x - 1][y] == ' ')
 		map_2d[x - 1][y] = 'P';
-	if (map_2d[x][y + 1] == '0')
+	if (map_2d[x][y + 1] == '0' || map_2d[x][y + 1] == ' ')
 		map_2d[x][y + 1] = 'P';
-	if (map_2d[x][y - 1] == '0')
+	if (map_2d[x][y - 1] == '0' || map_2d[x][y - 1] == ' ')
 		map_2d[x][y - 1] = 'P';
 	map_2d[x][y] = 'X';
-	printf("\n\n");
 	return (find_path_exit(game, map_2d));
 }
-
+/*
+	malloc strlen * 4 because i need to split tabs into spaces.
+*/
 bool	check_map_line(t_game *game, char *line)
 {
 	static int	counter = 0;
@@ -312,7 +318,7 @@ bool	check_map_line(t_game *game, char *line)
 	int			*line_2d;
 
 	i = 0;
-	line_2d = malloc(sizeof(int) * (ft_strlen(line) + 1));
+	line_2d = malloc(sizeof(int) * ((ft_strlen(line) * 4) + 1));
 	if (!line_2d)
 		return (false);
 	while (line[i])
@@ -344,6 +350,37 @@ bool	check_map_line(t_game *game, char *line)
 	return (true);
 }
 
+bool	check_elements_exist(t_game *game)
+{
+	if (game->map->no_texture == NULL)
+		return (false);
+	if (game->map->so_texture == NULL)
+		return (false);
+	if (game->map->we_texture == NULL)
+		return (false);
+	if (game->map->ea_texture == NULL)
+		return (false);
+	if (game->map->floor_color_string == NULL)
+		return (false);
+	if (game->map->ceiling_color_string == NULL)
+		return (false);
+	return (true);
+}
+
+bool	error_if_not_empty(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (is_whitespace(line[i]) == false && line[i] != '\0')
+			return (printf("Error: Line is not empty: %s\n", line), false);
+		i++;
+	}
+	return (true);
+}
+
 void	parse_cub_file(t_game *game, char *map)
 {
 	int		fd;
@@ -367,10 +404,10 @@ void	parse_cub_file(t_game *game, char *map)
 	}
 	while (line)
 	{
-		printf("%s", line);
+		// printf("%s", line);
 		while (is_whitespace(line[i]))
 			i++;
-		printf("Line[i] = %c\n", line[i]);
+		// printf("Line[i] = %c\n", line[i]);
 		if (line[i] == 'N' && line[i + 1] == 'O')
 		{
 			if (check_no_texture(game, line, i + 2, found_map) == false)
@@ -401,12 +438,20 @@ void	parse_cub_file(t_game *game, char *map)
 			if (check_ceiling_color(game, line, found_map) == false)
 				exit(EXIT_FAILURE);
 		}
-		else if (line[i] == '\0')
-			printf("Found empty line.\n");
+		else if ((line[i] == '\0'|| is_whitespace(line[i])) && found_map == false)
+			;
+		else if ((line[i] == '\0'|| is_whitespace(line[i])) && found_map == true)
+		{
+			error_if_not_empty(line);
+		}
 		else if (ft_isdigit(line[i]))
 		{
-			printf("Found map.\n");
 			found_map = true;
+			if (check_elements_exist(game) == false)
+			{
+				printf("Error: Missing map elements.\n");
+				exit(EXIT_FAILURE);
+			}
 			if (check_map_line(game, line) == false)
 			{
 				printf("Error: Invalid map line: %s\n", line);
@@ -456,6 +501,14 @@ void	init_map(t_game *game, char *map)
 		exit(EXIT_FAILURE);
 	}
 	game->map->player_count = 0;
+	game->map->no_texture = NULL;
+	game->map->so_texture = NULL;
+	game->map->we_texture = NULL;
+	game->map->ea_texture = NULL;
+	game->map->floor_color_string = NULL;
+	game->map->ceiling_color_string = NULL;
+	game->map->direction = '\0';
+	game->map->height = 0;
 }
 
 // TODO: Handle map parsing where row[x][y] == 0 && row[x + 1][y] == ' '. This is a potentially valid map because there may be a wall at row[x + 2][y].

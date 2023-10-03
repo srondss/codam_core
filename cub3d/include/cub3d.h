@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 10:16:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/10/01 19:00:21 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/03 17:38:17 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ typedef struct s_RGB
 
 typedef struct s_map
 {
-	int		width;
 	int		height;
 	int		**map_2d;
 	char	*no_texture;
@@ -87,7 +86,7 @@ bool	check_ceiling_color(t_game *game, char *line, bool found_map);
 // MAP PARSING UTILS
 bool	is_whitespace(char c);
 int		get_pos_last_digit(char *line);
-int		get_pos_first_digit(char *line);
+int		get_pos_first_digit(char *line, char c);
 int		get_num_lines_file(char *map);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 13:18:40 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/10/01 21:42:42 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/03 17:38:06 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ bool	check_floor_color(t_game *game, char *line, bool found_map)
 
 	if (found_map)
 		return (printf("Error: Map should be last element.\n"), false);
-	first_digit = get_pos_first_digit(line);
+	first_digit = get_pos_first_digit(line, 'F');
+	if (first_digit == 0)
+		return (printf("Error: Found invalid character in floor line.\n"), false);
 	last_digit = get_pos_last_digit(line);
 	game->map->floor_color_string = ft_substr(line, first_digit, last_digit);
 	printf("Floor Color String: %s\n", game->map->floor_color_string);
@@ -56,7 +58,9 @@ bool	check_ceiling_color(t_game *game, char *line, bool found_map)
 
 	if (found_map)
 		return (printf("Error: Map should be last element.\n"), false);
-	first_digit = get_pos_first_digit(line);
+	first_digit = get_pos_first_digit(line, 'C');
+	if (first_digit == 0)
+		return (printf("Error: Found invalid character in floor line.\n"), false);
 	last_digit = get_pos_last_digit(line);
 	game->map->ceiling_color_string = ft_substr(line, first_digit, last_digit);
 	printf("Ceiling Color String: %s\n", game->map->ceiling_color_string);
