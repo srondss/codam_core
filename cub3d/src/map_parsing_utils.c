@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 13:19:49 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/10/03 17:37:36 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/04 21:10:09 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,6 @@ int	get_num_lines_file(char *map)
 		line = get_next_line(fd);
 	}
 	close(fd);
-	printf("Found %d lines in map.\n", counter);
+	// printf("Found %d lines in map.\n", counter);
 	return (counter);
 }

@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/28 13:16:19 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/10/03 09:38:26 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/04 21:09:43 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,16 @@ bool	check_no_texture(t_game *game, char *line, int i, bool found_map)
 		return (printf("Error: Duplicate NO found.\n"), false);
 	if (found_map)
 		return (printf("Error: Map should be last element.\n"), false);
+	j = i;
 	while (is_whitespace(line[i]))
 		i++;
+	if (i == j)
+		return (printf("Error: No space between NO and texture path.\n"), false);
 	j = i;
 	while (!is_whitespace(line[j]))
 		j++;
 	game->map->no_texture = ft_substr(line, i, j);
-	printf("Found NO texture: %s\n", game->map->no_texture);
+	// printf("Found NO texture: %s\n", game->map->no_texture);
 	while (is_whitespace(line[j]))
 		j++;
 	if (line[j] != '\0')
@@ -42,13 +45,16 @@ bool	check_so_texture(t_game *game, char *line, int i, bool found_map)
 		return (printf("Error: Duplicate SO found.\n"), false);
 	if (found_map)
 		return (printf("Error: Map should be last element.\n"), false);
+	j = i;
 	while (is_whitespace(line[i]))
 		i++;
+	if (i == j)
+		return (printf("Error: No space between SO and texture path.\n"), false);
 	j = i;
 	while (!is_whitespace(line[j]))
 		j++;
 	game->map->so_texture = ft_substr(line, i, j);
-	printf("Found SO texture: %s\n", game->map->so_texture);
+	// printf("Found SO texture: %s\n", game->map->so_texture);
 	while (is_whitespace(line[j]))
 		j++;
 	if (line[j] != '\0')
@@ -64,13 +70,16 @@ bool	check_we_texture(t_game *game, char *line, int i, bool found_map)
 		return (printf("Error: Duplicate WE found.\n"), false);
 	if (found_map)
 		return (printf("Error: Map should be last element.\n"), false);
+	j = i;
 	while (is_whitespace(line[i]))
 		i++;
+	if (i == j)
+		return (printf("Error: No space between WE and texture path.\n"), false);
 	j = i;
 	while (!is_whitespace(line[j]))
 		j++;
 	game->map->we_texture = ft_substr(line, i, j);
-	printf("Found WE texture: %s\n", game->map->we_texture);
+	// printf("Found WE texture: %s\n", game->map->we_texture);
 	while (is_whitespace(line[j]))
 		j++;
 	if (line[j] != '\0')
@@ -86,13 +95,16 @@ bool	check_ea_texture(t_game *game, char *line, int i, bool found_map)
 		return (printf("Error: Duplicate EA texture.\n"), false);
 	if (found_map)
 		return (printf("Error: Map should be last element.\n"), false);
+	j = i;
 	while (is_whitespace(line[i]))
 		i++;
+	if (i == j)
+		return (printf("Error: No space between EA and texture path.\n"), false);
 	j = i;
 	while (!is_whitespace(line[j]))
 		j++;
 	game->map->ea_texture = ft_substr(line, i, j);
-	printf("Found EA texture: %s\n", game->map->ea_texture);
+	// printf("Found EA texture: %s\n", game->map->ea_texture);
 	while (is_whitespace(line[j]))
 		j++;
 	if (line[j] != '\0')

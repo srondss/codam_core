@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 10:16:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/10/03 17:38:17 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/04 21:56:05 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_RGB
 typedef struct s_map
 {
 	int		height;
+	int		largest_row;
 	int		**map_2d;
 	char	*no_texture;
 	char	*so_texture;
@@ -88,5 +89,20 @@ bool	is_whitespace(char c);
 int		get_pos_last_digit(char *line);
 int		get_pos_first_digit(char *line, char c);
 int		get_num_lines_file(char *map);
+
+// PATHFINDING
+int		position_player_x(int **map_2d, t_game *game);
+int		position_player_y(int **map_2d, t_game *game);
+void	print_map_2d(t_game *game);
+int		get_row_width(t_game *game, int **map_2d, int row);
+bool	find_path_exit(t_game *game, int **map_2d);
+
+// CHECK MAP
+bool	check_map_line(t_game *game, char *line);
+bool	check_elements_exist(t_game *game);
+bool	error_if_not_empty(char *line);
+void	parse_cub_file(t_game *game, char *map);
+bool	check_valid_map(t_game *game, char *map);
+
 
 #endif

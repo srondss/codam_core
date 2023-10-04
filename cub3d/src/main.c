@@ -6,17 +6,13 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 14:30:44 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/10/03 17:57:05 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/04 22:00:22 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-#define WIDTH 512
-#define HEIGHT 512
-#define TILE_SIZE 64
-#define MAP_WIDTH 8
-#define MAP_HEIGHT 8
+#define TILE_SIZE 32
 
 
 // MLX42 Logic:
@@ -164,322 +160,54 @@
 // 	(void)(key);
 // }
 
-// int	create_map(t_game *game)
-// {
-// 	int			**map;
-// 	int			tile;
-// 	uint32_t	color;
-
-// 	map = malloc(sizeof(int *) * MAP_HEIGHT);
-
-// 	for (int y = 0; y < MAP_HEIGHT; y++)
-// 	{
-// 		for (int x = 0; x < MAP_WIDTH; x++)
-// 		{
-// 			tile = input_map[(y * MAP_HEIGHT) + x];
-// 			if (tile == 1)
-// 			{
-// 				color = 0xFF0000FF;
-// 			}
-// 			else
-// 			{
-// 				color = 0x000000FF;
-// 			}
-// 			mlx_image_t *img = mlx_new_image(game->mlx, TILE_SIZE, TILE_SIZE);
-// 			if (!img)
-// 			{
-// 				printf("Error creating image.\n");
-// 				return (0);
-// 			}
-// 			for (int ty = 0; ty < TILE_SIZE; ty++)
-// 				for (int tx = 0; tx < TILE_SIZE; tx++)
-// 					mlx_put_pixel(img, tx, ty, color);
-// 			if (mlx_image_to_window(game->mlx, img, x * (TILE_SIZE + 1), y * (TILE_SIZE + 1)) < 0)
-// 			{
-// 				printf("Error displaying image.\n");
-// 				return (0);
-// 			}
-// 		}
-// 	}
-// 	game->map = map;
-// 	return (1);
-// }
-
-// TODO: Handle tabs because they mess up the map parsing.
-// Why? Because they take up 4 spaces but are only 1 character.
-
-int	position_player_x(int **map_2d, t_game *game)
+void	create_tiles(mlx_image_t *img, uint32_t color)
 {
-	int	i;
-	int	j;
+	int	tx;
+	int	ty;
 
-	i = 0;
-	j = 0;
-	while (i < game->map->height && game->map->map_2d[i])
+	tx = 0;
+	ty = 0;
+	while (ty < TILE_SIZE)
 	{
-		while (map_2d[i][j] != '\0')
+		while (tx < TILE_SIZE)
 		{
-			if (map_2d[i][j] == 'N' || map_2d[i][j] == 'S' || map_2d[i][j] == 'W' || map_2d[i][j] == 'E' || map_2d[i][j] == 'P')
-				return (i);
-			j++;
+			mlx_put_pixel(img, tx, ty, color);
+			tx++;
 		}
-		j = 0;
-		i++;
+		tx = 0;
+		ty++;
 	}
-	return (-1);
 }
 
-int	position_player_y(int **map_2d, t_game *game)
+int	create_map(t_game *game, int x, int y)
 {
-	int	i;
-	int	j;
+	int			**map;
+	int			tile;
+	uint32_t	color;
+	mlx_image_t	*img;
 
-	i = 0;
-	j = 0;
-	while (i < game->map->height && game->map->map_2d[i])
+	map = game->map->map_2d;
+	while (y < game->map->height)
 	{
-		while (map_2d[i][j] != '\0')
+		while (x < get_row_width(game, map, y))
 		{
-			if (map_2d[i][j] == 'N' || map_2d[i][j] == 'S' || map_2d[i][j] == 'W' || map_2d[i][j] == 'E' || map_2d[i][j] == 'P')
-				return (j);
-			j++;
-		}
-		j = 0;
-		i++;
-	}
-	return (-1);
-}
-
-void	print_map_2d(t_game *game)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (i < game->map->height && game->map->map_2d[i])
-	{
-		while ((game->map->map_2d[i][j]) != '\0')
-		{
-			printf("%c", game->map->map_2d[i][j]);
-			j++;
-		}
-		i++;
-		j = 0;
-	}
-	printf("\n");
-}
-
-int	get_row_width(int **map_2d, int row)
-{
-	int	i;
-
-	i = 0;
-	while (map_2d[row][i] != '\0')
-	{
-		i++;
-	}
-	return (i);
-}
-
-bool	find_path_exit(t_game *game, int **map_2d)
-{
-	int	x;
-	int	y;
-
-	x = position_player_x(map_2d, game);
-	y = position_player_y(map_2d, game);
-	if (x == -1 || y == -1)
-		return (printf("Player is indeed surrounded by walls.\n"), true);
-	// print_map_2d(game);
-	if (x == 0 || y == 0
-		|| x == game->map->height || y == get_row_width(map_2d, x)
-		|| map_2d[x + 1][y] == '\0' || map_2d[x - 1][y] == '\0'
-		|| map_2d[x][y + 1] == '\0' || map_2d[x][y - 1] == '\0')
-		return (printf("Error: Player is not surrounded by walls.\n"), false);
-	if (map_2d[x + 1][y] == '0' || map_2d[x + 1][y] == ' ')
-		map_2d[x + 1][y] = 'P';
-	if (map_2d[x - 1][y] == '0' || map_2d[x - 1][y] == ' ')
-		map_2d[x - 1][y] = 'P';
-	if (map_2d[x][y + 1] == '0' || map_2d[x][y + 1] == ' ')
-		map_2d[x][y + 1] = 'P';
-	if (map_2d[x][y - 1] == '0' || map_2d[x][y - 1] == ' ')
-		map_2d[x][y - 1] = 'P';
-	map_2d[x][y] = 'X';
-	return (find_path_exit(game, map_2d));
-}
-/*
-	malloc strlen * 4 because i need to split tabs into spaces.
-*/
-bool	check_map_line(t_game *game, char *line)
-{
-	static int	counter = 0;
-	int			i;
-	int			*line_2d;
-
-	i = 0;
-	line_2d = malloc(sizeof(int) * ((ft_strlen(line) * 4) + 1));
-	if (!line_2d)
-		return (false);
-	while (line[i])
-	{
-		if (ft_isdigit(line[i]))
-		{
-			if (line[i] != '1' && line[i] != '0')
-				return (false);
-		}
-		if (ft_isalpha(line[i]))
-		{
-			if (line[i] != 'N' && line[i] != 'S' && line[i] != 'W' && line[i] != 'E')
-				return (false);
+			tile = map[y][x];
+			if (tile == '1')
+				color = 0xFF00FFFF;
 			else
-			{
-				game->map->direction = line[i];
-				game->map->player_count++;
-				if (game->map->player_count > 1)
-					return (false);
-			}
+				color = 0xFFFFFFFF;
+			img = mlx_new_image(game->mlx, TILE_SIZE, TILE_SIZE);
+			if (!img)
+				return (printf("Error:\n Unable to create image.\n"), 0);
+			create_tiles(img, color);
+			if (mlx_image_to_window(game->mlx, img, x * (TILE_SIZE + 1), y * (TILE_SIZE + 1)) < 0)
+				return (printf("Error displaying image.\n"), 0);
+			x++;
 		}
-		line_2d[i] = line[i];
-		i++;
+		x = 0;
+		y++;
 	}
-	line_2d[i] = '\0';
-	game->map->map_2d[counter] = line_2d;
-	counter++;
-	game->map->height = counter;
-	return (true);
-}
-
-bool	check_elements_exist(t_game *game)
-{
-	if (game->map->no_texture == NULL)
-		return (false);
-	if (game->map->so_texture == NULL)
-		return (false);
-	if (game->map->we_texture == NULL)
-		return (false);
-	if (game->map->ea_texture == NULL)
-		return (false);
-	if (game->map->floor_color_string == NULL)
-		return (false);
-	if (game->map->ceiling_color_string == NULL)
-		return (false);
-	return (true);
-}
-
-bool	error_if_not_empty(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (is_whitespace(line[i]) == false && line[i] != '\0')
-			return (printf("Error: Line is not empty: %s\n", line), false);
-		i++;
-	}
-	return (true);
-}
-
-void	parse_cub_file(t_game *game, char *map)
-{
-	int		fd;
-	char	*line;
-	int		i;
-	bool	found_map;
-
-	i = 0;
-	fd = open(map, O_RDONLY);
-	found_map = false;
-	if (fd < 0)
-	{
-		printf("Error: Unable to open specified map.\n");
-		exit(EXIT_FAILURE);
-	}
-	line = get_next_line(fd);
-	if (!line)
-	{
-		printf("Error: Something went wrong while trying to read map.\n");
-		exit(EXIT_FAILURE);
-	}
-	while (line)
-	{
-		// printf("%s", line);
-		while (is_whitespace(line[i]))
-			i++;
-		// printf("Line[i] = %c\n", line[i]);
-		if (line[i] == 'N' && line[i + 1] == 'O')
-		{
-			if (check_no_texture(game, line, i + 2, found_map) == false)
-				exit(EXIT_FAILURE);
-		}
-		else if (line[i] == 'S' && line[i + 1] == 'O')
-		{
-			if (check_so_texture(game, line, i + 2, found_map) == false)
-				exit(EXIT_FAILURE);
-		}
-		else if (line[i] == 'W' && line[i + 1] == 'E')
-		{
-			if (check_we_texture(game, line, i + 2, found_map) == false)
-				exit(EXIT_FAILURE);
-		}
-		else if (line[i] == 'E' && line[i + 1] == 'A')
-		{
-			if (check_ea_texture(game, line, i + 2, found_map) == false)
-				exit(EXIT_FAILURE);
-		}
-		else if (line[i] == 'F')
-		{
-			if (check_floor_color(game, line, found_map) == false)
-				exit(EXIT_FAILURE);
-		}
-		else if (line[i] == 'C')
-		{
-			if (check_ceiling_color(game, line, found_map) == false)
-				exit(EXIT_FAILURE);
-		}
-		else if ((line[i] == '\0'|| is_whitespace(line[i])) && found_map == false)
-			;
-		else if ((line[i] == '\0'|| is_whitespace(line[i])) && found_map == true)
-		{
-			error_if_not_empty(line);
-		}
-		else if (ft_isdigit(line[i]))
-		{
-			found_map = true;
-			if (check_elements_exist(game) == false)
-			{
-				printf("Error: Missing map elements.\n");
-				exit(EXIT_FAILURE);
-			}
-			if (check_map_line(game, line) == false)
-			{
-				printf("Error: Invalid map line: %s\n", line);
-				exit(EXIT_FAILURE);
-			}
-		}
-		else
-		{
-			printf("Found invalid line: %s", line);
-			exit(EXIT_FAILURE);
-		}
-		free(line);
-		i = 0;
-		line = get_next_line(fd);
-	}
-	close(fd);
-}
-
-bool	check_valid_map(t_game *game, char *map)
-{
-	if (map == NULL)
-		return (printf("Error: No map file specified.\n"), false);
-	else if (ft_strncmp(map + ft_strlen(map) - 4, ".cub", 4) != 0)
-		return (printf("Error: Invalid map file specified.\n"), false);
-	parse_cub_file(game, map);
-	if (game->map->player_count == 0)
-		return (printf("Error: Invalid player count of %d.\n", game->map->player_count), false);
-	return (find_path_exit(game, game->map->map_2d));
+	return (1);
 }
 
 void	init_map(t_game *game, char *map)
@@ -509,12 +237,8 @@ void	init_map(t_game *game, char *map)
 	game->map->ceiling_color_string = NULL;
 	game->map->direction = '\0';
 	game->map->height = 0;
+	game->map->largest_row = 0;
 }
-
-// TODO: Handle map parsing where row[x][y] == 0 && row[x + 1][y] == ' '. This is a potentially valid map because there may be a wall at row[x + 2][y].
-// In order to handle this edge case, we need to loop through all the rows from x to the last row and check if there is a '1' at the same y coordinate.
-// If there is no '1' at the same y coordinate, then the map is invalid.
-// If there is a '1' at the same y coordinate, then the map is potentially valid assuming there are no other '0' values in subsequent rows.
 
 int main(int argc, char **argv)
 {
@@ -526,16 +250,18 @@ int main(int argc, char **argv)
 		return (printf("Error: Missing map argument.\n"), -1);
 	game = malloc(sizeof(t_game));
 	if (!game)
-		return (EXIT_FAILURE);
+		return (printf("Error:\n Malloc failed.\n"), EXIT_FAILURE);
 	init_map(game, argv[1]);
 	if (!check_valid_map(game, argv[1]))
 		return (EXIT_FAILURE);
 	printf("Map is valid.\n");
-	return (EXIT_SUCCESS);
-	// game->mlx = mlx_init(WIDTH, HEIGHT, "Map", true);
-	// if (!game->mlx)
-	// 	return (EXIT_FAILURE);
-	// bool m_success = create_map(game);
+	game->mlx = mlx_init((TILE_SIZE + 1) * game->map->largest_row, (TILE_SIZE + 1) * (game->map->height), "Map", true);
+	if (!game->mlx)
+		return (EXIT_FAILURE);
+	if (create_map(game, 0, 0) != true)
+		return (printf("Error:\n Unable to create map.\n"), EXIT_FAILURE);
+	mlx_loop(game->mlx);
+
 	// if (!m_success)
 	// 	return (printf("Error creating map.\n"), -1);
 
@@ -544,7 +270,6 @@ int main(int argc, char **argv)
 	// 	return (printf("Error creating player.\n"), -1);
 
 	// mlx_key_hook(game->mlx, key_hook, game);
-	// mlx_loop(game->mlx);
 	// free(game->player);
 	// free(game->map);
 	// free(game);

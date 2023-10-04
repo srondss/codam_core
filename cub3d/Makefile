@@ -6,7 +6,7 @@
 #    By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/09 10:02:31 by ysrondy           #+#    #+#              #
-#    Updated: 2023/10/03 18:00:11 by ysrondy          ###   ########.fr        #
+#    Updated: 2023/10/04 22:00:53 by ysrondy          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,8 @@ SRCS = src/main.c \
 		src/map_parsing_utils.c \
 		src/texture_check.c \
 		src/ceiling_floor_check.c \
+		src/check_map.c \
+		src/pathfinding.c
 
 #Objects
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
