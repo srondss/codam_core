@@ -6,13 +6,13 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 20:10:32 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/10/04 21:56:10 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/06 23:48:46 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-int	position_player_x(int **map_2d, t_game *game)
+int	position_player_row(int **map_2d, t_game *game)
 {
 	int	i;
 	int	j;
@@ -35,7 +35,7 @@ int	position_player_x(int **map_2d, t_game *game)
 	return (-1);
 }
 
-int	position_player_y(int **map_2d, t_game *game)
+int	position_player_column(int **map_2d, t_game *game)
 {
 	int	i;
 	int	j;
@@ -95,8 +95,8 @@ bool	find_path_exit(t_game *game, int **map_2d)
 	int	x;
 	int	y;
 
-	x = position_player_x(map_2d, game);
-	y = position_player_y(map_2d, game);
+	x = position_player_row(map_2d, game);
+	y = position_player_column(map_2d, game);
 	if (x == -1 || y == -1)
 		return (true);
 	// print_map_2d(game);

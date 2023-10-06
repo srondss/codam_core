@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 20:12:25 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/10/04 21:08:39 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/06 23:50:49 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,5 +185,7 @@ bool	check_valid_map(t_game *game, char *map)
 	if (game->map->player_count == 0 || game->map->player_count > 1)
 		return (printf("Error: Invalid player count of %d.\n",
 				game->map->player_count), false);
+	game->map->player_row = position_player_row(game->map->map_2d, game);
+	game->map->player_column = position_player_column(game->map->map_2d, game);
 	return (find_path_exit(game, game->map->map_2d));
 }

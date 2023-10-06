@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 10:16:23 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/10/04 21:56:05 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/06 23:50:12 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ typedef struct s_map
 	t_RGB	ceiling_colors;
 	char	direction;
 	int		player_count;
+	int		player_row;
+	int		player_column;
 	int		num_lines_file;
 }				t_map;
 
@@ -91,8 +93,8 @@ int		get_pos_first_digit(char *line, char c);
 int		get_num_lines_file(char *map);
 
 // PATHFINDING
-int		position_player_x(int **map_2d, t_game *game);
-int		position_player_y(int **map_2d, t_game *game);
+int		position_player_column(int **map_2d, t_game *game);
+int		position_player_row(int **map_2d, t_game *game);
 void	print_map_2d(t_game *game);
 int		get_row_width(t_game *game, int **map_2d, int row);
 bool	find_path_exit(t_game *game, int **map_2d);

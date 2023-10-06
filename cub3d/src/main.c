@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 14:30:44 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/10/04 22:00:22 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/06 23:54:28 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,29 +77,6 @@
 // // If i am in a new tile, I need to check if this tile is a wall.
 // // If i am a wall, i need to stop drawing pixels and end it there.
 
-// t_player	*create_player(t_game *game, int pos_x, int pos_y, float angle)
-// {
-// 	t_player	*player;
-
-// 	player = malloc(sizeof(t_player));
-// 	if (!player)
-// 		return (NULL);
-// 	player->player_images = mlx_new_image(game->mlx, 20, 20);
-// 	if (!player->player_images)
-// 		return (NULL);
-// 	player->angle = angle;
-// 	player->delta_x = cos(player->angle) * 5;
-// 	player->delta_y = sin(player->angle) * 5;
-// 	for (int y = 0; y < 20; y++)
-// 		for (int x = 0; x < 20; x++)
-// 			mlx_put_pixel(player->player_images, x, y, 0x00FF00FF);
-
-// 	if (mlx_image_to_window(game->mlx, player->player_images, pos_x, pos_y) < 0)
-// 		return (NULL);
-// 	game->player = player;
-// 	draw_line(game);
-// 	return (player);
-// }
 
 // void	key_hook(mlx_key_data_t key, void *param)
 // {
@@ -160,6 +137,37 @@
 // 	(void)(key);
 // }
 
+t_player	*create_player(t_game *game, int column, int row, float angle)
+{
+	t_player	*player;
+	int			i;
+	int			j;
+
+	i = -1;
+	j = -1;
+	player = malloc(sizeof(t_player));
+	if (!player)
+		return (NULL);
+	player->player_images = mlx_new_image(game->mlx, TILE_SIZE, TILE_SIZE);
+	if (!player->player_images)
+		return (NULL);
+	player->angle = angle;
+	player->delta_x = cos(player->angle) * 5;
+	player->delta_y = sin(player->angle) * 5;
+	while (++i < TILE_SIZE)
+	{
+		while (++j < TILE_SIZE)
+			mlx_put_pixel(player->player_images, i, j, 0xFFFF00FF);
+		j = 0;
+	}
+	if (mlx_image_to_window(game->mlx, player->player_images,
+			(TILE_SIZE + 1) * column, (TILE_SIZE + 1) * row) < 0)
+		return (NULL);
+	game->player = player;
+	// draw_line(game);
+	return (player);
+}
+
 void	create_tiles(mlx_image_t *img, uint32_t color)
 {
 	int	tx;
@@ -179,7 +187,7 @@ void	create_tiles(mlx_image_t *img, uint32_t color)
 	}
 }
 
-int	create_map(t_game *game, int x, int y)
+bool	create_map(t_game *game, int x, int y)
 {
 	int			**map;
 	int			tile;
@@ -187,27 +195,25 @@ int	create_map(t_game *game, int x, int y)
 	mlx_image_t	*img;
 
 	map = game->map->map_2d;
-	while (y < game->map->height)
+	while (++y < game->map->height)
 	{
-		while (x < get_row_width(game, map, y))
+		while (++x < get_row_width(game, map, y))
 		{
 			tile = map[y][x];
+			color = 0x00000000;
 			if (tile == '1')
-				color = 0xFF00FFFF;
-			else
-				color = 0xFFFFFFFF;
+				color = 0xffffffff;
 			img = mlx_new_image(game->mlx, TILE_SIZE, TILE_SIZE);
 			if (!img)
-				return (printf("Error:\n Unable to create image.\n"), 0);
+				return (printf("Error:\n Unable to create image.\n"), false);
 			create_tiles(img, color);
-			if (mlx_image_to_window(game->mlx, img, x * (TILE_SIZE + 1), y * (TILE_SIZE + 1)) < 0)
-				return (printf("Error displaying image.\n"), 0);
-			x++;
+			if (mlx_image_to_window(game->mlx,
+					img, x * (TILE_SIZE + 1), y * (TILE_SIZE + 1)) < 0)
+				return (printf("Error displaying image.\n"), false);
 		}
 		x = 0;
-		y++;
 	}
-	return (1);
+	return (true);
 }
 
 void	init_map(t_game *game, char *map)
@@ -242,7 +248,8 @@ void	init_map(t_game *game, char *map)
 
 int main(int argc, char **argv)
 {
-	t_game	*game;
+	t_game		*game;
+	t_player	*player;
 
 	if (argc > 2)
 		return (printf("Error: Too many arguments.\n"), -1);
@@ -258,16 +265,15 @@ int main(int argc, char **argv)
 	game->mlx = mlx_init((TILE_SIZE + 1) * game->map->largest_row, (TILE_SIZE + 1) * (game->map->height), "Map", true);
 	if (!game->mlx)
 		return (EXIT_FAILURE);
-	if (create_map(game, 0, 0) != true)
+	if (create_map(game, -1, -1) != true)
 		return (printf("Error:\n Unable to create map.\n"), EXIT_FAILURE);
+	print_map_2d(game);
+	player = create_player(game, game->map->player_column,
+			game->map->player_row, 0);
+	if (!player)
+		return (printf("Error creating player.\n"), -1);
 	mlx_loop(game->mlx);
 
-	// if (!m_success)
-	// 	return (printf("Error creating map.\n"), -1);
-
-	// t_player *player = create_player(game, WIDTH/2, HEIGHT/2, 0);
-	// if (!player)
-	// 	return (printf("Error creating player.\n"), -1);
 
 	// mlx_key_hook(game->mlx, key_hook, game);
 	// free(game->player);
