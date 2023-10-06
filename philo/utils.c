@@ -48,7 +48,7 @@ int	parse_arguments(char **argv)
 	j = 0;
 	while (argv[i] != NULL)
 	{
-		if (argv[i][0] != '0' && ft_atol(argv[i]) == 0)
+		if (ft_atol(argv[i]) == 0)
 			return (printf(E_ARG), -1);
 		while (argv[i][j] != '\0')
 		{

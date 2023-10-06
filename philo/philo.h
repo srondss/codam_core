@@ -81,6 +81,8 @@ int			p_think(t_philo *philo);
 int			p_sleep(t_philo *philo);
 int			p_eat(t_philo *philo);
 int			p_grab_fork(t_philo *philo);
+int			p_right_then_left(t_philo *philo);
+int			p_left_then_right(t_philo *philo);
 int			check_philo_death(t_thread_info *info, t_philo *philo);
 int			check_death_or_limit_meals(t_philo *philo);
 int			check_thread_creation(t_philo *philo);

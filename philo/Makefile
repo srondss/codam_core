@@ -5,13 +5,14 @@ SRCS = main.c	\
 	utils.c		\
 	time.c		\
 	tasks.c		\
+	tasks_utils.c \
 	check_state.c \
 	monitoring.c \
 	free_or_destroy.c
 
 OBJS = $(SRCS:.c=.o)
 
-CFLAGS ?= -g -pthread -Wall -Wextra -Werror
+CFLAGS ?= -pthread -Wall -Wextra -Werror
 
 all : $(NAME)
 

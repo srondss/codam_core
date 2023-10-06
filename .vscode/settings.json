@@ -68,7 +68,8 @@
 		"utility": "cpp",
 		"deque": "cpp",
 		"fstream": "cpp",
-		"stack": "cpp"
+		"stack": "cpp",
+		"mlx42.h": "c"
 	},
 	"42header.email": "ysrondy@student.codam.nl",
 	"42header.username": "ysrondy"
