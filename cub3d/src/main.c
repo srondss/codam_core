@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 14:30:44 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/10/06 23:54:28 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/09 01:08:29 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,61 +21,98 @@
 // Putting pixels requires looping through the image's data array.
 // Once the image has been drawn on, you can display it in a window with mlx_image_to_window.
 
-// void	draw_line(t_game *game)
-// {
-// 	float	i;
-// 	float	yn;
-// 	float	xn;
-// 	float	pos_x;
-// 	float	pos_y;
-// 	float	tangent;
+void	draw_line(t_game *game)
+{
+	float			xn;
+	float			yn;
+	float			p_x;
+	float			p_y;
+	// float		aTan;
+	// float		y_offset;
+	// float		x_offset;
 
-// 	game->player->player_line = mlx_new_image(game->mlx, WIDTH, HEIGHT);
-// 	pos_x = game->player->player_images->instances[0].x;
-// 	pos_y = game->player->player_images->instances[0].y;
-// 	if (!game->player->player_line)
-// 		return ;
-// 	i = 0;
-// 	tangent = tan(game->player->angle);
-// 	yn = 0;
-// 	while (i < WIDTH * 2)
-// 	{
-// 		if (tangent != 0)
-// 		{
-// 			yn = -(game->player->player_images->instances[0].y - (int)(game->player->player_images->instances[0].y / TILE_SIZE) * TILE_SIZE);
-// 			xn = yn / tangent;
-// 			if (yn >= HEIGHT || xn >= WIDTH)
-// 				;
-// 			else
-// 			{
-// 				while (pos_x != xn + game->player->player_images->instances[0].x)
-// 				{
-// 					mlx_put_pixel(game->player->player_line, pos_x, pos_y, 0xFFFFFFFF);
-// 					pos_x += 0.1;
-// 				}
-// 			}
-// 			mlx_put_pixel(game->player->player_line, xn + game->player->player_images->instances[0].x, (yn + game->player->player_images->instances[0].y), 0xFFFFFFFF);
-// 			printf("Horizontal || Put pixel at (%f, %f)\n", xn + game->player->player_images->instances[0].x, yn + game->player->player_images->instances[0].y);
-// 		}
-// 		else if (tangent != 1)
-// 		{
-// 			xn = -(game->player->player_images->instances[0].x - (int)(game->player->player_images->instances[0].x / TILE_SIZE) * TILE_SIZE);
-// 			yn = tangent * xn;
-// 			if (yn >= HEIGHT || xn >= WIDTH)
-// 				;
-// 			else
-// 				mlx_put_pixel(game->player->player_line, xn + game->player->player_images->instances[0].x, yn + game->player->player_images->instances[0].y, 0xFFFFFFFF);
-// 			printf("Vertical || Put pixel at (%f, %f)\n", xn + game->player->player_images->instances[0].x, yn + game->player->player_images->instances[0].y);
-// 		}
-// 		i++;
-// 	}
-// 	mlx_image_to_window(game->mlx, game->player->player_line, 0, 0);
-// }
+	p_x = game->player->player_images->instances[0].x + (game->player->size / 2);
+	p_y = game->player->player_images->instances[0].y + (game->player->size / 2);
+	// aTan = -1/tan(game->player->angle);
+	printf("Ray is starting at coordinates (%f, %f)\n", p_x, p_y);
+	if (game->player->angle < M_PI && game->player->angle > M_PI / 2) // ray is facing top-left
+	{
+		printf("Ray is facing top-left.\n");
+		yn = floor((double)p_y / TILE_SIZE) * TILE_SIZE;
+		xn = p_x + -(TILE_SIZE - (yn + TILE_SIZE - p_y));
+		printf("Yn: %f\n", yn);
+		printf("xn: %f\n", xn);
+	}
+	else if (game->player->angle > 0 && game->player->angle < M_PI / 2) // ray is facting top-right
+	{
+		printf("Ray is facing top-right\n");
+		yn = p_y - (floor((double)p_y / TILE_SIZE) * TILE_SIZE);
+		// yn = p_y - yn;
+		xn = yn / tan(game->player->angle);
+		yn = p_y - yn;
+		xn = p_x + xn;
+		printf("Yn: %f\n", yn);
+		printf("xn: %f\n", xn);
+	}
+	else if (game->player->angle > M_PI && game->player->angle < (1.5 * M_PI)) // ray is facing bottom-left.
+	{
+		printf("Ray is facing bottom-left.\n");
+		yn = round((double)p_y / TILE_SIZE) * TILE_SIZE;
+		xn = p_x + -(TILE_SIZE - (yn + TILE_SIZE - p_y));
+		printf("Yn: %f\n", yn);
+		printf("xn: %f\n", xn);
+	}
+	else // ray is facing bottom-right
+	{
+		printf("Ray is facing bottom-right.\n");
+		yn = ceil((double)p_y / TILE_SIZE) * TILE_SIZE;
+		xn = (-(tan(game->player->angle)) * (yn - p_y)) + p_x;
+		printf("Yn: %f\n", yn);
+		printf("xn: %f\n", xn);
+	}
+	game->player->player_line = mlx_new_image(game->mlx, (TILE_SIZE) * game->map->largest_row, (TILE_SIZE) * (game->map->height));
+	if (!game->player->player_line)
+		return ;
+	int x_target = xn;
+	int y_target = yn;
+	printf("Target Coordinates: (%d, %d)\n", x_target, y_target);
+	mlx_put_pixel(game->player->player_line, p_x, p_y, 0xFF0000FF);
+	printf("Current Coordinates: (%f, %f)\n", p_x, p_y);
+	while (p_x != x_target || p_y != y_target)
+	{
+		if (p_x > x_target)
+			p_x -= 0.5;
+		else if (p_x < x_target)
+			p_x += 0.5;
+		else
+			;
+		if (p_y > y_target)
+			p_y -= 0.5;
+		else if (p_y < y_target)
+			p_y += 0.5;
+		else
+			;
+		mlx_put_pixel(game->player->player_line, p_x, p_y, 0xFF0000FF);
+		printf("Current Coordinates: (%f, %f)\n", p_x, p_y);
+	}
+	// float ys = TILE_SIZE;
+	// // float xs = ys / tan(game->player->angle);
+	// // float xx_target = p_x + xs;
+	// // float yy_target = p_y + ys;
+	// // printf("New Target Coordinates: (%f, %f)\n", xx_target, yy_target);
+	// // while (p_x != xx_target && p_y != yy_target)
+	// // {
+	// // 	if (p_x != xx_target)
+	// // 		p_x++;
+	// // 	if (p_y != yy_target)
+	// // 		p_y++;
+	// // 	mlx_put_pixel(game->player->player_line, p_x, p_y, 0xFF0000FF);
+	// // }
 
-// // every tile is 64x64 pixels.
-// // i am at a certain coordinate. If i move by 64 pixels in any direction, i am now in a new tile.
-// // If i am in a new tile, I need to check if this tile is a wall.
-// // If i am a wall, i need to stop drawing pixels and end it there.
+	if (mlx_image_to_window(game->mlx, game->player->player_line, 0, 0) < 0)
+		return ;
+}
+
 
 
 // void	key_hook(mlx_key_data_t key, void *param)
@@ -137,48 +174,61 @@
 // 	(void)(key);
 // }
 
-t_player	*create_player(t_game *game, int column, int row, float angle)
+t_player	*create_player(t_game *game, int column, int row, double angle)
 {
 	t_player	*player;
 	int			i;
 	int			j;
 
-	i = -1;
-	j = -1;
+	i = 0;
+	j = 0;
 	player = malloc(sizeof(t_player));
 	if (!player)
 		return (NULL);
-	player->player_images = mlx_new_image(game->mlx, TILE_SIZE, TILE_SIZE);
+	player->size = 16;
+	player->player_images = mlx_new_image(game->mlx, player->size, player->size);
 	if (!player->player_images)
 		return (NULL);
 	player->angle = angle;
-	player->delta_x = cos(player->angle) * 5;
-	player->delta_y = sin(player->angle) * 5;
-	while (++i < TILE_SIZE)
+	player->pos_x = game->map->player_row;
+	player->pos_y = game->map->player_column;
+	// player->delta_x = cos(player->angle) * 5;
+	// player->delta_y = sin(player->angle) * 5;
+	while (i < player->size)
 	{
-		while (++j < TILE_SIZE)
-			mlx_put_pixel(player->player_images, i, j, 0xFFFF00FF);
+		while (j < player->size)
+		{
+			mlx_put_pixel(player->player_images, i, j, 0x00bb00FF);
+			j++;
+		}
+		i++;
 		j = 0;
 	}
 	if (mlx_image_to_window(game->mlx, player->player_images,
-			(TILE_SIZE + 1) * column, (TILE_SIZE + 1) * row) < 0)
+			(TILE_SIZE) * column, (TILE_SIZE) * row) < 0)
 		return (NULL);
 	game->player = player;
-	// draw_line(game);
+	draw_line(game);
 	return (player);
 }
 
 void	create_tiles(mlx_image_t *img, uint32_t color)
 {
-	int	tx;
-	int	ty;
+	int			tx;
+	int			ty;
+	uint32_t	og_color;
 
 	tx = 0;
 	ty = 0;
+	og_color = color;
 	while (ty < TILE_SIZE)
 	{
 		while (tx < TILE_SIZE)
 		{
+			if (ty == TILE_SIZE - 1 || tx == 0)
+				color = 0x000022FF;
+			else
+				color = og_color;
 			mlx_put_pixel(img, tx, ty, color);
 			tx++;
 		}
@@ -195,23 +245,25 @@ bool	create_map(t_game *game, int x, int y)
 	mlx_image_t	*img;
 
 	map = game->map->map_2d;
-	while (++y < game->map->height)
+	while (y < game->map->height)
 	{
-		while (++x < get_row_width(game, map, y))
+		while (x < get_row_width(game, map, y))
 		{
 			tile = map[y][x];
-			color = 0x00000000;
+			color = 0xFFFFFFFF;
 			if (tile == '1')
-				color = 0xffffffff;
+				color = 0xFF000000;
 			img = mlx_new_image(game->mlx, TILE_SIZE, TILE_SIZE);
 			if (!img)
 				return (printf("Error:\n Unable to create image.\n"), false);
 			create_tiles(img, color);
 			if (mlx_image_to_window(game->mlx,
-					img, x * (TILE_SIZE + 1), y * (TILE_SIZE + 1)) < 0)
+					img, x * (TILE_SIZE), y * (TILE_SIZE)) < 0)
 				return (printf("Error displaying image.\n"), false);
+			x++;
 		}
 		x = 0;
+		y++;
 	}
 	return (true);
 }
@@ -262,14 +314,13 @@ int main(int argc, char **argv)
 	if (!check_valid_map(game, argv[1]))
 		return (EXIT_FAILURE);
 	printf("Map is valid.\n");
-	game->mlx = mlx_init((TILE_SIZE + 1) * game->map->largest_row, (TILE_SIZE + 1) * (game->map->height), "Map", true);
+	game->mlx = mlx_init((TILE_SIZE) * game->map->largest_row, (TILE_SIZE) * (game->map->height), "Map", true);
 	if (!game->mlx)
 		return (EXIT_FAILURE);
-	if (create_map(game, -1, -1) != true)
+	if (create_map(game, 0, 0) != true)
 		return (printf("Error:\n Unable to create map.\n"), EXIT_FAILURE);
-	print_map_2d(game);
 	player = create_player(game, game->map->player_column,
-			game->map->player_row, 0);
+			game->map->player_row, 0.175);
 	if (!player)
 		return (printf("Error creating player.\n"), -1);
 	mlx_loop(game->mlx);
