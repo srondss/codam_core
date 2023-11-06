@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 18:49:13 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/04/03 21:56:19 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/20 17:50:35 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,18 @@ int	message_if_alive(t_philo *philo, int message)
 	time = get_time_since_start(philo);
 	if (check_death_or_limit_meals(philo) == -1)
 		return (-1);
+	pthread_mutex_lock(&philo->info->std_out_mutex);
 	if (message == TAKE_FORK)
-		printf("%lld %d has taken a fork\n", time, philo->id + 1);
+		printf("%lld %d has taken fork\n", time, philo->id);
 	if (message == EAT)
-		printf("%lld %d is eating\n", time, philo->id + 1);
+		printf("%lld %d is eating\n", time, philo->id);
 	if (message == SLEEP)
-		printf("%lld %d is sleeping\n", time, philo->id + 1);
+		printf("%lld %d is sleeping\n", time, philo->id);
 	if (message == THINK)
-		printf("%lld %d is thinking\n", time, philo->id + 1);
+		printf("%lld %d is thinking\n", time, philo->id);
 	if (message == DIED)
-		printf("%lld %d died\n", time, philo->id + 1);
+		printf("%lld %d died\n", time, philo->id);
+	pthread_mutex_unlock(&philo->info->std_out_mutex);
 	return (1);
 }
 

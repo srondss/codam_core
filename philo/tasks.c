@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 09:08:36 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/04/04 09:08:37 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/20 17:49:56 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,8 @@
 
 int	p_grab_fork(t_philo *philo)
 {
-	if (philo->id + 1 != philo->info->number_of_philos)
-	{
-		if (p_right_then_left(philo) == -1)
-			return (-1);
-	}
-	else
-	{
-		if (p_left_then_right(philo) == -1)
-			return (-1);
-	}
+	if (p_right_then_left(philo) == -1)
+		return (-1);
 	return (1);
 }
 

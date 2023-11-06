@@ -12,7 +12,7 @@ SRCS = main.c	\
 
 OBJS = $(SRCS:.c=.o)
 
-CFLAGS ?= -pthread -Wall -Wextra -Werror
+CFLAGS ?= -pthread -Wall -Wextra -Werror 
 
 all : $(NAME)
 

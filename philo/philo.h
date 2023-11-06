@@ -6,7 +6,7 @@
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 18:49:55 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/03/16 18:49:56 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/20 16:52:08 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ typedef struct s_thread_info
 
 	int				created_threads;
 	pthread_mutex_t	creation_mutex;
+
+	pthread_mutex_t	std_out_mutex;
 
 	int				time_to_die;
 	int				time_to_eat;

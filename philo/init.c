@@ -1,16 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_creation.c                                   :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ysrondy <ysrondy@student.codam.nl>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 21:02:03 by ysrondy           #+#    #+#             */
-/*   Updated: 2023/03/16 21:02:04 by ysrondy          ###   ########.fr       */
+/*   Updated: 2023/10/20 17:52:46 by ysrondy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	init_mutexes(t_thread_info *info)
+{
+	if (pthread_mutex_init(&info->philo_died_mutex, NULL) != 0)
+		return (printf(E_MUTEX), -1);
+	if (pthread_mutex_init(&info->creation_mutex, NULL) != 0)
+	{
+		pthread_mutex_destroy(&info->philo_died_mutex);
+		return (printf(E_MUTEX), -1);
+	}
+	if (pthread_mutex_init(&info->std_out_mutex, NULL) != 0)
+	{
+		pthread_mutex_destroy(&info->philo_died_mutex);
+		pthread_mutex_destroy(&info->creation_mutex);
+		return (printf(E_MUTEX), -1);
+	}
+	return (1);
+}
 
 int	init_info_struct(t_thread_info *info, char **argv)
 {
@@ -27,13 +45,8 @@ int	init_info_struct(t_thread_info *info, char **argv)
 	info->created_threads = 0;
 	if (!info->forks)
 		return (printf(E_MALLOC), -1);
-	if (pthread_mutex_init(&info->philo_died_mutex, NULL) != 0)
-		return (free(info->forks), printf(E_MUTEX), -1);
-	if (pthread_mutex_init(&info->creation_mutex, NULL) != 0)
-	{
-		pthread_mutex_destroy(&info->philo_died_mutex);
-		return (free(info->forks), printf(E_MUTEX), -1);
-	}
+	if (init_mutexes(info) == -1)
+		return (-1);
 	return (1);
 }
 
@@ -43,7 +56,10 @@ void	init_philo(t_thread_info *info, t_philo *philos, int i)
 	philos[i].last_meal_time = get_elapsed_time();
 	philos[i].meals_eaten = 0;
 	philos[i].id_fork_right = i;
-	philos[i].id_fork_left = ((i + 1) % info->number_of_philos);
+	if (i == 0)
+		philos[i].id_fork_left = info->number_of_philos - 1;
+	else
+		philos[i].id_fork_left = i - 1;
 	philos[i].info = info;
 }
 
